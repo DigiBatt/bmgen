@@ -10,7 +10,8 @@
     <script src="custom/blocks.js"></script>
     <script src="custom/blockly_developer_tools/codegen.js"></script>
     <script src="custom/generators/bts600.js"></script>
-    <script src="custom/generators/bts600/jumps.js"></script>
+    <script src="custom/generators/bts600/operators.js"></script>
+    <script src="custom/generators/bts600/actions.js"></script>
 
     <style type="text/css">
         table,
@@ -33,71 +34,55 @@
     <div id="blocklyDiv" style="position: absolute;"></div>
 
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
-        <category name="Logic">
-            <block type="controls_if"></block>
-            <block type="logic_compare">
-                <field name="OP">EQ</field>
+        <category name="Operators" colour="#745ba5">
+            <block type="set"></block>
+            <block type="beg">
+                <field name="NAME">name</field>
             </block>
-            <block type="logic_operation">
-                <field name="OP">AND</field>
+            <block type="cyc">
+                <field name="COUNT">1</field>
             </block>
-            <block type="logic_negate"></block>
-            <block type="logic_boolean">
-                <field name="BOOL">TRUE</field>
-            </block>
-            <block type="logic_null"></block>
-            <block type="logic_ternary"></block>
+            <block type="sto"></block>
+            <block type="cha"></block>
+            <block type="dch"></block>
         </category>
-        <category name="Jumps">
+        <category name="Actions" colour="#a55b80">
             <block type="goto">
-                <field name="label">label</field>
+                <field name="LABEL">label</field>
             </block>
             <block type="label">
-                <field name="label">label</field>
+                <field name="LABEL">label</field>
+            </block>
+            <block type="err">
+                <field name="ERRNUM">1</field>
             </block>
         </category>
-        <category name="Loops">
-            <block type="controls_repeat_ext">
-                <value name="TIMES">
-                    <shadow type="math_number">
-                        <field name="NUM">10</field>
-                    </shadow>
-                </value>
+        <category name="Limits" colour="#5b67a5">
+            <block type="limit"></block>
+            <block type="limit_action"></block>
+            <block type="compare">
+                <field name="OPERATOR">BIGGER</field>
             </block>
-            <block type="controls_whileUntil">
-                <field name="MODE">WHILE</field>
-            </block>
-            <block type="controls_for">
-                <field name="VAR" id="Mytp~4a`17_TVT$u6{_U">i</field>
-                <value name="FROM">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-                <value name="TO">
-                    <shadow type="math_number">
-                        <field name="NUM">10</field>
-                    </shadow>
-                </value>
-                <value name="BY">
-                    <shadow type="math_number">
-                        <field name="NUM">1</field>
-                    </shadow>
-                </value>
-            </block>
-            <block type="controls_forEach">
-                <field name="VAR" id="Ly7x|dsXnZqT*yfLAE+=">j</field>
-            </block>
-            <block type="controls_flow_statements" disabled="true">
-                <field name="FLOW">BREAK</field>
+            <block type="and"></block>
+            <block type="time">
+                <field name="VALUE">0</field>
+                <field name="UNIT">SECONDS</field>
             </block>
         </category>
-        <category name="Math">
+        <category name="Math" colour="#5b67a5">
             <block type="math_number">
                 <field name="NUM">0</field>
             </block>
+            <block type="factor">
+                <field name="FACTOR">2</field>
+            </block>
         </category>
-        <category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
+        <category name="Registration" colour="#5b67a5">
+            <block type="registration">
+                <field name="REGISTRATION">default</field>
+            </block>
+        </category>
+        <category name="Channels" colour="#a55b80" custom="VARIABLE"></category>
     </xml>
 
 
