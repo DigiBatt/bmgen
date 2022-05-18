@@ -1,0 +1,126 @@
+<html>
+
+<head>
+    <title>BM Generator 3000</title>
+    <script src="blockly/blockly_compressed.js"></script>
+    <script src="blockly/javascript_compressed.js"></script>
+    <script src="blockly/blocks_compressed.js"></script>
+    <script src="blockly/msg/js/en.js"></script>
+
+    <script src="blockly/closure/goog/base.js"></script>
+    <script src="custom/blocks.js"></script>
+    <script src="custom/blockly_developer_tools/codegen.js"></script>
+    <script src="custom/blockly_extension.js"></script>
+</head>
+
+<body>
+    <h1>BM Generator 3000</h1>
+    <div id="wrapper" style="height: 90%;">
+        <div id="blocklyArea" style="text-align: center; height: 100%; width: 70%; float: left"></div>
+        <div id="codearea" style="overflow: scroll; height: 100%; width: 30%"></div>
+    </div>
+    <div id="blocklyDiv" style="position: absolute;"></div>
+
+    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+        <category name="Logic">
+            <block type="controls_if"></block>
+            <block type="logic_compare">
+                <field name="OP">EQ</field>
+            </block>
+            <block type="logic_operation">
+                <field name="OP">AND</field>
+            </block>
+            <block type="logic_negate"></block>
+            <block type="logic_boolean">
+                <field name="BOOL">TRUE</field>
+            </block>
+            <block type="logic_null"></block>
+            <block type="logic_ternary"></block>
+        </category>
+        <category name="Jumps">
+            <block type="goto">
+                <field name="label">label</field>
+            </block>
+            <block type="label">
+                <field name="label">label</field>
+            </block>
+        </category>
+        <category name="Loops">
+            <block type="controls_repeat_ext">
+                <value name="TIMES">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="controls_whileUntil">
+                <field name="MODE">WHILE</field>
+            </block>
+            <block type="controls_for">
+                <field name="VAR" id="Mytp~4a`17_TVT$u6{_U">i</field>
+                <value name="FROM">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+                <value name="TO">
+                    <shadow type="math_number">
+                        <field name="NUM">10</field>
+                    </shadow>
+                </value>
+                <value name="BY">
+                    <shadow type="math_number">
+                        <field name="NUM">1</field>
+                    </shadow>
+                </value>
+            </block>
+            <block type="controls_forEach">
+                <field name="VAR" id="Ly7x|dsXnZqT*yfLAE+=">j</field>
+            </block>
+            <block type="controls_flow_statements" disabled="true">
+                <field name="FLOW">BREAK</field>
+            </block>
+        </category>
+        <category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
+    </xml>
+
+
+    <script type="text/javascript">
+        goog.require('Blockly')
+        goog.require('Blockly.BTS600')
+
+        var blocklyArea = document.getElementById('blocklyArea');
+        var blocklyDiv = document.getElementById('blocklyDiv');
+        var workspace = Blockly.inject(blocklyDiv,
+            { toolbox: document.getElementById('toolbox') });
+        var onresize = function (e) {
+            // Compute the absolute coordinates and dimensions of blocklyArea.
+            var element = blocklyArea;
+            var x = 0;
+            var y = 0;
+            do {
+                x += element.offsetLeft;
+                y += element.offsetTop;
+                element = element.offsetParent;
+            } while (element);
+            // Position blocklyDiv over blocklyArea.
+            blocklyDiv.style.left = x + 'px';
+            blocklyDiv.style.top = y + 'px';
+            blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+            blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+            Blockly.svgResize(workspace);
+        };
+        window.addEventListener('resize', onresize, false);
+        onresize();
+        Blockly.svgResize(workspace);
+
+        function myUpdateFunction(event) {
+            var code = Blockly.BTS600.workspaceToCode(workspace);
+            // var code = 'Test';
+            document.getElementById('codearea').textContent = code;
+        }
+        workspace.addChangeListener(myUpdateFunction);
+    </script>
+</body>
+
+</html>
