@@ -1,17 +1,11 @@
-'use strict';
-
-goog.module('Blockly.BTS600.jumps');
-
-const BTS600 = goog.require('Blockly.BTS600');
-
-BTS600['goto'] = function (block) {
+Blockly.BTS600['goto'] = function (block) {
     const label = block.getFieldValue('label');
-    const code = 'goto ' + label + ';\n';
+    const code = '\t\t\t\t\tGOTO ' + label + '\t\n';
     return code;
 }
 
-BTS600['label'] = function (block) {
+Blockly.BTS600['label'] = function (block) {
     const label = block.getFieldValue('label');
-    const code = ':' + label + ';\n';
+    const code = '\t' + label + '\t\t\t\t\t\n';
     return code;
 };

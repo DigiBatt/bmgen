@@ -7,14 +7,25 @@
     <script src="blockly/blocks_compressed.js"></script>
     <script src="blockly/msg/js/en.js"></script>
 
-    <script src="blockly/closure/goog/base.js"></script>
     <script src="custom/blocks.js"></script>
     <script src="custom/blockly_developer_tools/codegen.js"></script>
-    <script src="custom/blockly_extension.js"></script>
+    <script src="custom/generators/bts600.js"></script>
+    <script src="custom/generators/bts600/jumps.js"></script>
+
+    <style type="text/css">
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+        }
+    </style>
 </head>
 
 <body>
     <h1>BM Generator 3000</h1>
+    <button onclick="saveProgram()">Save</button>
+    <input type="file" name="Load" onchange="loadProgram(this.files)" />
     <div id="wrapper" style="height: 90%;">
         <div id="blocklyArea" style="text-align: center; height: 100%; width: 70%; float: left"></div>
         <div id="codearea" style="overflow: scroll; height: 100%; width: 30%"></div>
@@ -81,14 +92,16 @@
                 <field name="FLOW">BREAK</field>
             </block>
         </category>
+        <category name="Math">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+        </category>
         <category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
     </xml>
 
 
     <script type="text/javascript">
-        goog.require('Blockly')
-        goog.require('Blockly.BTS600')
-
         var blocklyArea = document.getElementById('blocklyArea');
         var blocklyDiv = document.getElementById('blocklyDiv');
         var workspace = Blockly.inject(blocklyDiv,
@@ -116,10 +129,38 @@
 
         function myUpdateFunction(event) {
             var code = Blockly.BTS600.workspaceToCode(workspace);
-            // var code = 'Test';
-            document.getElementById('codearea').textContent = code;
+            var table = Blockly.BTS600.codeToTable(code);
+            document.getElementById('codearea').innerHTML = table;
         }
         workspace.addChangeListener(myUpdateFunction);
+
+        function saveProgram() {
+            const xml = Blockly.Xml.workspaceToDom(workspace);
+            console.log(xml);
+            const serializer = new XMLSerializer();
+            const xmlStr = serializer.serializeToString(xml);
+            var element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xmlStr));
+            element.setAttribute('download', 'workspace.xml');
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+
+        function loadProgram(files) {
+            var reader = new FileReader();
+            reader.onload = (function () { return function (e) { loadXml(e.target.result); }; })();
+            reader.readAsText(files[0]);
+        }
+
+        function loadXml(file) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(file, 'application/xml');
+            console.log(doc.documentElement);
+            workspace.clear();
+            Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
+        }
     </script>
 </body>
 

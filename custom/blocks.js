@@ -10,6 +10,7 @@ Blockly.defineBlocksWithJsonArray([
             }
         ],
         "inputsInline": true,
+        "previousStatement": null,
         "colour": 0,
         "tooltip": "",
         "helpUrl": ""
@@ -25,6 +26,8 @@ Blockly.defineBlocksWithJsonArray([
             }
         ],
         "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
         "colour": 0,
         "tooltip": "",
         "helpUrl": ""

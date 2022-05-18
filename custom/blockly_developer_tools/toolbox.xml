@@ -58,5 +58,10 @@
       <field name="FLOW">BREAK</field>
     </block>
   </category>
+  <category name="Math">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </category>
   <category name="Variables" colour="#a55b80" custom="VARIABLE"></category>
 </xml>
