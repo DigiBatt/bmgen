@@ -99,6 +99,9 @@ class CustomGenerator {
      * @protected
      */
     this.nameDB_ = undefined;
+
+    this.channels = [];
+    this.variables = [];
   }
 
   /**
@@ -117,33 +120,17 @@ class CustomGenerator {
     this.init(workspace);
     const blocks = workspace.getTopBlocks(true);
     for (let i = 0, block; (block = blocks[i]); i++) {
-      let line = this.blockToCode(block);
-      if (Array.isArray(line)) {
-        // Value blocks return tuples of code and operator order.
-        // Top-level blocks don't care about operator order.
-        line = line[0];
-      }
-      if (line) {
-        if (block.outputConnection) {
-          // This block is a naked value.  Ask the language's code generator if
-          // it wants to append a semicolon, or something.
-          line = this.scrubNakedValue(line);
-          if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
-            line = this.injectId(this.STATEMENT_PREFIX, block) + line;
-          }
-          if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
-            line = line + this.injectId(this.STATEMENT_SUFFIX, block);
-          }
+      let codeblock = this.blockToCode(block);
+      if (codeblock) {
+        if (codeblock instanceof Array) {
+          code.push(codeblock.map(line => line.toCode()).join('\r\n'));
+        } else {
+          code.push(codeblock.toCode());
         }
-        code.push(line);
       }
     }
-    code = code.join('\n');  // Blank line between each section.
+    code = code.join('\r\n');  // Blank line between each section.
     code = this.finish(code);
-    // Final scrubbing of whitespace.
-    code = code.replace(/^\s+\n/, '');
-    code = code.replace(/\n\s+$/, '\n');
-    code = code.replace(/[ \t]+\n/g, '\n');
     return code;
   }
 
@@ -199,7 +186,7 @@ class CustomGenerator {
         'Generator init was not called before blockToCode was called.');
     }
     if (!block) {
-      return '';
+      return null;
     }
     if (!block.isEnabled()) {
       // Skip past this block if it is disabled.
@@ -222,25 +209,7 @@ class CustomGenerator {
     // argument to func.call, which becomes the first parameter to the
     // generator.
     let code = func.call(block, block);
-    if (Array.isArray(code)) {
-      // Value blocks return tuples of code and operator order.
-      if (!block.outputConnection) {
-        throw TypeError('Expecting string from statement block: ' + block.type);
-      }
-      return [this.scrub_(block, code[0], opt_thisOnly), code[1]];
-    } else if (typeof code === 'string') {
-      if (this.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
-        code = this.injectId(this.STATEMENT_PREFIX, block) + code;
-      }
-      if (this.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
-        code = code + this.injectId(this.STATEMENT_SUFFIX, block);
-      }
-      return this.scrub_(block, code, opt_thisOnly);
-    } else if (code === null) {
-      // Block has handled code generation itself.
-      return '';
-    }
-    throw SyntaxError('Invalid code generated: ' + code);
+    return this.scrub_(block, code, opt_thisOnly);
   }
 
   /**
@@ -252,65 +221,12 @@ class CustomGenerator {
    * @return {string} Generated code or '' if no blocks are connected or the
    *     specified input does not exist.
    */
-  valueToCode(block, name, outerOrder) {
-    if (isNaN(outerOrder)) {
-      throw TypeError('Expecting valid order from block: ' + block.type);
-    }
+  valueToCode(block, name) {
     const targetBlock = block.getInputTargetBlock(name);
     if (!targetBlock) {
       return '';
     }
-    const tuple = this.blockToCode(targetBlock);
-    if (tuple === '') {
-      // Disabled block.
-      return '';
-    }
-    // Value blocks must return code and order of operations info.
-    // Statement blocks must only return code.
-    if (!Array.isArray(tuple)) {
-      throw TypeError('Expecting tuple from value block: ' + targetBlock.type);
-    }
-    let code = tuple[0];
-    const innerOrder = tuple[1];
-    if (isNaN(innerOrder)) {
-      throw TypeError(
-        'Expecting valid order from value block: ' + targetBlock.type);
-    }
-    if (!code) {
-      return '';
-    }
-
-    // Add parentheses if needed.
-    let parensNeeded = false;
-    const outerOrderClass = Math.floor(outerOrder);
-    const innerOrderClass = Math.floor(innerOrder);
-    if (outerOrderClass <= innerOrderClass) {
-      if (outerOrderClass === innerOrderClass &&
-        (outerOrderClass === 0 || outerOrderClass === 99)) {
-        // Don't generate parens around NONE-NONE and ATOMIC-ATOMIC pairs.
-        // 0 is the atomic order, 99 is the none order.  No parentheses needed.
-        // In all known languages multiple such code blocks are not order
-        // sensitive.  In fact in Python ('a' 'b') 'c' would fail.
-      } else {
-        // The operators outside this code are stronger than the operators
-        // inside this code.  To prevent the code from being pulled apart,
-        // wrap the code in parentheses.
-        parensNeeded = true;
-        // Check for special exceptions.
-        for (let i = 0; i < this.ORDER_OVERRIDES.length; i++) {
-          if (this.ORDER_OVERRIDES[i][0] === outerOrder &&
-            this.ORDER_OVERRIDES[i][1] === innerOrder) {
-            parensNeeded = false;
-            break;
-          }
-        }
-      }
-    }
-    if (parensNeeded) {
-      // Technically, this should be handled on a language-by-language basis.
-      // However all known (sane) languages use parentheses for grouping.
-      code = '(' + code + ')';
-    }
+    const code = this.blockToCode(targetBlock);
     return code;
   }
 
@@ -326,16 +242,6 @@ class CustomGenerator {
   statementToCode(block, name) {
     const targetBlock = block.getInputTargetBlock(name);
     let code = this.blockToCode(targetBlock);
-    // Value blocks must return code and order of operations info.
-    // Statement blocks must only return code.
-    if (typeof code !== 'string') {
-      throw TypeError(
-        'Expecting code from statement block: ' +
-        (targetBlock && targetBlock.type));
-    }
-    if (code) {
-      code = this.prefixLines(/** @type {string} */(code), this.INDENT);
-    }
     return code;
   }
 
@@ -498,8 +404,8 @@ class CustomGenerator {
   }
 
   codeToTable(code) {
-    var table = '<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Setpoint</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n'
-    const lines = code.split('\n');
+    var table = '<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n'
+    const lines = code.split('\r\n');
     for (var i = 0; i < lines.length; i++) {
       if (lines[i].length == 0) {
         continue;
@@ -508,7 +414,11 @@ class CustomGenerator {
       while (fields.length < 7) {
         fields.push('')
       }
-      table += '<tr><td>' + fields.join('</td><td>') + '</td></tr>\n'
+      if (fields[1].startsWith('!')) {
+        table += '<tr><td>' + fields[0] + '</td><td colspan="6">' + fields[1] + '</td></tr><br>\n';
+      } else {
+        table += ('<tr><td>' + fields.join('</td><td>') + '</td></tr>').replace(/\n/g, '<br>') + '\n';
+      }
     }
     table += '</table>'
     return table
@@ -544,4 +454,66 @@ Object.defineProperties(CustomGenerator.prototype, {
   },
 });
 
+class BTSLine {
+
+  constructor() {
+    this.label = '';
+    this.operator = '';
+    this.value = '';
+    this.limit = '';
+    this.action = '';
+    this.registration = '';
+  }
+
+  toCode() {
+    return `\t${this.label}\t${this.operator}\t${this.value}\t${this.limit}\t${this.action}\t${this.registration}`
+  }
+
+  append(code) {
+    if (!code) {
+      return this;
+    } else if (code instanceof Array) {
+      code.unshift(this);
+      return code;
+    } else if (code instanceof BTSLine) {
+      return [this, code];
+    } else {
+      console.error('invalid code type');
+    }
+  }
+
+  static concat(top, bottom) {
+    if (!top) {
+      return bottom;
+    } else if (top instanceof BTSLine) {
+      return top.append(bottom);
+    } else if (top instanceof Array) {
+      if (!bottom) {
+        return top;
+      } else if (bottom instanceof BTSLine) {
+        top.push(bottom);
+        return top;
+      } else if (bottom instanceof Array) {
+        return top.concat(bottom);
+      } else {
+        console.error('invalid code type');
+      }
+    } else {
+      console.error('invalid code type');
+    }
+  }
+
+}
+
 Blockly.BTS600 = new CustomGenerator('BTS600');
+
+
+Blockly.BTS600.scrub_ = function (block, code, opt_thisOnly) {
+  const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
+  const nextCode = opt_thisOnly ? null : this.blockToCode(nextBlock);
+  if (nextCode) {
+    return BTSLine.concat(code, nextCode);
+  } else {
+    return code;
+  }
+};

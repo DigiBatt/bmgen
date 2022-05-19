@@ -81,7 +81,8 @@ Blockly.defineBlocksWithJsonArray([
             },
             {
                 "type": "input_statement",
-                "name": "LIMIT"
+                "name": "LIMIT",
+                "check": "limit"
             },
             {
                 "type": "input_statement",
@@ -145,8 +146,11 @@ Blockly.defineBlocksWithJsonArray([
             },
             {
                 "type": "input_value",
-                "name": "NAME",
-                "check": "Number"
+                "name": "VALUE",
+                "check": [
+                    "Number",
+                    "channel"
+                ]
             },
             {
                 "type": "input_statement",
@@ -170,7 +174,7 @@ Blockly.defineBlocksWithJsonArray([
             },
             {
                 "type": "input_statement",
-                "name": "action"
+                "name": "ACTION"
             }
         ],
         "inputsInline": true,
@@ -189,8 +193,11 @@ Blockly.defineBlocksWithJsonArray([
             },
             {
                 "type": "input_value",
-                "name": "NAME",
-                "check": "Number"
+                "name": "VALUE",
+                "check": [
+                    "Number",
+                    "channel"
+                ]
             },
             {
                 "type": "input_statement",
@@ -225,14 +232,17 @@ Blockly.defineBlocksWithJsonArray([
         "message0": "%1 * %2",
         "args0": [
             {
-                "type": "field_number",
+                "type": "input_value",
                 "name": "FACTOR",
-                "value": 2
+                "check": "Number"
             },
             {
                 "type": "input_value",
                 "name": "VALUE",
-                "check": "Number"
+                "check": [
+                    "Number",
+                    "channel"
+                ]
             }
         ],
         "inputsInline": true,
@@ -250,24 +260,32 @@ Blockly.defineBlocksWithJsonArray([
                 "name": "OPERATOR",
                 "options": [
                     [
-                        ">",
-                        "BIGGER"
+                        "<",
+                        "LT"
                     ],
                     [
-                        "<",
-                        "SMALLER"
+                        ">",
+                        "GT"
+                    ],
+                    [
+                        "<=",
+                        "LTE"
+                    ],
+                    [
+                        ">=",
+                        "GTE"
                     ]
                 ]
             },
             {
-                "type": "field_number",
+                "type": "input_value",
                 "name": "FACTOR",
-                "value": 0
+                "check": "Number"
             },
             {
-                "type": "field_variable",
+                "type": "input_value",
                 "name": "CHANNEL",
-                "variable": "channel"
+                "check": "channel"
             }
         ],
         "inputsInline": true,
@@ -315,6 +333,10 @@ Blockly.defineBlocksWithJsonArray([
                         "SECONDS"
                     ],
                     [
+                        "min",
+                        "MINUTES"
+                    ],
+                    [
                         "h",
                         "HOURS"
                     ]
@@ -324,6 +346,94 @@ Blockly.defineBlocksWithJsonArray([
         "inputsInline": true,
         "output": "Boolean",
         "colour": 230,
+        "tooltip": "",
+        "helpUrl": ""
+    },
+    {
+        "type": "channel",
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_label_serializable",
+                "name": "CHANNEL",
+                "text": "channel"
+            }
+        ],
+        "inputsInline": true,
+        "output": "channel",
+        "colour": 120,
+        "tooltip": "",
+        "helpUrl": ""
+    },
+    {
+        "type": "variable",
+        "message0": "%1",
+        "args0": [
+            {
+                "type": "field_label_serializable",
+                "name": "VARIABLE",
+                "text": "variable"
+            }
+        ],
+        "inputsInline": true,
+        "output": "Number",
+        "colour": 65,
+        "tooltip": "",
+        "helpUrl": ""
+    },
+    {
+        "type": "assignment",
+        "message0": "%1 = %2",
+        "args0": [
+            {
+                "type": "input_value",
+                "name": "LHS",
+                "check": "Number"
+            },
+            {
+                "type": "field_number",
+                "name": "RHS",
+                "value": 0
+            }
+        ],
+        "inputsInline": true,
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 65,
+        "tooltip": "",
+        "helpUrl": ""
+    },
+    {
+        "type": "pau",
+        "message0": "PAU %1 LIMIT %2",
+        "args0": [
+            {
+                "type": "input_dummy"
+            },
+            {
+                "type": "input_statement",
+                "name": "LIMIT"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 290,
+        "tooltip": "",
+        "helpUrl": ""
+    },
+    {
+        "type": "comment",
+        "message0": "! %1",
+        "args0": [
+            {
+                "type": "field_input",
+                "name": "COMMENT",
+                "text": "comment"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 180,
         "tooltip": "",
         "helpUrl": ""
     }

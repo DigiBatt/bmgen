@@ -8,10 +8,15 @@
     <script src="blockly/msg/js/en.js"></script>
 
     <script src="custom/blocks.js"></script>
-    <script src="custom/blockly_developer_tools/codegen.js"></script>
     <script src="custom/generators/bts600.js"></script>
+    <script src="custom/generators/bts600/labels.js"></script>
     <script src="custom/generators/bts600/operators.js"></script>
+    <script src="custom/generators/bts600/limits.js"></script>
     <script src="custom/generators/bts600/actions.js"></script>
+    <script src="custom/generators/bts600/channels.js"></script>
+    <script src="custom/generators/bts600/variables.js"></script>
+    <script src="custom/generators/bts600/math.js"></script>
+    <script src="custom/toolbox/dynamic_categories.js"></script>
 
     <style type="text/css">
         table,
@@ -19,6 +24,7 @@
         td {
             border: 1px solid black;
             border-collapse: collapse;
+            vertical-align: top;
         }
     </style>
 </head>
@@ -27,6 +33,9 @@
     <h1>BM Generator 3000</h1>
     <button onclick="saveProgram()">Save</button>
     <input type="file" name="Load" onchange="loadProgram(this.files)" />
+    <button onclick="programToClipboard()">Copy to clipboard</button>
+    <button onclick="addChannel()">Add channel</button>
+    <button onclick="addVariable()">Add variable</button>
     <div id="wrapper" style="height: 90%;">
         <div id="blocklyArea" style="text-align: center; height: 100%; width: 70%; float: left"></div>
         <div id="codearea" style="overflow: scroll; height: 100%; width: 30%"></div>
@@ -34,6 +43,14 @@
     <div id="blocklyDiv" style="position: absolute;"></div>
 
     <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+        <category name="Labels" colour="#5ba58c">
+            <block type="label">
+                <field name="LABEL">label</field>
+            </block>
+            <block type="comment">
+                <field name="COMMENT">comment</field>
+            </block>
+        </category>
         <category name="Operators" colour="#745ba5">
             <block type="set"></block>
             <block type="beg">
@@ -45,23 +62,13 @@
             <block type="sto"></block>
             <block type="cha"></block>
             <block type="dch"></block>
-        </category>
-        <category name="Actions" colour="#a55b80">
-            <block type="goto">
-                <field name="LABEL">label</field>
-            </block>
-            <block type="label">
-                <field name="LABEL">label</field>
-            </block>
-            <block type="err">
-                <field name="ERRNUM">1</field>
-            </block>
+            <block type="pau"></block>
         </category>
         <category name="Limits" colour="#5b67a5">
             <block type="limit"></block>
             <block type="limit_action"></block>
             <block type="compare">
-                <field name="OPERATOR">BIGGER</field>
+                <field name="OPERATOR">LT</field>
             </block>
             <block type="and"></block>
             <block type="time">
@@ -69,12 +76,12 @@
                 <field name="UNIT">SECONDS</field>
             </block>
         </category>
-        <category name="Math" colour="#5b67a5">
-            <block type="math_number">
-                <field name="NUM">0</field>
+        <category name="Actions" colour="#a55b80">
+            <block type="goto">
+                <field name="LABEL">label</field>
             </block>
-            <block type="factor">
-                <field name="FACTOR">2</field>
+            <block type="err">
+                <field name="ERRNUM">1</field>
             </block>
         </category>
         <category name="Registration" colour="#5b67a5">
@@ -82,7 +89,18 @@
                 <field name="REGISTRATION">default</field>
             </block>
         </category>
-        <category name="Channels" colour="#a55b80" custom="VARIABLE"></category>
+        <category name="Math" colour="#5b67a5">
+            <block type="math_number">
+                <field name="NUM">0</field>
+            </block>
+            <block type="factor"></block>
+        </category>
+        <category name="Channels" colour="#5ba55b" custom="CHANNELS"></category>
+        <category name="Variables" colour="#9fa55b" custom="BM_VARIABLES">
+            <block type="assignment">
+                <field name="RHS">0</field>
+            </block>
+        </category>
     </xml>
 
 
@@ -146,6 +164,23 @@
             workspace.clear();
             Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
         }
+
+        function programToClipboard() {
+            var code = Blockly.BTS600.workspaceToCode(workspace);
+            navigator.clipboard.writeText(code)
+        }
+
+        function addChannel() {
+            let channelname = window.prompt("Channel name:", "");
+            addChannelNameToToolbox(channelname);
+        }
+
+        function addVariable() {
+            let variablename = window.prompt("Variable name:", "");
+            addVariableNameToToolbox(variablename);
+        }
+
+        registerToolboxCallbacks(workspace);
     </script>
 </body>
 

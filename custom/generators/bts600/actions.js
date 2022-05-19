@@ -1,11 +1,13 @@
 Blockly.BTS600['goto'] = function (block) {
-    const label = block.getFieldValue('label');
-    const code = '\t\t\t\t\tGOTO ' + label + '\t\n';
+    var code = new BTSLine();
+    const label = block.getFieldValue('LABEL');
+    code.action = `GOTO ${label}`
     return code;
 }
 
-Blockly.BTS600['label'] = function (block) {
-    const label = block.getFieldValue('label');
-    const code = '\t' + label + '\t\t\t\t\t\n';
+Blockly.BTS600['err'] = function (block) {
+    var code = new BTSLine();
+    const errnum = block.getFieldValue('ERRNUM');
+    code.action = `ERR ${errnum}`
     return code;
 };
