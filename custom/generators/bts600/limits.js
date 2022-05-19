@@ -23,7 +23,7 @@ Blockly.BTS600['compare'] = function (block) {
 
 Blockly.BTS600['time'] = function (block) {
     const UNITS =
-        { 'SECONDS': 'sec', 'HOURS': 'h' };
+        { 'SECONDS': 'sec', 'MINUTES': 'min', 'HOURS': 'h' };
     const unit = UNITS[block.getFieldValue('UNIT')];
     const value = block.getFieldValue('VALUE');
     var code = new BTSLine();
