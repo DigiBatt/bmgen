@@ -1,3 +1,0 @@
-goog.addDependency('../../../custom/generators/bts600.js', ['Blockly.BTS600'], ['Blockly.Generator', 'Blockly.Names', 'Blockly.Variables', 'Blockly.inputTypes', 'Blockly.utils.global', 'Blockly.utils.object', 'Blockly.utils.string'], { 'lang': 'es6', 'module': 'goog' });
-goog.addDependency('../../../custom/generators/bts600/all.js', ['Blockly.BTS600.all'], ['Blockly.BTS600.jumps'], { 'module': 'goog' });
-goog.addDependency('../../../custom/generators/bts600/jumps.js', ['Blockly.BTS600.jumps'], ['Blockly.BTS600'], { 'lang': 'es6', 'module': 'goog' });

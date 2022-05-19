@@ -35,6 +35,8 @@
     <input type="file" name="Load" onchange="loadProgram(this.files)" />
     <button onclick="addChannel()">Add channel</button>
     <button onclick="addVariable()">Add variable</button>
+    Program Name:
+    <input type="text" id="programName" />
     <div id="wrapper" style="height: 90%;">
         <div id="blocklyArea" style="text-align: center; height: 100%; width: 70%; float: left"></div>
         <div id="codearea" style="overflow: scroll; height: 100%; width: 30%"></div>
@@ -143,7 +145,13 @@
             const xmlStr = serializer.serializeToString(xml);
             var element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xmlStr));
-            element.setAttribute('download', 'workspace.xml');
+            filename = document.getElementById('programName').value
+            if (filename) {
+                filename += '.xml';
+            } else {
+                filename = 'workspace.xml';
+            }
+            element.setAttribute('download', filename);
             element.style.display = 'none';
             document.body.appendChild(element);
             element.click();
