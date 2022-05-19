@@ -13,8 +13,10 @@ Blockly.BTS600['set'] = function (block) {
   var limit = Blockly.BTS600.statementToCode(block, 'LIMIT');
   if (limit instanceof Array) {
     const combined = limit.map(line => line.limit).join('\n');
+    const combined_action = limit.map(line => line.action).join('\n');
     limit = new BTSLine();
     limit.limit = combined;
+    limit.action = combined_action;
     limit.operator = 'SET';
   }
   else if (limit instanceof BTSLine) {
