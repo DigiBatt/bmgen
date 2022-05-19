@@ -1,7 +1,7 @@
 Blockly.BTS600['set'] = function (block) {
   var value = Blockly.BTS600.statementToCode(block, 'VALUE');
   if (value instanceof Array) {
-    const combined = value.map(line => line.value).join('\n');
+    const combined = value.map(line => line.value);
     value = new BTSLine();
     value.value = combined;
     value.operator = 'SET';
@@ -12,8 +12,8 @@ Blockly.BTS600['set'] = function (block) {
 
   var limit = Blockly.BTS600.statementToCode(block, 'LIMIT');
   if (limit instanceof Array) {
-    const combined = limit.map(line => line.limit).join('\n');
-    const combined_action = limit.map(line => line.action).join('\n');
+    const combined = limit.map(line => line.limit);
+    const combined_action = limit.map(line => line.action);
     limit = new BTSLine();
     limit.limit = combined;
     limit.action = combined_action;
@@ -25,7 +25,7 @@ Blockly.BTS600['set'] = function (block) {
 
   var registration = Blockly.BTS600.statementToCode(block, 'REGISTRATION');
   if (registration instanceof Array) {
-    const combined = registration.map(line => line.registration).join('\n');
+    const combined = registration.map(line => line.registration);
     registration = new BTSLine();
     registration.registration = combined;
     registration.operator = 'SET';

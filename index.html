@@ -140,7 +140,6 @@
 
         function saveProgram() {
             const xml = Blockly.Xml.workspaceToDom(workspace);
-            console.log(xml);
             const serializer = new XMLSerializer();
             const xmlStr = serializer.serializeToString(xml);
             var element = document.createElement('a');

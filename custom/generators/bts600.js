@@ -123,13 +123,12 @@ class CustomGenerator {
       let codeblock = this.blockToCode(block);
       if (codeblock) {
         if (codeblock instanceof Array) {
-          code.push(codeblock.map(line => line.toCode()).join('\r\n'));
+          code = code.concat(codeblock);
         } else {
-          code.push(codeblock.toCode());
+          code.push(codeblock);
         }
       }
     }
-    code = code.join('\r\n');  // Blank line between each section.
     code = this.finish(code);
     return code;
   }
@@ -406,19 +405,16 @@ class CustomGenerator {
   codeToTable(code) {
     var table = '<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n'
     var step = 1;
-    const lines = code.split('\r\n');
-    for (var i = 0; i < lines.length; i++) {
-      if (lines[i].length == 0) {
-        continue;
-      }
-      var fields = lines[i].split('\t');
-      while (fields.length < 6) {
-        fields.push('')
-      }
-      if (fields[0].startsWith('!')) {
-        table += '<tr><td></td><td colspan="6">' + fields[0] + '</td></tr><br>\n';
+    for (var i = 0; i < code.length; i++) {
+      const line = code[i];
+      if (line.label.startsWith('!')) {
+        table += `<tr><td></td><td colspan="6">${line.label}</td></tr><br>\n`;
       } else {
-        table += ('<tr><td>' + step + '</td><td>' + fields.join('</td><td>') + '</td></tr>').replace(/\n/g, '<br>') + '\n';
+        const value = line.value instanceof Array ? line.value.join('<br>') : line.value;
+        const limit = line.limit instanceof Array ? line.limit.join('<br>') : line.limit;
+        const action = line.action instanceof Array ? line.action.join('<br>') : line.action;
+        const registration = line.registration instanceof Array ? line.registration.join('<br>') : line.registration;
+        table += `<tr><td>${step}</td><td>${line.label}</td><td>${line.operator}</td><td>${value}</td><td>${limit}</td><td>${action}</td><td>${registration}</td></tr>\n`;
         step += 1;
       }
     }
