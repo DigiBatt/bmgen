@@ -405,19 +405,21 @@ class CustomGenerator {
 
   codeToTable(code) {
     var table = '<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n'
+    var step = 1;
     const lines = code.split('\r\n');
     for (var i = 0; i < lines.length; i++) {
       if (lines[i].length == 0) {
         continue;
       }
       var fields = lines[i].split('\t');
-      while (fields.length < 7) {
+      while (fields.length < 6) {
         fields.push('')
       }
-      if (fields[1].startsWith('!')) {
-        table += '<tr><td>' + fields[0] + '</td><td colspan="6">' + fields[1] + '</td></tr><br>\n';
+      if (fields[0].startsWith('!')) {
+        table += '<tr><td></td><td colspan="6">' + fields[0] + '</td></tr><br>\n';
       } else {
-        table += ('<tr><td>' + fields.join('</td><td>') + '</td></tr>').replace(/\n/g, '<br>') + '\n';
+        table += ('<tr><td>' + step + '</td><td>' + fields.join('</td><td>') + '</td></tr>').replace(/\n/g, '<br>') + '\n';
+        step += 1;
       }
     }
     table += '</table>'
@@ -466,7 +468,7 @@ class BTSLine {
   }
 
   toCode() {
-    return `\t${this.label}\t${this.operator}\t${this.value}\t${this.limit}\t${this.action}\t${this.registration}`
+    return `${this.label}\t${this.operator}\t${this.value}\t${this.limit}\t${this.action}\t${this.registration}`
   }
 
   append(code) {
