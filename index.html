@@ -134,7 +134,8 @@
         function myUpdateFunction(event) {
             var code = Blockly.BTS600.workspaceToCode(workspace);
             var table = Blockly.BTS600.codeToTable(code);
-            document.getElementById('codearea').innerHTML = table;
+            var text = '<code>' + Blockly.BTS600.codeToText(code).replace(/\n/g, '<br>').replace(/ /g, '&nbsp;') + '</code>';
+            document.getElementById('codearea').innerHTML = table + '<br><br>' + text;
         }
         workspace.addChangeListener(myUpdateFunction);
 

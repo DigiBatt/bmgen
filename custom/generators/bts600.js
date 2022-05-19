@@ -421,6 +421,66 @@ class CustomGenerator {
     table += '</table>'
     return table
   }
+
+  codeToText(code) {
+    var text = '';
+    for (var i = 0; i < code.length; i++) {
+      const line = code[i];
+      var linetext = '';
+      if (line.label.startsWith('!')) {
+        linetext += line.label + '\n';
+        continue;
+      }
+      if (line.label) {
+        linetext += 'LABEL ' + line.label;
+      }
+      if (line.operator) {
+        linetext += line.operator;
+      }
+      if (line.value) {
+        if (line.value instanceof Array) {
+          const prefix = ' '.repeat(linetext.length);
+          linetext += line.value.map(x => ' VALUE ' + x).join('\n' + prefix);
+        } else {
+          linetext += ' VALUE ' + line.value;
+        }
+      }
+      if (line.limit) {
+        if (line.limit instanceof Array) {
+          const prefix = ' '.repeat(linetext.length);
+          if (line.action) {
+            var limits = []
+            for (var k = 0; k < line.limit.length; k++) {
+              var lim = ' LIMIT ' + line.limit[k];
+              if (line.action[k]) {
+                lim += ' ACTION ' + line.action[k];
+              }
+              limits.push(lim);
+            }
+            linetext += limits.join('\n' + prefix);
+          } else {
+            linetext += line.value.map(x => ' VALUE ' + x).join('\n' + prefix);
+          }
+        } else {
+          linetext += ' LIMIT ' + line.limit;
+          if (line.action) {
+            linetext += ' ACTION ' + line.action;
+          }
+        }
+      }
+      if (line.registration) {
+        if (line.registration instanceof Array) {
+          const prefix = ' '.repeat(linetext.length);
+          linetext += line.registration.map(x => ' REGISTRATION ' + x).join('\n' + prefix);
+        } else {
+          linetext += ' REGISTRATION ' + line.registration;
+        }
+      }
+      linetext += ';\n';
+      text += linetext;
+    }
+    return text;
+  }
 }
 
 Object.defineProperties(CustomGenerator.prototype, {
