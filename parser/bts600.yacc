@@ -4,11 +4,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void yyerror(char *s)
+void yyerror(program **retprogram, char *s)
 {
   fprintf(stderr, "%s\n",s);
 }
 %}
+
+%parse-param {program **retprogram}
 
 %token FLOAT ID COMP ASSIGN MATHOP COMMENT WHITESPACE SEMICOLON KW_VALUE KW_LIMIT KW_ACTION KW_REGISTRATION KW_GOTO KW_ERR
 
@@ -48,6 +50,7 @@ void yyerror(char *s)
 program:    stat
             {
                 program *x = malloc(sizeof(program));
+                *retprogram = x;
                 x->statvalue = malloc(sizeof(stat*));
                 x->statvalue[0] = $1;
                 x->statcount = 1;
@@ -238,7 +241,10 @@ registration:   KW_REGISTRATION numvalue
                  
 %%
 
+/*
 int main()
 {
- return(yyparse());
+    program *retprogram;
+    return(yyparse(&retprogram));
 }
+*/
