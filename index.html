@@ -17,6 +17,7 @@
     <script src="custom/generators/bts600/variables.js"></script>
     <script src="custom/generators/bts600/math.js"></script>
     <script src="custom/toolbox/dynamic_categories.js"></script>
+    <script src="custom/import_json_program.js"></script>
 
     <style type="text/css">
         table,
@@ -160,14 +161,19 @@
 
         function loadProgram(files) {
             var reader = new FileReader();
-            reader.onload = (function () { return function (e) { loadXml(e.target.result); }; })();
+            if (files[0].name.endsWith('xml')) {
+                reader.onload = (function () { return function (e) { loadXml(e.target.result); }; })();
+            } else if (files[0].name.endsWith('json')) {
+                reader.onload = (function () { return function (e) { import_json_program(e.target.result); }; })();
+            } else {
+                alert("Unknown file format");
+            }
             reader.readAsText(files[0]);
         }
 
         function loadXml(file) {
             const parser = new DOMParser();
             const doc = parser.parseFromString(file, 'application/xml');
-            console.log(doc.documentElement);
             workspace.clear();
             Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
         }
