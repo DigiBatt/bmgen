@@ -4,30 +4,31 @@
 #include <stdlib.h>
 #include <string.h>
 
-char *strarray_to_str(int size, char **in)
+char *strarray_to_str(int size, char **in, char *sep)
 {
     int *len = malloc(sizeof(int) * size);
     int total_len = 0;
     for (int i = 0; i < size; i++)
     {
-        if (in[i] == 0)
-        {
-            len[i] = 0;
-        }
-        else
-        {
-            len[i] = strlen(in[i]);
-            total_len += len[i];
-        }
+        len[i] = strlen(in[i]);
+        total_len += len[i];
+    }
+    int sep_len = 0;
+    if (sep)
+    {
+        sep_len = strlen(sep);
+        total_len += sep_len * (size - 1);
     }
     char *out = malloc(sizeof(char) * (total_len + 1));
     total_len = 0;
     for (int i = 0; i < size; i++)
     {
-        if (len[i] > 0)
+        strcpy(out + total_len, in[i]);
+        total_len += len[i];
+        if (sep && i < (size - 1))
         {
-            strcpy(out + total_len, in[i]);
-            total_len += len[i];
+            strcpy(out + total_len, sep);
+            total_len += sep_len;
         }
     }
     return out;
@@ -41,32 +42,32 @@ char *numvalue_to_json(numvalue *x)
         arraysize = 7;
     }
     char **stringparts = malloc(sizeof(char *) * arraysize);
-    stringparts[0] = "{'type': '";
+    stringparts[0] = "{\"type\": \"";
     switch (x->type)
     {
     case numvalue_idtype:
         stringparts[1] = "variable";
-        stringparts[2] = "', 'name': '";
+        stringparts[2] = "\", \"name\": \"";
         stringparts[3] = x->idvalue;
-        stringparts[4] = "'}";
+        stringparts[4] = "\"}";
         break;
     case numvalue_floattype:
         stringparts[1] = "number";
-        stringparts[2] = "', 'value': ";
+        stringparts[2] = "\", \"value\": ";
         stringparts[3] = malloc(sizeof(char) * 10);
         snprintf(stringparts[3], 10, "%f", x->floatvalue);
         stringparts[4] = "}";
         break;
     case numvalue_multype:
         stringparts[1] = "multiplication";
-        stringparts[2] = "', 'lhs': ";
+        stringparts[2] = "\", \"lhs\": ";
         stringparts[3] = numvalue_to_json(x->mulvalue[0]);
-        stringparts[4] = ", 'rhs': ";
+        stringparts[4] = ", \"rhs\": ";
         stringparts[5] = numvalue_to_json(x->mulvalue[0]);
         stringparts[6] = "}";
         break;
     }
-    char *out = strarray_to_str(arraysize, stringparts);
+    char *out = strarray_to_str(arraysize, stringparts, 0);
     if (x->type == numvalue_floattype)
     {
         free(stringparts[3]);
@@ -91,7 +92,7 @@ char *valueexpr_to_json(value_expr *x)
         arraysize = 7;
     }
     char **stringparts = malloc(sizeof(char *) * arraysize);
-    stringparts[0] = "{'type': '";
+    stringparts[0] = "{\"type\": \"";
     switch (x->type)
     {
     case value_expr_assigntype:
@@ -104,19 +105,19 @@ char *valueexpr_to_json(value_expr *x)
         stringparts[1] = "cycles";
         break;
     }
-    stringparts[2] = "', 'value': ";
+    stringparts[2] = "\", \"value\": ";
     stringparts[3] = numvalue_to_json(x->numvaluevalue);
     if (x->type == value_expr_assigntype)
     {
-        stringparts[4] = ", 'target': '";
+        stringparts[4] = ", \"target\": \"";
         stringparts[5] = x->idvalue;
-        stringparts[6] = "}";
+        stringparts[6] = "\"}";
     }
     else
     {
         stringparts[4] = "}";
     }
-    char *out = strarray_to_str(arraysize, stringparts);
+    char *out = strarray_to_str(arraysize, stringparts, 0);
     free(stringparts[3]);
     if (x->type == value_expr_assigntype)
     {
@@ -135,18 +136,18 @@ char *action_to_json(action *x)
     switch (x->type)
     {
     case action_errtype:
-        stringparts[0] = "{'type': 'error', 'number': ";
+        stringparts[0] = "{\"type\": \"error\", \"number\": ";
         stringparts[1] = malloc(sizeof(char) * 10);
         snprintf(stringparts[1], 10, "%i", x->errvalue);
         stringparts[2] = "}";
         break;
     case action_gototype:
-        stringparts[0] = "{'type': 'goto', 'label': '";
+        stringparts[0] = "{\"type\": \"goto\", \"label\": \"";
         stringparts[1] = x->gotovalue;
-        stringparts[2] = "'}";
+        stringparts[2] = "\"}";
         break;
     }
-    char *out = strarray_to_str(3, stringparts);
+    char *out = strarray_to_str(3, stringparts, 0);
     if (x->type == action_errtype)
     {
         free(stringparts[1]);
@@ -161,14 +162,14 @@ char *limit_to_json(limit *x)
         return strdup("{}");
     }
     char **stringparts = malloc(sizeof(char *) * 7);
-    stringparts[0] = "{'operator': '";
+    stringparts[0] = "{\"operator\": \"";
     stringparts[1] = x->operatorvalue;
-    stringparts[2] = "', 'value': ";
+    stringparts[2] = "\", \"value\": ";
     stringparts[3] = numvalue_to_json(x->numvaluevalue);
-    stringparts[4] = ", 'action': ";
+    stringparts[4] = ", \"action\": ";
     stringparts[5] = action_to_json(x->actionvalue);
     stringparts[6] = "}";
-    char *out = strarray_to_str(7, stringparts);
+    char *out = strarray_to_str(7, stringparts, 0);
     free(stringparts[3]);
     free(stringparts[5]);
     return out;
@@ -181,10 +182,10 @@ char *registration_to_json(registration *x)
         return strdup("{}");
     }
     char **stringparts = malloc(sizeof(char *) * 3);
-    stringparts[0] = "{'value': ";
+    stringparts[0] = "{\"value\": ";
     stringparts[1] = numvalue_to_json(x->numvaluevalue);
     stringparts[2] = "}";
-    char *out = strarray_to_str(3, stringparts);
+    char *out = strarray_to_str(3, stringparts, 0);
     free(stringparts[1]);
     return out;
 }
@@ -195,19 +196,20 @@ char *valuelist_to_json(valuelist *x)
     {
         return strdup("[]");
     }
-    int size = x->valueexprcount + 2;
+    int size = x->valueexprcount;
     char **stringparts = malloc(sizeof(char *) * size);
-    stringparts[0] = "[";
     for (int i = 0; i < x->valueexprcount; i++)
     {
-        stringparts[i + 1] = valueexpr_to_json(x->valueexprvalue[i]);
+        stringparts[i] = valueexpr_to_json(x->valueexprvalue[i]);
     }
-    stringparts[size - 1] = "]";
-    char *out = strarray_to_str(size, stringparts);
+    char *array = strarray_to_str(size, stringparts, ", ");
     for (int i = 0; i < x->valueexprcount; i++)
     {
-        free(stringparts[i + 1]);
+        free(stringparts[i]);
     }
+    char *allparts[] = {"[", array, "]"};
+    char *out = strarray_to_str(3, allparts, 0);
+    free(allparts[1]);
     return out;
 }
 
@@ -217,19 +219,20 @@ char *limitlist_to_json(limitlist *x)
     {
         return strdup("[]");
     }
-    int size = x->limitcount + 2;
+    int size = x->limitcount;
     char **stringparts = malloc(sizeof(char *) * size);
-    stringparts[0] = "[";
     for (int i = 0; i < x->limitcount; i++)
     {
-        stringparts[i + 1] = limit_to_json(x->limitvalue[i]);
+        stringparts[i] = limit_to_json(x->limitvalue[i]);
     }
-    stringparts[size - 1] = "]";
-    char *out = strarray_to_str(size, stringparts);
+    char *array = strarray_to_str(size, stringparts, ", ");
     for (int i = 0; i < x->limitcount; i++)
     {
-        free(stringparts[i + 1]);
+        free(stringparts[i]);
     }
+    char *allparts[] = {"[", array, "]"};
+    char *out = strarray_to_str(3, allparts, 0);
+    free(allparts[1]);
     return out;
 }
 
@@ -240,14 +243,14 @@ char *args_to_json(args *x)
         return strdup("{}");
     }
     char **stringparts = malloc(sizeof(char *) * 7);
-    stringparts[0] = "{'value': ";
+    stringparts[0] = "{\"value\": ";
     stringparts[1] = valuelist_to_json(x->valuelistvalue);
-    stringparts[2] = ", 'limit': ";
+    stringparts[2] = ", \"limit\": ";
     stringparts[3] = limitlist_to_json(x->limitlistvalue);
-    stringparts[4] = ", 'registration': ";
+    stringparts[4] = ", \"registration\": ";
     stringparts[5] = registration_to_json(x->registrationvalue);
     stringparts[6] = "}";
-    char *out = strarray_to_str(7, stringparts);
+    char *out = strarray_to_str(7, stringparts, 0);
     free(stringparts[1]);
     free(stringparts[3]);
     free(stringparts[5]);
@@ -257,12 +260,12 @@ char *args_to_json(args *x)
 char *stat_to_json(stat *x)
 {
     char **stringparts = malloc(sizeof(char *) * 5);
-    stringparts[0] = "{'operator': '";
+    stringparts[0] = "{\"operator\": \"";
     stringparts[1] = x->operatorvalue;
-    stringparts[2] = "', 'args': ";
+    stringparts[2] = "\", \"args\": ";
     stringparts[3] = args_to_json(x->argsvalue);
     stringparts[4] = "}";
-    char *out = strarray_to_str(5, stringparts);
+    char *out = strarray_to_str(5, stringparts, 0);
     free(stringparts[1]);
     free(stringparts[3]);
     return out;
@@ -270,20 +273,21 @@ char *stat_to_json(stat *x)
 
 char *program_to_json(program *x)
 {
-    const char *pre = "{'statements': [";
+    const char *pre = "{\"statements\": [";
     const char *post = "]}";
-    char **stringparts = malloc(sizeof(char *) * (x->statcount + 2));
-    stringparts[0] = pre;
+    char **stringparts = malloc(sizeof(char *) * (x->statcount));
     for (int i = 0; i < x->statcount; i++)
     {
-        stringparts[i + 1] = stat_to_json(x->statvalue[i]);
+        stringparts[i] = stat_to_json(x->statvalue[i]);
     }
-    stringparts[x->statcount + 1] = post;
-    char *out = strarray_to_str(x->statcount + 2, stringparts);
+    char *array = strarray_to_str(x->statcount, stringparts, ", ");
     for (int i = 0; i < x->statcount; i++)
     {
-        free(stringparts[i + 1]);
+        free(stringparts[i]);
     }
+    char *allparts[] = {"{\"statements\": [", array, "]}"};
+    char *out = strarray_to_str(3, allparts, 0);
+    free(allparts[1]);
     return out;
 }
 
