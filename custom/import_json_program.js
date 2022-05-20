@@ -36,6 +36,22 @@ function json_action_to_xml(x) {
     }
 }
 
+function json_valueexpr_to_xml(x, next) {
+    if (x.type == 'assignment') {
+        var targetdef = {
+            'type': 'variable',
+            'name': x.target
+        };
+        var xml = `<block type="assignment" id="${gen_xml_id()}"><value name="LHS">${json_numvalue_to_xml(targetdef)}</value><field name="RHS">${x.value.value}</field>`;
+        if (next) {
+            xml += '<next>' + next + '</next>';
+        }
+        xml += "</block>";
+        return xml;
+    }
+    return next;
+}
+
 function json_limit_to_xml(x, next) {
     var blocktype = 'limit';
     const has_action = ("type" in x.action);
@@ -55,11 +71,21 @@ function json_limit_to_xml(x, next) {
 
 function json_args_to_xml(x) {
     var next = '';
-    for (var i = x.limit.length - 1; i >= 0; i--) {
-        console.log(x.limit[i]);
-        next = json_limit_to_xml(x.limit[i], next);
+    var xml = '';
+    if (x.limit.length > 0) {
+        for (var i = x.limit.length - 1; i >= 0; i--) {
+            next = json_limit_to_xml(x.limit[i], next);
+        }
+        xml = '<statement name="LIMIT">' + next + '</statement>';
     }
-    return '<statement name="LIMIT">' + next + '</statement>';
+    if (x.value.length > 0) {
+        next = ''
+        for (var i = x.value.length - 1; i >= 0; i--) {
+            next = json_valueexpr_to_xml(x.value[i], next);
+        }
+        xml += '<statement name="VALUE">' + next + '</statement>';
+    }
+    return xml;
 }
 
 function json_stat_to_xml(x, next) {
@@ -78,7 +104,6 @@ function json_stat_to_xml(x, next) {
 function json_program_to_xml(x) {
     var next = '';
     for (var i = x.statements.length - 1; i >= 0; i--) {
-        console.log(x.statements[i]);
         next = json_stat_to_xml(x.statements[i], next);
     }
     return '<xml xmlns="https://developers.google.com/blockly/xml">' + next + '</xml>';
@@ -91,5 +116,4 @@ function import_json_program(file) {
     const doc = parser.parseFromString(xml, 'application/xml');
     workspace.clear();
     Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
-    console.log(doc);
 }
