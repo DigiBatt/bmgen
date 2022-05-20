@@ -63,7 +63,7 @@ char *numvalue_to_json(numvalue *x)
         stringparts[2] = "\", \"lhs\": ";
         stringparts[3] = numvalue_to_json(x->mulvalue[0]);
         stringparts[4] = ", \"rhs\": ";
-        stringparts[5] = numvalue_to_json(x->mulvalue[0]);
+        stringparts[5] = numvalue_to_json(x->mulvalue[1]);
         stringparts[6] = "}";
         break;
     }
