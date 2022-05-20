@@ -429,6 +429,7 @@ class CustomGenerator {
       var linetext = '';
       if (line.label.startsWith('!')) {
         linetext += line.label + '\n';
+        text += linetext;
         continue;
       }
       if (line.label) {
