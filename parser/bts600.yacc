@@ -12,7 +12,7 @@ void yyerror(program **retprogram, char *s)
 
 %parse-param {program **retprogram}
 
-%token FLOAT ID COMP ASSIGN MATHOP COMMENT WHITESPACE SEMICOLON KW_VALUE KW_LIMIT KW_ACTION KW_REGISTRATION KW_GOTO KW_ERR
+%token FLOAT ID COMP ASSIGN MATHMUL COMMENT WHITESPACE SEMICOLON KW_VALUE KW_LIMIT KW_ACTION KW_REGISTRATION KW_GOTO KW_ERR
 
 %union
 {
@@ -20,8 +20,10 @@ void yyerror(program **retprogram, char *s)
     char *stringValue;
     numvalue *numvaluevalue;
     value_expr *valueexprvalue;
+    valuelist *valuelistvalue;
     action *actionvalue;
     limit *limitvalue;
+    limitlist *limitlistvalue;
     registration *registrationvalue;
     args *argsvalue;
     stat *statvalue;
@@ -42,6 +44,8 @@ void yyerror(program **retprogram, char *s)
 %type <programvalue> program
 %type <stringValue> operator
 %type <valueexprvalue> value
+%type <valuelistvalue> valuelist
+%type <limitlistvalue> limitlist
 
 %start program
 
@@ -90,29 +94,29 @@ operator:   ID
             }
              ;
              
-args:       value limit
+args:       valuelist limitlist
             {
                 args *x = malloc(sizeof(args));
-                x->valueexprvalue = $1;
-                x->limitvalue = $2;
+                x->valuelistvalue = $1;
+                x->limitlistvalue = $2;
                 x->registrationvalue = 0;
                 $$ = x;
             }
              |
-            value
+            valuelist
             {
                 args *x = malloc(sizeof(args));
-                x->valueexprvalue = $1;
-                x->limitvalue = 0;
+                x->valuelistvalue = $1;
+                x->limitlistvalue = 0;
                 x->registrationvalue = 0;
                 $$ = x;
             }
              |
-            limit
+            limitlist
             {
                 args *x = malloc(sizeof(args));
-                x->valueexprvalue = 0;
-                x->limitvalue = $1;
+                x->valuelistvalue = 0;
+                x->limitlistvalue = $1;
                 x->registrationvalue = 0;
                 $$ = x;
             }
@@ -120,8 +124,8 @@ args:       value limit
             registration
             {
                 args *x = malloc(sizeof(args));
-                x->valueexprvalue = 0;
-                x->limitvalue = 0;
+                x->valuelistvalue = 0;
+                x->limitlistvalue = 0;
                 x->registrationvalue = $1;
                 $$ = x;
             }
@@ -129,9 +133,47 @@ args:       value limit
                                 /* empty */
             {
                 args *x = malloc(sizeof(args));
-                x->valueexprvalue = 0;
-                x->limitvalue = 0;
+                x->valuelistvalue = 0;
+                x->limitlistvalue = 0;
                 x->registrationvalue = 0;
+                $$ = x;
+            }
+             ;
+             
+valuelist:  value
+            {
+                valuelist *x = malloc(sizeof(valuelist));
+                x->valueexprvalue = malloc(sizeof(value_expr*));
+                x->valueexprvalue[0] = $1;
+                x->valueexprcount = 1;
+                $$ = x;
+            }
+             |
+            valuelist value
+            {
+                valuelist *x = $1;
+                x->valueexprvalue = realloc(x->valueexprvalue, sizeof(value_expr*) * (x->valueexprcount + 1));
+                x->valueexprvalue[x->valueexprcount] = $2;
+                x->valueexprcount++;
+                $$ = x;
+            }
+             ;
+
+limitlist:  limit
+            {
+                limitlist *x = malloc(sizeof(limitlist));
+                x->limitvalue = malloc(sizeof(limit*));
+                x->limitvalue[0] = $1;
+                x->limitcount = 1;
+                $$ = x;
+            }
+             |
+            limitlist limit
+            {
+                limitlist *x = $1;
+                x->limitvalue = realloc(x->limitvalue, sizeof(limit*) * (x->limitcount + 1));
+                x->limitvalue[x->limitcount] = $2;
+                x->limitcount++;
                 $$ = x;
             }
              ;
@@ -159,7 +201,7 @@ value_expr: ID ASSIGN numvalue
                 $$ = x;
             }
              |
-            numvalue '*'
+            numvalue MATHMUL
             {
                 value_expr *x = malloc(sizeof(value_expr));
                 x->type = value_expr_cycletype;

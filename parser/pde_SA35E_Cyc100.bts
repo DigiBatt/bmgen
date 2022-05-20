@@ -1,0 +1,15 @@
+SET LIMIT > 4.3 V ACTION ERR 1
+    LIMIT < 2.5 V ACTION ERR 1
+    LIMIT > 65 PBOC1 ACTION ERR 1;
+! Variablen des Kapazitätstests
+SET VALUE CEla = 1.7
+    VALUE CLad = 1.7
+    VALUE DODAh = 3.4
+    VALUE AnodeAh = 3.4
+    VALUE EOCycV = 3;
+PAU LIMIT > 5 min;
+BEG;
+DCH VALUE CEla A LIMIT <= EODV V;
+CHA VALUE CLad A LIMIT >= EOCV V;
+CYC VALUE 50 *;
+STO;

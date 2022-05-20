@@ -16,7 +16,7 @@ FLOAT -?{DIGIT}(.{DIGIT}+)?
 ID [A-Za-z][A-Za-z0-9]*
 COMP [><]=?
 ASSIGN =
-MATHOP [-+*/]
+MATHMUL [*]
 COMMENT ^[ \t]*!.*
 WHITESPACE [ \t\r\n]*
 
@@ -70,9 +70,8 @@ WHITESPACE [ \t\r\n]*
                 return(ASSIGN);
               }
 
-{MATHOP}      {
-                yylval.stringValue = strdup(yytext);
-                return(MATHOP);
+{MATHMUL}     {
+                return(MATHMUL);
               }
               
 [;]           {

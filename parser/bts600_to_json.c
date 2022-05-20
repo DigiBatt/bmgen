@@ -189,13 +189,61 @@ char *registration_to_json(registration *x)
     return out;
 }
 
+char *valuelist_to_json(valuelist *x)
+{
+    if (x == 0)
+    {
+        return strdup("[]");
+    }
+    int size = x->valueexprcount + 2;
+    char **stringparts = malloc(sizeof(char *) * size);
+    stringparts[0] = "[";
+    for (int i = 0; i < x->valueexprcount; i++)
+    {
+        stringparts[i + 1] = valueexpr_to_json(x->valueexprvalue[i]);
+    }
+    stringparts[size - 1] = "]";
+    char *out = strarray_to_str(size, stringparts);
+    for (int i = 0; i < x->valueexprcount; i++)
+    {
+        free(stringparts[i + 1]);
+    }
+    return out;
+}
+
+char *limitlist_to_json(limitlist *x)
+{
+    if (x == 0)
+    {
+        return strdup("[]");
+    }
+    int size = x->limitcount + 2;
+    char **stringparts = malloc(sizeof(char *) * size);
+    stringparts[0] = "[";
+    for (int i = 0; i < x->limitcount; i++)
+    {
+        stringparts[i + 1] = limit_to_json(x->limitvalue[i]);
+    }
+    stringparts[size - 1] = "]";
+    char *out = strarray_to_str(size, stringparts);
+    for (int i = 0; i < x->limitcount; i++)
+    {
+        free(stringparts[i + 1]);
+    }
+    return out;
+}
+
 char *args_to_json(args *x)
 {
+    if (x == 0)
+    {
+        return strdup("{}");
+    }
     char **stringparts = malloc(sizeof(char *) * 7);
     stringparts[0] = "{'value': ";
-    stringparts[1] = valueexpr_to_json(x->valueexprvalue);
+    stringparts[1] = valuelist_to_json(x->valuelistvalue);
     stringparts[2] = ", 'limit': ";
-    stringparts[3] = limit_to_json(x->limitvalue);
+    stringparts[3] = limitlist_to_json(x->limitlistvalue);
     stringparts[4] = ", 'registration': ";
     stringparts[5] = registration_to_json(x->registrationvalue);
     stringparts[6] = "}";

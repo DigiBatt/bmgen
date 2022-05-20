@@ -1,18 +1,23 @@
-typedef struct _numvalue {
-  enum {
+typedef struct _numvalue
+{
+  enum
+  {
     numvalue_idtype,
     numvalue_floattype,
     numvalue_multype,
   } type;
-  union {
+  union
+  {
     char *idvalue;
     double floatvalue;
     struct _numvalue *mulvalue[2];
   };
 } numvalue;
 
-typedef struct {
-  enum {
+typedef struct
+{
+  enum
+  {
     value_expr_assigntype,
     value_expr_numvaluetype,
     value_expr_cycletype,
@@ -21,39 +26,59 @@ typedef struct {
   numvalue *numvaluevalue;
 } value_expr;
 
-typedef struct {
-  enum {
+typedef struct
+{
+  enum
+  {
     action_errtype,
     action_gototype,
   } type;
-  union {
+  union
+  {
     int errvalue;
     char *gotovalue;
   };
 } action;
 
-typedef struct {
+typedef struct
+{
   char *operatorvalue;
   numvalue *numvaluevalue;
   action *actionvalue;
 } limit;
 
-typedef struct {
+typedef struct
+{
   numvalue *numvaluevalue;
 } registration;
 
-typedef struct {
-  value_expr *valueexprvalue;
-  limit *limitvalue;
+typedef struct
+{
+  value_expr **valueexprvalue;
+  int valueexprcount;
+} valuelist;
+
+typedef struct
+{
+  limit **limitvalue;
+  int limitcount;
+} limitlist;
+
+typedef struct
+{
+  valuelist *valuelistvalue;
+  limitlist *limitlistvalue;
   registration *registrationvalue;
 } args;
 
-typedef struct {
+typedef struct
+{
   char *operatorvalue;
   args *argsvalue;
 } stat;
 
-typedef struct {
+typedef struct
+{
   stat **statvalue;
   int statcount;
 } program;
