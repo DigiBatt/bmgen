@@ -130,7 +130,7 @@ class CustomGenerator {
       }
     }
     code = this.finish(code);
-    return code;
+    return new BTSProgram(code);
   }
 
   // The following are some helpful functions which can be used by multiple
@@ -241,6 +241,9 @@ class CustomGenerator {
   statementToCode(block, name) {
     const targetBlock = block.getInputTargetBlock(name);
     let code = this.blockToCode(targetBlock);
+    if (code instanceof BTSNode) {
+      code = [code];
+    }
     return code;
   }
 
@@ -401,87 +404,6 @@ class CustomGenerator {
     // Optionally override
     return line;
   }
-
-  codeToTable(code) {
-    var table = '<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n'
-    var step = 1;
-    for (var i = 0; i < code.length; i++) {
-      const line = code[i];
-      if (line.label.startsWith('!')) {
-        table += `<tr><td></td><td colspan="6">${line.label}</td></tr><br>\n`;
-      } else {
-        const value = line.value instanceof Array ? line.value.join('<br>') : line.value;
-        const limit = line.limit instanceof Array ? line.limit.join('<br>') : line.limit;
-        const action = line.action instanceof Array ? line.action.join('<br>') : line.action;
-        const registration = line.registration instanceof Array ? line.registration.join('<br>') : line.registration;
-        table += `<tr><td>${step}</td><td>${line.label}</td><td>${line.operator}</td><td>${value}</td><td>${limit}</td><td>${action}</td><td>${registration}</td></tr>\n`;
-        step += 1;
-      }
-    }
-    table += '</table>'
-    return table
-  }
-
-  codeToText(code) {
-    var text = '';
-    for (var i = 0; i < code.length; i++) {
-      const line = code[i];
-      var linetext = '';
-      if (line.label.startsWith('!')) {
-        linetext += line.label + '\n';
-        text += linetext;
-        continue;
-      }
-      if (line.label) {
-        linetext += 'LABEL ' + line.label;
-      }
-      if (line.operator) {
-        linetext += line.operator;
-      }
-      if (line.value) {
-        if (line.value instanceof Array) {
-          const prefix = ' '.repeat(linetext.length);
-          linetext += line.value.map(x => ' VALUE ' + x).join('\n' + prefix);
-        } else {
-          linetext += ' VALUE ' + line.value;
-        }
-      }
-      if (line.limit) {
-        if (line.limit instanceof Array) {
-          const prefix = ' '.repeat(linetext.length);
-          if (line.action) {
-            var limits = []
-            for (var k = 0; k < line.limit.length; k++) {
-              var lim = ' LIMIT ' + line.limit[k];
-              if (line.action[k]) {
-                lim += ' ACTION ' + line.action[k];
-              }
-              limits.push(lim);
-            }
-            linetext += limits.join('\n' + prefix);
-          } else {
-            linetext += line.value.map(x => ' VALUE ' + x).join('\n' + prefix);
-          }
-        } else {
-          linetext += ' LIMIT ' + line.limit;
-          if (line.action) {
-            linetext += ' ACTION ' + line.action;
-          }
-        }
-      }
-      if (line.registration) {
-        if (line.registration instanceof Array) {
-          const prefix = ' '.repeat(linetext.length);
-          linetext += line.registration.map(x => ' REGISTRATION ' + x).join('\n' + prefix);
-        } else {
-          linetext += ' REGISTRATION ' + line.registration;
-        }
-      }
-      linetext += ';\n';
-      text += linetext;
-    }
-    return text;
-  }
 }
 
 Object.defineProperties(CustomGenerator.prototype, {
@@ -513,57 +435,6 @@ Object.defineProperties(CustomGenerator.prototype, {
   },
 });
 
-class BTSLinexxx {
-
-  constructor() {
-    this.label = '';
-    this.operator = '';
-    this.value = '';
-    this.limit = '';
-    this.action = '';
-    this.registration = '';
-  }
-
-  toCode() {
-    return `${this.label}\t${this.operator}\t${this.value}\t${this.limit}\t${this.action}\t${this.registration}`
-  }
-
-  append(code) {
-    if (!code) {
-      return this;
-    } else if (code instanceof Array) {
-      code.unshift(this);
-      return code;
-    } else if (code instanceof BTSLine) {
-      return [this, code];
-    } else {
-      console.error('invalid code type');
-    }
-  }
-
-  static concat(top, bottom) {
-    if (!top) {
-      return bottom;
-    } else if (top instanceof BTSLine) {
-      return top.append(bottom);
-    } else if (top instanceof Array) {
-      if (!bottom) {
-        return top;
-      } else if (bottom instanceof BTSLine) {
-        top.push(bottom);
-        return top;
-      } else if (bottom instanceof Array) {
-        return top.concat(bottom);
-      } else {
-        console.error('invalid code type');
-      }
-    } else {
-      console.error('invalid code type');
-    }
-  }
-
-}
-
 Blockly.BTS600 = new CustomGenerator('BTS600');
 
 
@@ -571,7 +442,7 @@ Blockly.BTS600.scrub_ = function (block, code, opt_thisOnly) {
   const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   const nextCode = opt_thisOnly ? null : this.blockToCode(nextBlock);
   if (nextCode) {
-    return BTSLine.concat(code, nextCode);
+    return BTSConcat(code, nextCode);
   } else {
     return code;
   }

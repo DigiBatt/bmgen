@@ -101,3 +101,28 @@ class BTSProgram extends BTSNode {
         this.lines = lines;
     }
 }
+
+function BTSConcat(top, bottom) {
+    if (!top) {
+        return bottom;
+    }
+    if (!bottom) {
+        return top;
+    }
+
+    if (top instanceof Array) {
+        if (bottom instanceof Array) {
+            return top.concat(bottom);
+        } else {
+            top.push(bottom);
+            return top;
+        }
+    } else {
+        if (bottom instanceof Array) {
+            bottom.unshift(top);
+            return bottom
+        } else {
+            return [top, bottom];
+        }
+    }
+}

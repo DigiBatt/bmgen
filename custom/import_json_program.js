@@ -10,10 +10,6 @@ function gen_xml_id() {
     return result;
 }
 
-function json_chain_blocks(x) {
-
-}
-
 function json_numvalue_to_xml(x) {
     if (x.type == 'number') {
         return `<block type="math_number" id="${gen_xml_id()}"><field name="NUM">${x.value}</field></block>`;
