@@ -6,7 +6,7 @@ Blockly.BTS600['limit'] = function (block) {
 Blockly.BTS600['limit_action'] = function (block) {
     const limit = Blockly.BTS600.valueToCode(block, 'EXPRESSION');
     const action = Blockly.BTS600.statementToCode(block, 'ACTION');
-    limit.action = action.action;
+    limit.action = action;
     return limit;
 }
 
@@ -18,7 +18,7 @@ Blockly.BTS600['compare'] = function (block) {
     const channel = Blockly.BTS600.valueToCode(block, 'CHANNEL');
     var code = new BTSLine();
     code.limit = `${operator} ${factor} ${channel}`;
-    return code;
+    return new BTSLimit(operator, new BTSMultiplication(factor, channel), null);
 }
 
 Blockly.BTS600['time'] = function (block) {

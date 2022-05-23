@@ -19,6 +19,10 @@
     <script src="custom/toolbox/dynamic_categories.js"></script>
     <script src="custom/import_json_program.js"></script>
 
+    <script src="custom/bts600/parsetree.js"></script>
+    <script src="custom/bts600/parser.js"></script>
+    <script src="custom/bts600/program_to_xml.js"></script>
+
     <style type="text/css">
         table,
         th,
@@ -165,6 +169,8 @@
                 reader.onload = (function () { return function (e) { loadXml(e.target.result); }; })();
             } else if (files[0].name.endsWith('json')) {
                 reader.onload = (function () { return function (e) { import_json_program(e.target.result); }; })();
+            } else if (files[0].name.endsWith('bts')) {
+                reader.onload = (function () { return function (e) { import_text_program(e.target.result); }; })();
             } else {
                 alert("Unknown file format");
             }

@@ -513,7 +513,7 @@ Object.defineProperties(CustomGenerator.prototype, {
   },
 });
 
-class BTSLine {
+class BTSLinexxx {
 
   constructor() {
     this.label = '';
