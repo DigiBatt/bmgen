@@ -15,6 +15,8 @@ function numvalue_to_xml(x) {
         return `<block type="math_number" id="${gen_xml_id()}"><field name="NUM">${x.value}</field></block>`;
     } else if (x instanceof BTSVariable) {
         return `<block type="variable" id="${gen_xml_id()}"><field name="VARIABLE">${x.name}</field></block>`;
+    } else if (x instanceof BTSMultiplication) {
+        return `<block type="factor" id="${gen_xml_id()}"><value name="FACTOR">${numvalue_to_xml(x.lhs)}</value><value name="VALUE">${numvalue_to_xml(x.rhs)}</value></block>`;
     }
 }
 
@@ -33,20 +35,21 @@ function action_to_xml(x) {
 }
 
 function value_to_xml(x, next) {
+    var xml = "";
     if (x instanceof BTSAssignment) {
-        var xml = `<block type="assignment" id="${gen_xml_id()}"><value name="LHS">${numvalue_to_xml(x.variable)}</value><field name="RHS">${x.numvalue.value}</field>`;
+        xml = `<block type="assignment" id="${gen_xml_id()}"><value name="LHS">${numvalue_to_xml(x.variable)}</value><field name="RHS">${x.numvalue.value}</field>`;
         if (next) {
             xml += '<next>' + next + '</next>';
         }
         xml += "</block>";
-        return xml;
     }
     else if (x instanceof BTSCycleCount) {
-
+        xml = x.numvalue.value;
     }
     else {
-        return numvalue_to_xml(x.numvalue);
+        xml = numvalue_to_xml(x.numvalue);
     }
+    return xml;
 }
 
 function limit_to_xml(x, next) {
@@ -124,6 +127,5 @@ function import_text_program(file) {
     const parser = new DOMParser();
     const doc = parser.parseFromString(xml, 'application/xml');
     workspace.clear();
-    console.log(xml);
     Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
 }

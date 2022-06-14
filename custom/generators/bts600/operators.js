@@ -10,7 +10,7 @@ Blockly.BTS600['beg'] = function (block) {
 };
 
 Blockly.BTS600['cyc'] = function (block) {
-  const value = block.getFieldValue('COUNT');
+  const value = block.getFieldValue('VALUE');
   var cyclecount = new BTSCycleCount(new BTSNumber(value));
   return new BTSStatement('CYC', [cyclecount], [], []);
 };
@@ -33,6 +33,5 @@ Blockly.BTS600['sto'] = function (block) {
 
 Blockly.BTS600['pau'] = function (block) {
   var limits = Blockly.BTS600.statementToCode(block, 'LIMIT');
-  console.log(limits);
   return new BTSStatement('PAU', [], limits, []);
 };

@@ -117,7 +117,7 @@ Blockly.defineBlocksWithJsonArray([
         "args0": [
             {
                 "type": "field_number",
-                "name": "COUNT",
+                "name": "VALUE",
                 "value": 1,
                 "min": 1,
                 "precision": 1
