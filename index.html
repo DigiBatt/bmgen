@@ -24,6 +24,7 @@
     <script src="custom/bts600/program_to_xml.js"></script>
     <script src="custom/bts600/program_to_text.js"></script>
     <script src="custom/bts600/program_to_table.js"></script>
+    <script src="custom/bts600/program_to_bm.js"></script>
 
     <style type="text/css">
         table,
@@ -47,7 +48,9 @@
     <input type="text" id="programName" />
     <div id="wrapper" style="height: 90%;">
         <div id="blocklyArea" style="text-align: center; height: 100%; width: 70%; float: left"></div>
-        <div id="codearea" style="overflow: scroll; height: 100%; width: 30%"></div>
+        <div id="tablearea" style="overflow: auto; height: 50%; width: 30%"></div>
+        <input type="checkbox" id="bm_format"> BM Format
+        <textarea id="codearea" style="overflow: auto; height: 50%; width: 30%"></textarea>
     </div>
     <div id="blocklyDiv" style="position: absolute;"></div>
 
@@ -61,6 +64,7 @@
             </block>
         </category>
         <category name="Operators" colour="#745ba5">
+            <block type="statement"></block>
             <block type="set"></block>
             <block type="beg">
                 <field name="NAME">name</field>
@@ -142,10 +146,20 @@
         function myUpdateFunction(event) {
             var code = Blockly.BTS600.workspaceToCode(workspace);
             var table = code.toTable();
-            var text = '<code>' + code.toText().replace(/\n/g, '<br>').replace(/ /g, '&nbsp;') + '</code>';
-            document.getElementById('codearea').innerHTML = table + '<br><br>' + text;
+            document.getElementById('tablearea').innerHTML = table;
+            if (document.getElementById('bm_format').checked) {
+                document.getElementById('codearea').value = code.toBM();
+            } else {
+                document.getElementById('codearea').value = code.toText();
+            }
         }
         workspace.addChangeListener(myUpdateFunction);
+        document.getElementById('bm_format').addEventListener('change', myUpdateFunction);
+
+        function updateFromCode(event) {
+            import_text_program(document.getElementById('codearea').value);
+        }
+        document.getElementById('codearea').addEventListener('change', updateFromCode);
 
         function saveProgram() {
             const xml = Blockly.Xml.workspaceToDom(workspace);
@@ -178,6 +192,7 @@
                 alert("Unknown file format");
             }
             reader.readAsText(files[0]);
+            document.getElementById('programName').value = files[0].name.substring(0, files[0].name.indexOf('.'));
         }
 
         function loadXml(file) {

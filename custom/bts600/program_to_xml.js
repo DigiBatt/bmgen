@@ -129,3 +129,12 @@ function import_text_program(file) {
     workspace.clear();
     Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
 }
+
+function import_bm_program(file) {
+    var program = bts_parse_program(file);
+    var xml = program_to_xml(program);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, 'application/xml');
+    workspace.clear();
+    Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
+}

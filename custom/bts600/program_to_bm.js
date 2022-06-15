@@ -45,17 +45,16 @@ BTSComment.prototype.toBM = function () {
 }
 
 BTSProgram.prototype.toBM = function () {
-    var table = '<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n'
+    var program = '';
     var linenumber = 1;
     for (var i = 0; i < this.lines.length; i++) {
         const line = this.lines[i];
         if (line instanceof BTSComment) {
-            table += line.toBM(); + "\n";
+            program += line.toBM(); + "\n";
         } else {
-            table += line.toBM(linenumber);
+            program += line.toBM(linenumber);
             linenumber++;
         }
     }
-    table += '</table>';
-    return table;
+    return program;
 }

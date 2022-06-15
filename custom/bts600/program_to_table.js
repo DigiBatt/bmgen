@@ -24,6 +24,18 @@ BTSRegistration.prototype.toTable = function () {
 }
 
 BTSStatement.prototype.toTable = function (linenumber) {
+    if (this.values) {
+        for (const v of this.values) {
+            if (!(v instanceof BTSNode)) {
+                console.log(`Line ${linenumber} (${this.operator}): no BTSNode`);
+                console.log(v);
+            }
+            if (!('toTable' in v)) {
+                console.log(`Line ${linenumber} (${this.operator}): no toTable function`);
+                console.log(v);
+            }
+        }
+    }
     const value = this.values ? this.values.map(x => x.toTable()).join("<br>") : "";
     const registration = this.registrations ? this.registrations.map(x => x.toTable()).join("<br>") : "";
     var limit = [];

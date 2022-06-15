@@ -10,6 +10,10 @@ BTSMultiplication.prototype.toText = function () {
     return this.lhs.toText() + " " + this.rhs.toText();
 }
 
+BTSValue.prototype.toText = function () {
+    return "VALUE " + this.numvalue.toText();
+}
+
 BTSCycleCount.prototype.toText = function () {
     return "VALUE " + this.numvalue.toText() + " *";
 }
