@@ -1,3 +1,7 @@
+const Align = Blockly.Input.Align;
+const Mutator = Blockly.Mutator;
+const xmlUtils = Blockly.utils.xml;
+
 Blockly.defineBlocksWithJsonArray([
     {
         "type": "goto",
@@ -86,6 +90,37 @@ Blockly.defineBlocksWithJsonArray([
             },
             {
                 "type": "input_statement",
+                "name": "REGISTRATION"
+            }
+        ],
+        "previousStatement": null,
+        "nextStatement": null,
+        "colour": 290,
+        "tooltip": "",
+        "helpUrl": ""
+    },
+    {
+        "type": "statement",
+        "message0": "%1 %2 VALUE %3 LIMIT %4 REGISTRATION %5",
+        "args0": [
+            {
+                "type": "field_input",
+                "name": "OPERATOR",
+            },
+            {
+                "type": "input_dummy"
+            },
+            {
+                "type": "input_value",
+                "name": "VALUE"
+            },
+            {
+                "type": "input_value",
+                "name": "LIMIT",
+                "check": "limit"
+            },
+            {
+                "type": "input_value",
                 "name": "REGISTRATION"
             }
         ],
@@ -376,7 +411,7 @@ Blockly.defineBlocksWithJsonArray([
             }
         ],
         "inputsInline": true,
-        "output": "Number",
+        "output": "BTSVariable",
         "colour": 65,
         "tooltip": "",
         "helpUrl": ""
@@ -386,9 +421,10 @@ Blockly.defineBlocksWithJsonArray([
         "message0": "%1 = %2",
         "args0": [
             {
-                "type": "input_value",
+                "type": "field_variable",
                 "name": "LHS",
-                "check": "Number"
+                "variableTypes": ["BTSVariable"],
+                "defaultType": "BTSVariable"
             },
             {
                 "type": "field_number",
@@ -469,7 +505,7 @@ Blockly.defineBlocksWithJsonArray([
 ]);
 
 
-Blockly.Blocks['statement'] = {
+Blockly.Blocks['statement_asdf'] = {
     /**
      * Block for creating a list with any number of elements of any type.
      * @this {Block}
@@ -478,9 +514,13 @@ Blockly.Blocks['statement'] = {
         this.valueCount_ = 1;
         this.limitCount_ = 0;
         this.registrationCount_ = 0;
+        this.appendDummyInput()
+            .appendField(new Blockly.FieldLabelSerializable("SET"), "OPERATOR");
+        this.setInputsInline(false);
+        this.setColour(230);
         this.updateShape_();
         // this.setOutput(true, 'BTSLine');
-        this.setMutator(new Mutator(['statement_mutator']));
+        this.setMutator(new Mutator(['statement_mutator_item']));
     },
     /**
      * Create XML to represent list inputs.

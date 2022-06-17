@@ -73,12 +73,24 @@ typedef struct
 
 typedef struct
 {
-  char *operatorvalue;
-  args *argsvalue;
-} stat;
+  enum
+  {
+    line_commenttype,
+    line_stattype,
+  } type;
+  union
+  {
+    int commentvalue;
+    struct
+    {
+      char *operatorvalue;
+      args *argsvalue;
+    } statvalue;
+  };
+} line;
 
 typedef struct
 {
-  stat **statvalue;
-  int statcount;
+  line **linevalue;
+  int linecount;
 } program;

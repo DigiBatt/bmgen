@@ -1,0 +1,152 @@
+[
+    {
+        "type": "function",
+        "name": "limit",
+        "args": [
+            {
+                "type": "comparison",
+                "lhs": "V",
+                "rhs": "4.3"
+            },
+            {
+                "type": "function",
+                "name": "error",
+                "args": [
+                    "1"
+                ]
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "limit",
+        "args": [
+            {
+                "type": "comparison",
+                "lhs": "V",
+                "rhs": "2.5"
+            },
+            {
+                "type": "function",
+                "name": "error",
+                "args": [
+                    "1"
+                ]
+            }
+        ]
+    },
+    {
+        "type": "function",
+        "name": "limit",
+        "args": [
+            {
+                "type": "comparison",
+                "lhs": "PBOC1",
+                "rhs": "65"
+            },
+            {
+                "type": "function",
+                "name": "error",
+                "args": [
+                    "1"
+                ]
+            }
+        ]
+    },
+    {
+        "type": "comment",
+        "text": " Variablen des Kapazitätstests"
+    },
+    {
+        "type": "assignment",
+        "lhs": "CEla",
+        "rhs": "1.7"
+    },
+    {
+        "type": "assignment",
+        "lhs": "CLad",
+        "rhs": "1.7"
+    },
+    {
+        "type": "assignment",
+        "lhs": "DODAh",
+        "rhs": "3.4"
+    },
+    {
+        "type": "assignment",
+        "lhs": "AnodeAh",
+        "rhs": "3.4"
+    },
+    {
+        "type": "assignment",
+        "lhs": "EOCycV",
+        "rhs": "3"
+    },
+    {
+        "type": "function",
+        "name": "pause",
+        "args": [
+            {
+                "type": "function",
+                "name": "limit",
+                "args": [
+                    {
+                        "type": "time",
+                        "value": "5",
+                        "unit": "min"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "type": "cycle",
+        "count": "50",
+        "program": [
+            {
+                "type": "function",
+                "name": "discharge",
+                "args": [
+                    {
+                        "type": "assignment",
+                        "lhs": "A",
+                        "rhs": "CEla"
+                    },
+                    {
+                        "type": "function",
+                        "name": "limit",
+                        "args": [
+                            {
+                                "type": "comparison",
+                                "lhs": "V",
+                                "rhs": "EODV"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "type": "function",
+                "name": "charge",
+                "args": [
+                    {
+                        "type": "assignment",
+                        "lhs": "A",
+                        "rhs": "CLad"
+                    },
+                    {
+                        "type": "function",
+                        "name": "limit",
+                        "args": [
+                            {
+                                "type": "comparison",
+                                "lhs": "V",
+                                "rhs": "EOCV"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

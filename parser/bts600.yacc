@@ -26,7 +26,7 @@ void yyerror(program **retprogram, char *s)
     limitlist *limitlistvalue;
     registration *registrationvalue;
     args *argsvalue;
-    stat *statvalue;
+    line *linevalue;
     program *programvalue;
 }
 
@@ -40,7 +40,7 @@ void yyerror(program **retprogram, char *s)
 %type <limitvalue> limit
 %type <registrationvalue> registration
 %type <argsvalue> args
-%type <statvalue> stat
+%type <linevalue> line
 %type <programvalue> program
 %type <stringValue> operator
 %type <valueexprvalue> value
@@ -51,39 +51,40 @@ void yyerror(program **retprogram, char *s)
 
 %%
 
-program:    stat
+program:    line
             {
                 program *x = malloc(sizeof(program));
                 *retprogram = x;
-                x->statvalue = malloc(sizeof(stat*));
-                x->statvalue[0] = $1;
-                x->statcount = 1;
+                x->linevalue = malloc(sizeof(line*));
+                x->linevalue[0] = $1;
+                x->linecount = 1;
                 $$ = x;
             }
              |
-            program stat
+            program line
             {
                 program *x = $1;
-                x->statvalue = realloc(x->statvalue, sizeof(stat*) * (x->statcount + 1));
-                x->statvalue[x->statcount] = $2;
-                x->statcount++;
+                x->linevalue = realloc(x->linevalue, sizeof(line*) * (x->linecount + 1));
+                x->linevalue[x->linecount] = $2;
+                x->linecount++;
                 $$ = x;
             }
              ;
          
-stat:       COMMENT
+line:       COMMENT
             {
-                stat *x = malloc(sizeof(stat));
-                x->operatorvalue = $1;
-                x->argsvalue = 0;
+                line *x = malloc(sizeof(line));
+                x->type = line_commenttype;
+                x->commentvalue = $1;
                 $$ = x;
             }
              |
             operator args SEMICOLON
             {
-                stat *x = malloc(sizeof(stat));
-                x->operatorvalue = $1;
-                x->argsvalue = $2;
+                line *x = malloc(sizeof(line));
+                x->type = line_stattype;
+                x->statvalue.operatorvalue = $1;
+                x->statvalue.argsvalue = $2;
                 $$ = x;
             }
              ;

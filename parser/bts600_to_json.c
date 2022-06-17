@@ -190,7 +190,7 @@ char *registration_to_json(registration *x)
     return out;
 }
 
-char *valuelist_to_json(valuelist *x)
+char *valuelist_to_text(valuelist *x)
 {
     if (x == 0)
     {
@@ -236,7 +236,7 @@ char *limitlist_to_json(limitlist *x)
     return out;
 }
 
-char *args_to_json(args *x)
+char *args_to_text(args *x)
 {
     if (x == 0)
     {
@@ -244,7 +244,7 @@ char *args_to_json(args *x)
     }
     char **stringparts = malloc(sizeof(char *) * 7);
     stringparts[0] = "{\"value\": ";
-    stringparts[1] = valuelist_to_json(x->valuelistvalue);
+    stringparts[1] = valuelist_to_text(x->valuelistvalue);
     stringparts[2] = ", \"limit\": ";
     stringparts[3] = limitlist_to_json(x->limitlistvalue);
     stringparts[4] = ", \"registration\": ";
@@ -257,13 +257,13 @@ char *args_to_json(args *x)
     return out;
 }
 
-char *stat_to_json(stat *x)
+char *line_to_text(line *x)
 {
     char **stringparts = malloc(sizeof(char *) * 5);
     stringparts[0] = "{\"operator\": \"";
-    stringparts[1] = x->operatorvalue;
+    stringparts[1] = x->statvalue.operatorvalue;
     stringparts[2] = "\", \"args\": ";
-    stringparts[3] = args_to_json(x->argsvalue);
+    stringparts[3] = args_to_text(x->statvalue.argsvalue);
     stringparts[4] = "}";
     char *out = strarray_to_str(5, stringparts, 0);
     free(stringparts[1]);
@@ -271,24 +271,19 @@ char *stat_to_json(stat *x)
     return out;
 }
 
-char *program_to_json(program *x)
+char *program_to_text(program *x)
 {
-    const char *pre = "{\"statements\": [";
-    const char *post = "]}";
-    char **stringparts = malloc(sizeof(char *) * (x->statcount));
-    for (int i = 0; i < x->statcount; i++)
+    char **stringparts = malloc(sizeof(char *) * (x->linecount));
+    for (int i = 0; i < x->linecount; i++)
     {
-        stringparts[i] = stat_to_json(x->statvalue[i]);
+        stringparts[i] = line_to_text(x->linevalue[i]);
     }
-    char *array = strarray_to_str(x->statcount, stringparts, ", ");
-    for (int i = 0; i < x->statcount; i++)
+    char *joined = strarray_to_str(x->linecount, stringparts, "\n");
+    for (int i = 0; i < x->linecount; i++)
     {
         free(stringparts[i]);
     }
-    char *allparts[] = {"{\"statements\": [", array, "]}"};
-    char *out = strarray_to_str(3, allparts, 0);
-    free(allparts[1]);
-    return out;
+    return joined;
 }
 
 int main()
@@ -297,16 +292,16 @@ int main()
     int retvalue = yyparse(&p);
     if (retvalue == 1)
     {
-        printf("Syntax error");
+        fprintf(stderr, "Syntax error");
         return 1;
     }
     if (retvalue == 2)
     {
-        printf("Out of memory");
+        fprintf(stderr, "Out of memory");
         return 2;
     }
-    char *json = program_to_json(p);
-    puts(json);
-    free(json);
+    char *text = program_to_text(p);
+    puts(text);
+    free(text);
     return 0;
 }
