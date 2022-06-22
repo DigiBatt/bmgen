@@ -440,3 +440,24 @@ Blockly.BMGen.scrub_ = function (block, code, opt_thisOnly) {
     return code;
   }
 };
+
+Blockly.BMGen.fillDynamicCategoriesFromProgram = function (program) {
+  const findObjects = function (root, type) {
+    let list = [];
+    if ('type' in root && root.type === type) {
+      list.push(root);
+    }
+    for (const value of Object.values(root)) {
+      if (typeof value === 'object' && value !== null) {
+        list = list.concat(findObjects(value, type));
+      }
+    }
+    return list;
+  };
+
+  let programVariables = findObjects(program, 'variable').map(x => x.name);
+  this.variables = this.variables.concat(programVariables).filter((v, i, a) => a.indexOf(v) === i).sort();
+
+  let programChannels = findObjects(program, 'channel').map(x => x.name);
+  this.channels = this.channels.concat(programChannels).filter((v, i, a) => a.indexOf(v) === i).sort();
+};

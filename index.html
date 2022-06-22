@@ -42,8 +42,8 @@
     <h1>BM Generator 3000</h1>
     <button onclick="saveProgram()">Save</button>
     <input type="file" name="Load" onchange="loadProgram(this.files)" />
-    <button onclick="addChannel()">Add channel</button>
     <button onclick="addVariable()">Add variable</button>
+    <button onclick="addChannel()">Add channel</button>
     Program Name:
     <input type="text" id="programName" />
     <div id="wrapper" style="height: 90%;">
@@ -188,6 +188,7 @@
             const doc = parser.parseFromString(xml, 'application/xml');
             workspace.clear();
             Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
+            Blockly.BMGen.fillDynamicCategoriesFromProgram(program);
         }
 
         function saveProgram() {
