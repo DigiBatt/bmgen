@@ -15,7 +15,6 @@
     <script src="custom/generators/bmgen/variables.js"></script>
     <script src="custom/generators/bmgen/math.js"></script>
     <script src="custom/toolbox/dynamic_categories.js"></script>
-    <script src="custom/import_json_program.js"></script>
     <script src="parser/bmgen_parser.js"></script>
     <script src="parser/bmgen_to_bts.js"></script>
     <script src="custom/bts600/parsetree.js"></script>
@@ -180,6 +179,10 @@
 
         function import_text_program(file) {
             var program = BMGenParser.parse(file);
+            import_json_program(program);
+        }
+
+        function import_json_program(program) {
             var xml = bmgen_to_xml(program);
             const parser = new DOMParser();
             const doc = parser.parseFromString(xml, 'application/xml');
@@ -188,16 +191,14 @@
         }
 
         function saveProgram() {
-            const xml = Blockly.Xml.workspaceToDom(workspace);
-            const serializer = new XMLSerializer();
-            const xmlStr = serializer.serializeToString(xml);
+            const code = Blockly.BMGen.workspaceToCode(workspace);
             var element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(xmlStr));
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
             filename = document.getElementById('programName').value
             if (filename) {
-                filename += '.xml';
+                filename += '.bmgen';
             } else {
-                filename = 'workspace.xml';
+                filename = 'program.bmgen';
             }
             element.setAttribute('download', filename);
             element.style.display = 'none';
