@@ -24,6 +24,7 @@
     <script src="custom/bts600/program_to_table.js"></script>
     <script src="custom/bts600/program_to_bm.js"></script>
     <script src="custom/bts600/bts_simplify.js"></script>
+    <script src="custom/bmgen/bmgen_to_xml.js"></script>
 
 
     <style type="text/css">
@@ -177,6 +178,15 @@
         }
         document.getElementById('codearea').addEventListener('change', updateFromCode);
 
+        function import_text_program(file) {
+            var program = BMGenParser.parse(file);
+            var xml = bmgen_to_xml(program);
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(xml, 'application/xml');
+            workspace.clear();
+            Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
+        }
+
         function saveProgram() {
             const xml = Blockly.Xml.workspaceToDom(workspace);
             const serializer = new XMLSerializer();
@@ -202,7 +212,7 @@
                 reader.onload = (function () { return function (e) { loadXml(e.target.result); }; })();
             } else if (files[0].name.endsWith('json')) {
                 reader.onload = (function () { return function (e) { import_json_program(e.target.result); }; })();
-            } else if (files[0].name.endsWith('bts')) {
+            } else if (files[0].name.endsWith('bmgen')) {
                 reader.onload = (function () { return function (e) { import_text_program(e.target.result); }; })();
             } else {
                 alert("Unknown file format");

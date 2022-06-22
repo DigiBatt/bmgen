@@ -19,11 +19,20 @@ bmgen_bts_converter['function'] = function (json) {
 }
 
 bmgen_bts_converter['limit_global'] = function (json) {
-    return 'SET LIMIT ' + json.args.map(x => obj_to_bts(x)).join(' ') + ';';
+    var text = 'SET LIMIT ' + obj_to_bts(json.condition);
+    if (json.action) {
+        text += ' ' + obj_to_bts(json.action);
+    }
+    text += ';';
+    return text;
 }
 
 bmgen_bts_converter['limit'] = function (json) {
-    return 'LIMIT ' + json.args.map(x => obj_to_bts(x)).join(' ');
+    var text = 'LIMIT ' + obj_to_bts(json.condition);
+    if (json.action) {
+        text += ' ' + obj_to_bts(json.action);
+    }
+    return text;
 }
 
 bmgen_bts_converter['comparison'] = function (json) {

@@ -12,10 +12,10 @@ cycle =
 	"cycle" _ "(" _ count:INT _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
     
 limit_global =
-	"limit" _ "(" args:argslist ")" _ ";" { return {'type': 'limit_global', 'args': args}; }
+	"limit" _ "(" condition:limit_condition action:(_ "," _ error)? ")" _ ";" { return {'type': 'limit_global', 'condition': condition, 'action': action ? action[3] : null}; }
     
 limit =
-	"limit" _ "(" args:argslist ")" { return {'type': 'limit', 'args': args}; }
+	"limit" _ "(" condition:limit_condition action:(_ "," _ error)? ")" { return {'type': 'limit', 'condition': condition, 'action': action ? action[3] : null}; }
     
 error =
 	"error" _ "(" errnum:INT ")" { return {'type': 'error', 'errnum': errnum}; }
@@ -25,7 +25,11 @@ function =
     
 argslist =
 	x0:arg? x:(_ "," _ arg)* { return x ? [x0, ...(x.map(elem => elem[3]))] : x0  }
-    
+
+limit_condition =
+	comparison
+    / time
+
 arg =
 	setvalue
     / comparison
@@ -47,7 +51,7 @@ comment =
 	"//" text:$([^\n]*) { return {'type': 'comment', 'text': text}; }
 	
 time =
-	value:numvalue _ unit:TIMEUNIT { return {'type': 'time', 'value': value, 'unit': unit}; }
+	value:FLOAT _ unit:TIMEUNIT { return {'type': 'time', 'value': value, 'unit': unit}; }
     
 numvalue =
 	variable
