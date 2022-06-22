@@ -16,13 +16,15 @@
     <script src="custom/generators/bmgen/math.js"></script>
     <script src="custom/toolbox/dynamic_categories.js"></script>
     <script src="custom/import_json_program.js"></script>
-
+    <script src="parser/bmgen_parser.js"></script>
+    <script src="parser/bmgen_to_bts.js"></script>
     <script src="custom/bts600/parsetree.js"></script>
     <script src="custom/bts600/parser.js"></script>
-    <script src="custom/bts600/program_to_xml.js"></script>
     <script src="custom/bts600/program_to_text.js"></script>
     <script src="custom/bts600/program_to_table.js"></script>
     <script src="custom/bts600/program_to_bm.js"></script>
+    <script src="custom/bts600/bts_simplify.js"></script>
+
 
     <style type="text/css">
         table,
@@ -46,9 +48,9 @@
     <input type="text" id="programName" />
     <div id="wrapper" style="height: 90%;">
         <div id="blocklyArea" style="text-align: center; height: 100%; width: 70%; float: left"></div>
-        <div id="tablearea" style="overflow: auto; height: 50%; width: 30%"></div>
+        <textarea id="codearea" style="overflow: auto; height: 45%; width: 30%"></textarea>
         <input type="checkbox" id="bm_format"> BM Format
-        <textarea id="codearea" style="overflow: auto; height: 50%; width: 30%"></textarea>
+        <div id="bmarea" style="overflow: auto; height: 45%; width: 30%"></div>
     </div>
     <div id="blocklyDiv" style="position: absolute;"></div>
 
@@ -159,14 +161,13 @@
 
         function myUpdateFunction(event) {
             var code = Blockly.BMGen.workspaceToCode(workspace);
-            // var table = code.toTable();
-            // document.getElementById('tablearea').innerHTML = table;
-            // if (document.getElementById('bm_format').checked) {
-            //     document.getElementById('codearea').value = code.toBM();
-            // } else {
-            //     document.getElementById('codearea').value = code.toText();
-            // }
+            var bts_code = bts_parse_program(bmgen_to_bts(BMGenParser.parse(code))).simplify();
             document.getElementById('codearea').value = code;
+            if (document.getElementById('bm_format').checked) {
+                document.getElementById('bmarea').innerHTML = '<textarea readonly style="overflow: auto; height: 95%; width: 100%">' + bts_code.toBM() + '</textarea>';
+            } else {
+                document.getElementById('bmarea').innerHTML = bts_code.toTable();
+            }
         }
         workspace.addChangeListener(myUpdateFunction);
         document.getElementById('bm_format').addEventListener('change', myUpdateFunction);

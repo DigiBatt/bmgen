@@ -10,11 +10,15 @@ BTSAssignment.prototype.toTable = function () {
     return this.variable.toText() + " = " + this.numvalue.toText();
 }
 
+BTSValue.prototype.toTable = function () {
+    return this.numvalue.toText();
+}
+
 BTSLimit.prototype.toTable = function () {
     const limit = this.operator + " " + this.numvalue.toText();
     var action = "";
     if (this.action) {
-        action = this.action[0].toText();
+        action = this.action.toText();
     }
     return [limit, action];
 }

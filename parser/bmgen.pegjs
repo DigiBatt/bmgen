@@ -2,28 +2,32 @@ program =
 	_ statements:(statement _)* { return statements.map(x => x[0]); }
     
 statement =
-    x:assignment ";" { return x; }
-    / x:function ";" { return x; }
+    x:assignment { return x; }
+    / x:limit_global { return x; }
+    / x:function { return x; }
     / cycle
     / comment
     
 cycle =
 	"cycle" _ "(" _ count:numvalue _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
     
+limit_global =
+	"limit" _ "(" args:argslist ")" _ ";" { return {'type': 'limit_global', 'args': args}; }
+    
 limit =
 	"limit" _ "(" args:argslist ")" { return {'type': 'limit', 'args': args}; }
     
 error =
-	"error" _ "(" args:argslist ")" { return {'type': 'error', 'args': args}; }
+	"error" _ "(" errnum:INT ")" { return {'type': 'error', 'errnum': errnum}; }
     
 function =
-	name:ID _ "(" args:argslist ")" { return {'type': 'function', 'name': name, 'args': args}; }
+	name:ID _ "(" args:argslist ")" _ ";" { return {'type': 'function', 'name': name, 'args': args}; }
     
 argslist =
 	x0:arg? x:(_ "," _ arg)* { return x ? [x0, ...(x.map(elem => elem[3]))] : x0  }
     
 arg =
-	assignment
+	setvalue
     / comparison
     / time
     / limit
@@ -31,7 +35,10 @@ arg =
     / numvalue
 
 assignment =
-	lhs:ID _ "=" _ rhs:numvalue { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
+	lhs:ID _ "=" _ rhs:numvalue _ ";" { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
+    
+setvalue =
+	lhs:ID _ "=" _ rhs:numvalue { return {'type': 'setvalue', 'lhs': lhs, 'rhs': rhs}; }
     
 comparison =
 	lhs:numvalue _ operator:COMPARE _ rhs:numvalue { return {'type': 'comparison', 'lhs': lhs, 'rhs': rhs, 'operator': operator}; }

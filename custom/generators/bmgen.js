@@ -116,12 +116,15 @@ class CustomGenerator {
         'No workspace specified in workspaceToCode call.  Guessing.');
       workspace = common.getMainWorkspace();
     }
-    let code = '';
+    let code = [];
     this.init(workspace);
     const blocks = workspace.getTopBlocks(true);
     for (let i = 0, block; (block = blocks[i]); i++) {
-      code += '\n' + this.blockToCode(block);
+      const blockcode = this.blockToCode(block)
+      if (blockcode)
+        code.push(blockcode);
     }
+    code = code.join('\n');
     code = this.finish(code);
     return code;
   }

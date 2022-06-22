@@ -14,7 +14,7 @@ BTSLimit.prototype.toBM = function () {
     const limit = this.operator + " " + this.numvalue.toText();
     var action = "";
     if (this.action) {
-        action = this.action[0].toText();
+        action = this.action.toText();
     }
     return [limit, action];
 }
@@ -23,7 +23,12 @@ BTSRegistration.prototype.toBM = function () {
     return this.numvalue.toText();
 }
 
+BTSValue.prototype.toBM = function () {
+    return this.numvalue.toText();
+}
+
 BTSStatement.prototype.toBM = function (linenumber) {
+    console.log(this.values);
     const value = this.values ? this.values.map(x => x.toBM()).join("\\r\\n") : "";
     const registration = this.registrations ? this.registrations.map(x => x.toBM()).join("\\r\\n") : "";
     var limit = [];
