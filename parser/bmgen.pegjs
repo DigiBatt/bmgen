@@ -34,7 +34,7 @@ assignment =
 	lhs:ID _ "=" _ rhs:numvalue { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
     
 comparison =
-	lhs:numvalue _ COMPARE _ rhs:numvalue { return {'type': 'comparison', 'lhs': lhs, 'rhs': rhs}; }
+	lhs:numvalue _ operator:COMPARE _ rhs:numvalue { return {'type': 'comparison', 'lhs': lhs, 'rhs': rhs, 'operator': operator}; }
     
 comment =
 	"//" text:$([^\n]*) { return {'type': 'comment', 'text': text}; }

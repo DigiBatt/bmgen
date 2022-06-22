@@ -1,13 +1,13 @@
 // Returns an array of objects.
 var channelsFlyoutCallback = function (workspace) {
-    const channelnames = Blockly.BTS600.channels;
+    const channelnames = Blockly.BMGen.channels;
     var blockList = [];
     for (var i = 0; i < channelnames.length; i++) {
         blockList.push({
             'kind': 'block',
             'type': 'channel',
             'fields': {
-                'CHANNEL': channelnames[i]
+                'NAME': channelnames[i]
             }
         });
     }
@@ -15,21 +15,14 @@ var channelsFlyoutCallback = function (workspace) {
 };
 
 var variablesFlyoutCallback = function (workspace) {
-    const variablenames = Blockly.BTS600.variables;
+    const variablenames = Blockly.BMGen.variables;
     var blockList = [];
-    blockList.push({
-        'kind': 'block',
-        'type': 'assignment',
-        'fields': {
-            'RHS': 0
-        }
-    });
     for (var i = 0; i < variablenames.length; i++) {
         blockList.push({
             'kind': 'block',
             'type': 'variable',
             'fields': {
-                'VARIABLE': variablenames[i]
+                'NAME': variablenames[i]
             }
         });
     }
@@ -42,9 +35,9 @@ var registerToolboxCallbacks = function (workspace) {
 };
 
 var addChannelNameToToolbox = function (channelname) {
-    Blockly.BTS600.channels.push(channelname);
+    Blockly.BMGen.channels.push(channelname);
 };
 
 var addVariableNameToToolbox = function (variablename) {
-    Blockly.BTS600.variables.push(variablename);
+    Blockly.BMGen.variables.push(variablename);
 };
