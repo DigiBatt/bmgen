@@ -28,7 +28,6 @@ BTSValue.prototype.toBM = function () {
 }
 
 BTSStatement.prototype.toBM = function (linenumber) {
-    console.log(this.values);
     const value = this.values ? this.values.map(x => x.toBM()).join("\\r\\n") : "";
     const registration = this.registrations ? this.registrations.map(x => x.toBM()).join("\\r\\n") : "";
     var limit = [];

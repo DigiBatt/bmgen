@@ -7,7 +7,7 @@ bmgen_function_map = {
 }
 
 bmgen_bts_converter['assignment'] = function (json) {
-    return `SET VALUE ${json.lhs} = ${json.rhs};`;
+    return `SET VALUE ${obj_to_bts(json.lhs)} = ${obj_to_bts(json.rhs)};`;
 }
 
 bmgen_bts_converter['function'] = function (json) {
@@ -27,7 +27,7 @@ bmgen_bts_converter['limit'] = function (json) {
 }
 
 bmgen_bts_converter['comparison'] = function (json) {
-    return `${json.operator} ${json.rhs} ${json.lhs}`;
+    return `${json.operator} ${obj_to_bts(json.rhs)} ${obj_to_bts(json.lhs)}`;
 }
 
 bmgen_bts_converter['error'] = function (json) {
@@ -35,15 +35,27 @@ bmgen_bts_converter['error'] = function (json) {
 }
 
 bmgen_bts_converter['setvalue'] = function (json) {
-    return `VALUE ${json.rhs} ${json.lhs}`;
+    return `VALUE ${obj_to_bts(json.rhs)} ${obj_to_bts(json.lhs)}`;
 }
 
 bmgen_bts_converter['time'] = function (json) {
-    return `> ${json.value} ${json.unit}`;
+    return `> ${obj_to_bts(json.value)} ${json.unit}`;
 }
 
 bmgen_bts_converter['cycle'] = function (json) {
     return 'BEG;\n' + json.program.map(x => obj_to_bts(x)).join('\n') + `\nCYC VALUE ${json.count} *;`;
+}
+
+bmgen_bts_converter['variable'] = function (json) {
+    return `${json.name}`;
+}
+
+bmgen_bts_converter['channel'] = function (json) {
+    return `${json.name}`;
+}
+
+bmgen_bts_converter['number'] = function (json) {
+    return `${json.value}`;
 }
 
 function obj_to_bts(json) {

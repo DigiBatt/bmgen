@@ -9,7 +9,7 @@ statement =
     / comment
     
 cycle =
-	"cycle" _ "(" _ count:numvalue _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
+	"cycle" _ "(" _ count:INT _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
     
 limit_global =
 	"limit" _ "(" args:argslist ")" _ ";" { return {'type': 'limit_global', 'args': args}; }
@@ -35,13 +35,13 @@ arg =
     / numvalue
 
 assignment =
-	lhs:ID _ "=" _ rhs:numvalue _ ";" { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
+	lhs:variable _ "=" _ rhs:numvalue _ ";" { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
     
 setvalue =
-	lhs:ID _ "=" _ rhs:numvalue { return {'type': 'setvalue', 'lhs': lhs, 'rhs': rhs}; }
+	lhs:channel _ "=" _ rhs:numvalue { return {'type': 'setvalue', 'lhs': lhs, 'rhs': rhs}; }
     
 comparison =
-	lhs:numvalue _ operator:COMPARE _ rhs:numvalue { return {'type': 'comparison', 'lhs': lhs, 'rhs': rhs, 'operator': operator}; }
+	lhs:channel _ operator:COMPARE _ rhs:numvalue { return {'type': 'comparison', 'lhs': lhs, 'rhs': rhs, 'operator': operator}; }
     
 comment =
 	"//" text:$([^\n]*) { return {'type': 'comment', 'text': text}; }
@@ -50,8 +50,17 @@ time =
 	value:numvalue _ unit:TIMEUNIT { return {'type': 'time', 'value': value, 'unit': unit}; }
     
 numvalue =
-	ID
-    / FLOAT
+	variable
+    / number
+    
+variable =
+	name:ID { return {'type': 'variable', 'name': name}; }
+    
+channel =
+	name:ID { return {'type': 'channel', 'name': name}; }
+    
+number =
+	value:FLOAT { return {'type': 'number', 'value': value}; }
 
 TIMEUNIT = $("sec" / "min" / "h")
 COMPARE = $([><]"="?)
