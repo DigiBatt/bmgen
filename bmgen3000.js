@@ -1,0 +1,146 @@
+function loadScript(url) {
+    var script = document.createElement("script");
+    script.src = url;
+    document.head.appendChild(script);
+}
+
+loadScript("custom/blockly_developer_tools/bmgen_blocks.js");
+loadScript("custom/generators/bmgen.js");
+loadScript("custom/toolbox/toolbox.js");
+loadScript("custom/toolbox/dynamic_categories.js");
+loadScript("parser/bmgen_parser.js");
+loadScript("parser/bmgen_to_bts.js");
+loadScript("custom/bts600/parsetree.js");
+loadScript("custom/bts600/parser.js");
+loadScript("custom/bts600/program_to_text.js");
+loadScript("custom/bts600/program_to_table.js");
+loadScript("custom/bts600/program_to_bm.js");
+loadScript("custom/bts600/bts_simplify.js");
+loadScript("custom/bmgen/bmgen_to_xml.js");
+
+var workspace;
+
+function loadBMGen() {
+    var blocklyArea = document.getElementById('blocklyArea');
+    var blocklyDiv = document.getElementById('blocklyDiv');
+
+    for (category of toolbox.getElementsByTagName("category")) {
+        if (category.getAttribute("name") === "Variables") {
+            category.setAttribute("custom", "BM_VARIABLES");
+        }
+        else if (category.getAttribute("name") === "Channels") {
+            category.setAttribute("custom", "CHANNELS");
+        }
+    }
+
+    workspace = Blockly.inject(blocklyDiv,
+        { toolbox: toolbox.documentElement });
+    var onresize = function (e) {
+        // Compute the absolute coordinates and dimensions of blocklyArea.
+        var element = blocklyArea;
+        var x = 0;
+        var y = 0;
+        do {
+            x += element.offsetLeft;
+            y += element.offsetTop;
+            element = element.offsetParent;
+        } while (element);
+        // Position blocklyDiv over blocklyArea.
+        blocklyDiv.style.left = x + 'px';
+        blocklyDiv.style.top = y + 'px';
+        blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+        blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+        Blockly.svgResize(workspace);
+    };
+    window.addEventListener('resize', onresize, false);
+    onresize();
+    Blockly.svgResize(workspace);
+
+    registerToolboxCallbacks(workspace);
+    workspace.addChangeListener(myUpdateFunction);
+    document.getElementById('bm_format').addEventListener('change', myUpdateFunction);
+    document.getElementById('codearea').addEventListener('change', updateFromCode);
+}
+
+function myUpdateFunction(event) {
+    var code = Blockly.BMGen.workspaceToCode(workspace);
+    var bts_code = bts_parse_program(bmgen_to_bts(BMGenParser.parse(code))).simplify();
+    document.getElementById('codearea').value = code;
+    if (document.getElementById('bm_format').checked) {
+        document.getElementById('bmarea').innerHTML = '<textarea readonly style="overflow: auto; height: 95%; width: 100%">' + bts_code.toBM() + '</textarea>';
+    } else {
+        document.getElementById('bmarea').innerHTML = bts_code.toTable();
+    }
+}
+
+function updateFromCode(event) {
+    import_text_program(document.getElementById('codearea').value);
+}
+
+function import_text_program(file) {
+    var program = BMGenParser.parse(file);
+    import_json_program(program);
+}
+
+function import_json_program(program) {
+    var xml = bmgen_to_xml(program);
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(xml, 'application/xml');
+    workspace.clear();
+    Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
+    Blockly.BMGen.fillDynamicCategoriesFromProgram(program);
+}
+
+function saveProgram() {
+    const code = Blockly.BMGen.workspaceToCode(workspace);
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
+    filename = document.getElementById('programName').value
+    if (filename) {
+        filename += '.bmgen';
+    } else {
+        filename = 'program.bmgen';
+    }
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+
+function loadProgram(files) {
+    var reader = new FileReader();
+    if (files[0].name.endsWith('xml')) {
+        reader.onload = (function () { return function (e) { loadXml(e.target.result); }; })();
+    } else if (files[0].name.endsWith('json')) {
+        reader.onload = (function () { return function (e) { import_json_program(e.target.result); }; })();
+    } else if (files[0].name.endsWith('bmgen')) {
+        reader.onload = (function () { return function (e) { import_text_program(e.target.result); }; })();
+    } else {
+        alert("Unknown file format");
+    }
+    reader.readAsText(files[0]);
+    document.getElementById('programName').value = files[0].name.substring(0, files[0].name.indexOf('.'));
+}
+
+function loadXml(file) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(file, 'application/xml');
+    workspace.clear();
+    Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
+}
+
+function programToClipboard() {
+    var code = Blockly.BTS600.workspaceToCode(workspace);
+    navigator.clipboard.writeText(code)
+}
+
+function addChannel() {
+    let channelname = window.prompt("Channel name:", "");
+    addChannelNameToToolbox(channelname);
+}
+
+function addVariable() {
+    let variablename = window.prompt("Variable name:", "");
+    addVariableNameToToolbox(variablename);
+}

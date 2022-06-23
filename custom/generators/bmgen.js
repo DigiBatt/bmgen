@@ -461,3 +461,9 @@ Blockly.BMGen.fillDynamicCategoriesFromProgram = function (program) {
   let programChannels = findObjects(program, 'channel').map(x => x.name);
   this.channels = this.channels.concat(programChannels).filter((v, i, a) => a.indexOf(v) === i).sort();
 };
+
+loadScript("custom/generators/bmgen/statements.js");
+loadScript("custom/generators/bmgen/limits.js");
+loadScript("custom/generators/bmgen/channels.js");
+loadScript("custom/generators/bmgen/variables.js");
+loadScript("custom/generators/bmgen/math.js");
