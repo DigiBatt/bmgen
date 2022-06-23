@@ -1,6 +1,6 @@
 #! /bin/bash
 
-node bts600/js/generate_parser.js parser/bmgen.pegjs > parser/bmgen_parser.js
+node parser/generate_parser.js parser/bmgen.pegjs > parser/bmgen_parser.js
 
 cat << EOF > custom/toolbox/toolbox.js
 const parser = new DOMParser();
