@@ -14,6 +14,7 @@
     <script src="custom/generators/bmgen/channels.js"></script>
     <script src="custom/generators/bmgen/variables.js"></script>
     <script src="custom/generators/bmgen/math.js"></script>
+    <script src="custom/toolbox/toolbox.js"></script>
     <script src="custom/toolbox/dynamic_categories.js"></script>
     <script src="parser/bmgen_parser.js"></script>
     <script src="parser/bmgen_to_bts.js"></script>
@@ -54,90 +55,21 @@
     </div>
     <div id="blocklyDiv" style="position: absolute;"></div>
 
-    <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
-        <category name="Statements" colour="#5b80a5">
-            <block type="assignment"></block>
-            <block type="function_charge">
-                <statement name="ARGS">
-                    <block type="assignment">
-                        <next>
-                            <block type="limit">
-                                <value name="CONDITION">
-                                    <block type="comparison">
-                                        <field name="OPERATOR">&lt;</field>
-                                    </block>
-                                </value>
-                            </block>
-                        </next>
-                    </block>
-                </statement>
-            </block>
-            <block type="function_discharge">
-                <statement name="ARGS">
-                    <block type="assignment">
-                        <next>
-                            <block type="limit">
-                                <value name="CONDITION">
-                                    <block type="comparison">
-                                        <field name="OPERATOR">&lt;</field>
-                                    </block>
-                                </value>
-                            </block>
-                        </next>
-                    </block>
-                </statement>
-            </block>
-            <block type="function_cycle">
-                <field name="COUNT">5</field>
-            </block>
-            <block type="function_pause">
-                <statement name="ARGS">
-                    <block type="limit">
-                        <value name="CONDITION">
-                            <block type="time">
-                                <field name="VALUE">0</field>
-                                <field name="UNIT">sec</field>
-                            </block>
-                        </value>
-                    </block>
-                </statement>
-            </block>
-            <block type="function">
-                <field name="NAME">function</field>
-            </block>
-        </category>
-        <category name="Limits" colour="#5ba55b">
-            <block type="limit"></block>
-            <block type="limit_action"></block>
-            <block type="comparison">
-                <field name="OPERATOR">&lt;</field>
-            </block>
-            <block type="time">
-                <field name="VALUE">0</field>
-                <field name="UNIT">sec</field>
-            </block>
-            <block type="action_error">
-                <field name="ERRNUM">0</field>
-            </block>
-            <block type="action_goto">
-                <field name="LABEL">label</field>
-            </block>
-        </category>
-        <category name="Variables" colour="#a55b80" custom="BM_VARIABLES"></category>
-        <category name="Channels" colour="#995ba5" custom="CHANNELS"></category>
-        <category name="Math" colour="#5ba58c">
-            <block type="number">
-                <field name="NUMBER">0</field>
-            </block>
-        </category>
-    </xml>
-
-
     <script type="text/javascript">
         var blocklyArea = document.getElementById('blocklyArea');
         var blocklyDiv = document.getElementById('blocklyDiv');
+
+        for (category of toolbox.getElementsByTagName("category")) {
+            if (category.getAttribute("name") === "Variables") {
+                category.setAttribute("custom", "BM_VARIABLES");
+            }
+            else if (category.getAttribute("name") === "Channels") {
+                category.setAttribute("custom", "CHANNELS");
+            }
+        }
+
         var workspace = Blockly.inject(blocklyDiv,
-            { toolbox: document.getElementById('toolbox') });
+            { toolbox: toolbox.documentElement });
         var onresize = function (e) {
             // Compute the absolute coordinates and dimensions of blocklyArea.
             var element = blocklyArea;
