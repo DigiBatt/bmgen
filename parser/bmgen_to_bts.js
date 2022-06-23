@@ -67,6 +67,14 @@ bmgen_bts_converter['number'] = function (json) {
     return `${json.value}`;
 }
 
+bmgen_bts_converter['comment'] = function (json) {
+    return `! ${json.text}`;
+}
+
+bmgen_bts_converter['label'] = function (json) {
+    return `LABEL ${json.name}`;
+}
+
 function obj_to_bts(json) {
     if (typeof json === 'object' && json !== null) {
         return bmgen_bts_converter[json.type](json);

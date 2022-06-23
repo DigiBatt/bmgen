@@ -466,4 +466,4 @@ loadScript("custom/generators/bmgen/statements.js");
 loadScript("custom/generators/bmgen/limits.js");
 loadScript("custom/generators/bmgen/channels.js");
 loadScript("custom/generators/bmgen/variables.js");
-loadScript("custom/generators/bmgen/math.js");
+loadScript("custom/generators/bmgen/other.js");

@@ -3,14 +3,20 @@ function bts_parse_program(program) {
     const statements = program.split(';');
     for (var i = 0; i < statements.length; i++) {
         var stmt = statements[i].trim();
+        var label = null;
         while (stmt.startsWith('!')) {
             var commentEnd = stmt.indexOf("\n");
             var comment = stmt.substring(0, commentEnd);
-            stmt = stmt.substring(commentEnd + 1);
+            stmt = stmt.substring(commentEnd + 1).trim();
             lines.push(bts_parse_comment(comment));
         }
+        while (stmt.startsWith('LABEL')) {
+            var labelEnd = stmt.indexOf("\n");
+            label = stmt.substring(6, labelEnd).trim();
+            stmt = stmt.substring(labelEnd + 1).trim();
+        }
         if (stmt) {
-            lines.push(bts_parse_statement(stmt));
+            lines.push(bts_parse_statement(stmt, label));
         }
     }
     return new BTSProgram(lines);
@@ -24,7 +30,7 @@ function bts_parse_comment(comment) {
     return new BTSComment(comment.substring(1).trim());
 }
 
-function bts_parse_statement(statement) {
+function bts_parse_statement(statement, label) {
     var tokens = statement.trim().replace(/[\n\r]+/gm, ' ').replace(/ +/g, ' ').split(' ');
     const operator = tokens[0];
     var values = [];
@@ -56,7 +62,11 @@ function bts_parse_statement(statement) {
             arg = tokens[i] + ' ' + arg;
         }
     }
-    return new BTSStatement(operator, values, limits, registrations);
+    let bts_statement = new BTSStatement(operator, values, limits, registrations);
+    if (label) {
+        bts_statement.label = label;
+    }
+    return bts_statement;
 }
 
 function bts_parse_action(action) {

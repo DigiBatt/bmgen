@@ -53,11 +53,12 @@ BTSStatement.prototype.toTable = function (linenumber) {
     }
     limit = limit.join("<br>");
     action = action.join("<br>");
-    return `<tr><td>${linenumber}</td><td></td><td>${this.operator}</td><td>${value}</td><td>${limit}</td><td>${action}</td><td>${registration}</td></tr>\n`;
+    const label = this.label ? this.label : '';
+    return `<tr><td>${linenumber}</td><td>${label}</td><td>${this.operator}</td><td>${value}</td><td>${limit}</td><td>${action}</td><td>${registration}</td></tr>\n`;
 }
 
 BTSComment.prototype.toTable = function () {
-    return `<tr><td></td><td colspan="6">! ${this.text}</td></tr>`;
+    return `<tr><td></td><td>!</td><td colspan="5" style="text-align: left;"> ${this.text}</td></tr>`;
 }
 
 BTSProgram.prototype.toTable = function () {

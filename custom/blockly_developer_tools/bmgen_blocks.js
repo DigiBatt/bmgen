@@ -204,3 +204,29 @@ Blockly.Blocks['number'] = {
  this.setHelpUrl("");
   }
 };
+
+Blockly.Blocks['comment'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("comment")
+        .appendField(new Blockly.FieldTextInput("text"), "TEXT");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(165);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['label'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField("label")
+        .appendField(new Blockly.FieldTextInput("text"), "LABEL");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(165);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};

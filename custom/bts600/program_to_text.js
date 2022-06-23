@@ -67,6 +67,9 @@ BTSStatement.prototype.toText = function () {
         }
     }
     text += ";";
+    if (this.label) {
+        text = `LABEL ${this.label}\n` + text;
+    }
     return text;
 }
 

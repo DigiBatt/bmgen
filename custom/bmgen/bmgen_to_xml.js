@@ -111,6 +111,24 @@ bmgen_xml_converter['function_pause'] = function (x, next) {
     return xml;
 }
 
+bmgen_xml_converter['comment'] = function (x, next) {
+    xml = `<block type="comment" id="${gen_xml_id()}"><field name="TEXT">${x.text}</field>`;
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
+bmgen_xml_converter['label'] = function (x, next) {
+    xml = `<block type="label" id="${gen_xml_id()}"><field name="LABEL">${x.name}</field>`;
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
 function bmgen_obj_to_xml(json) {
     if (typeof json === 'object' && json !== null) {
         return bmgen_xml_converter[json.type](json);

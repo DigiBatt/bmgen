@@ -69,9 +69,15 @@
   </category>
   <category name="Variables" colour="#a55b80"></category>
   <category name="Channels" colour="#995ba5"></category>
-  <category name="Math" colour="#5ba58c">
+  <category name="Other" colour="#5ba58c">
     <block type="number">
       <field name="NUMBER">0</field>
+    </block>
+    <block type="comment">
+      <field name="TEXT">text</field>
+    </block>
+    <block type="label">
+      <field name="LABEL">text</field>
     </block>
   </category>
 </xml>

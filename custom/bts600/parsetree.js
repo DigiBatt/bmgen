@@ -85,6 +85,7 @@ class BTSStatement extends BTSLine {
         this.values = values;
         this.limits = limits;
         this.registrations = registrations;
+        this.label = null;
     }
 }
 

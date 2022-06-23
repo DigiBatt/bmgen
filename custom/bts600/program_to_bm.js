@@ -41,7 +41,8 @@ BTSStatement.prototype.toBM = function (linenumber) {
     }
     limit = limit.join("\\r\\n");
     action = action.join("\\r\\n");
-    return `\t${linenumber}\t\t${this.operator}\t${value}\t${limit}\t${action}\t${registration}\n`;
+    const label = this.label ? this.label : '';
+    return `\t${linenumber}\t${label}\t${this.operator}\t${value}\t${limit}\t${action}\t${registration}\n`;
 }
 
 BTSComment.prototype.toBM = function () {

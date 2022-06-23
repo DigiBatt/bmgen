@@ -2,11 +2,12 @@ program =
 	_ statements:(statement _)* { return statements.map(x => x[0]); }
     
 statement =
-    x:assignment { return x; }
-    / x:limit_global { return x; }
-    / x:function { return x; }
+    assignment
+    / limit_global
+    / function
     / cycle
     / comment
+    / label
     
 cycle =
 	"cycle" _ "(" _ count:INT _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
@@ -65,6 +66,9 @@ channel =
     
 number =
 	value:FLOAT { return {'type': 'number', 'value': value}; }
+    
+label =
+	_ ":" _ name:ID { return {'type': 'label', 'name': name}; }
 
 TIMEUNIT = $("sec" / "min" / "h")
 COMPARE = $([><]"="?)
