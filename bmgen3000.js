@@ -17,15 +17,13 @@ goog.require("BMGen3000.Generator.Statements");
 goog.require("BMGen3000.Generator.Variables");
 const { registerToolboxCallbacks, addChannelNameToToolbox, addVariableNameToToolbox } = goog.require("BMGen3000.Toolbox.DynamicCategories");
 let { toolbox } = goog.require("BMGen3000.Toolbox");
-
-loadScript("parser/bmgen_parser.js");
-loadScript("parser/bmgen_to_bts.js");
-loadScript("custom/bts600/parsetree.js");
-loadScript("custom/bts600/program_to_text.js");
-loadScript("custom/bts600/program_to_table.js");
-loadScript("custom/bts600/program_to_bm.js");
-loadScript("custom/bts600/bts_simplify.js");
-loadScript("custom/bmgen/bmgen_to_xml.js");
+const BMGenParser = goog.require("BMGen3000.Parser");
+const { bmgen_to_bts } = goog.require("BMGen3000.BMGenToBTS");
+goog.require("BMGen3000.BTS600.ProgramToText");
+goog.require("BMGen3000.BTS600.ProgramToTable");
+goog.require("BMGen3000.BTS600.ProgramToBM");
+goog.require("BMGen3000.BTS600.Simplify");
+const { bmgen_to_xml } = goog.require("BMGen3000.BMGenToXML");
 
 var workspace;
 

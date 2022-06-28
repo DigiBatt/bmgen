@@ -1,3 +1,5 @@
+goog.module("BMGen3000.BTS600.Parsetree");
+
 class BTSNode { }
 
 class BTSNumValue extends BTSNode { }
@@ -127,3 +129,5 @@ function BTSConcat(top, bottom) {
         }
     }
 }
+
+exports = { BTSNode, BTSNumValue, BTSVariable, BTSNumber, BTSMultiplication, BTSValue, BTSCycleCount, BTSAssignment, BTSAction, BTSGoto, BTSError, BTSLimit, BTSRegistration, BTSLine, BTSStatement, BTSComment, BTSProgram };

@@ -1,3 +1,6 @@
+goog.module("BMGen3000.BTS600.Simplify");
+let { BTSProgram } = goog.require("BMGen3000.BTS600.Parsetree");
+
 BTSProgram.prototype.simplify = function () {
     // combine SET statements
     var prev_set_value = false;

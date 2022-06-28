@@ -1,20 +1,23 @@
-BTSNumValue.prototype.toTable = function () {
+goog.module("BMGen3000.BTS600.ProgramToTable");
+let Parsetree = goog.require("BMGen3000.BTS600.Parsetree");
+
+Parsetree.BTSNumValue.prototype.toTable = function () {
     return this.toText();
 }
 
-BTSCycleCount.prototype.toTable = function () {
+Parsetree.BTSCycleCount.prototype.toTable = function () {
     return this.numvalue.toText() + " *";
 }
 
-BTSAssignment.prototype.toTable = function () {
+Parsetree.BTSAssignment.prototype.toTable = function () {
     return this.variable.toText() + " = " + this.numvalue.toText();
 }
 
-BTSValue.prototype.toTable = function () {
+Parsetree.BTSValue.prototype.toTable = function () {
     return this.numvalue.toText();
 }
 
-BTSLimit.prototype.toTable = function () {
+Parsetree.BTSLimit.prototype.toTable = function () {
     const limit = this.operator + " " + this.numvalue.toText();
     var action = "";
     if (this.action) {
@@ -23,14 +26,14 @@ BTSLimit.prototype.toTable = function () {
     return [limit, action];
 }
 
-BTSRegistration.prototype.toTable = function () {
+Parsetree.BTSRegistration.prototype.toTable = function () {
     return this.numvalue.toText();
 }
 
-BTSStatement.prototype.toTable = function (linenumber) {
+Parsetree.BTSStatement.prototype.toTable = function (linenumber) {
     if (this.values) {
         for (const v of this.values) {
-            if (!(v instanceof BTSNode)) {
+            if (!(v instanceof Parsetree.BTSNode)) {
                 console.log(`Line ${linenumber} (${this.operator}): no BTSNode`);
                 console.log(v);
             }
@@ -57,16 +60,16 @@ BTSStatement.prototype.toTable = function (linenumber) {
     return `<tr><td>${linenumber}</td><td>${label}</td><td>${this.operator}</td><td>${value}</td><td>${limit}</td><td>${action}</td><td>${registration}</td></tr>\n`;
 }
 
-BTSComment.prototype.toTable = function () {
+Parsetree.BTSComment.prototype.toTable = function () {
     return `<tr><td></td><td>!</td><td colspan="5" style="text-align: left;"> ${this.text}</td></tr>`;
 }
 
-BTSProgram.prototype.toTable = function () {
+Parsetree.BTSProgram.prototype.toTable = function () {
     var table = '<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n'
     var linenumber = 1;
     for (var i = 0; i < this.lines.length; i++) {
         const line = this.lines[i];
-        if (line instanceof BTSComment) {
+        if (line instanceof Parsetree.BTSComment) {
             table += line.toTable(); + "\n";
         } else {
             table += line.toTable(linenumber);

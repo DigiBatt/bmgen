@@ -1,3 +1,5 @@
+goog.module("BMGen3000.BMGenToXML");
+
 function gen_xml_id() {
     const length = 20;
     var result = '';
@@ -10,7 +12,7 @@ function gen_xml_id() {
     return result;
 }
 
-bmgen_xml_converter = {};
+let bmgen_xml_converter = {};
 
 bmgen_xml_converter['variable'] = function (x) {
     return `<block type="variable" id="${gen_xml_id()}"><field name="NAME">${x.name}</field></block>`;
@@ -76,7 +78,7 @@ bmgen_xml_converter['function'] = function (x, next) {
     if (blockname in bmgen_xml_converter) {
         return bmgen_xml_converter[blockname](x, next);
     }
-    xml = `<block type="function" id="${gen_xml_id()}"><field name="NAME">${x.name}</field><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
+    let xml = `<block type="function" id="${gen_xml_id()}"><field name="NAME">${x.name}</field><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
     if (next) {
         xml += '<next>' + next + '</next>';
     }
@@ -85,7 +87,7 @@ bmgen_xml_converter['function'] = function (x, next) {
 }
 
 bmgen_xml_converter['function_charge'] = function (x, next) {
-    xml = `<block type="function_charge" id="${gen_xml_id()}"><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
+    let xml = `<block type="function_charge" id="${gen_xml_id()}"><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
     if (next) {
         xml += '<next>' + next + '</next>';
     }
@@ -94,7 +96,7 @@ bmgen_xml_converter['function_charge'] = function (x, next) {
 }
 
 bmgen_xml_converter['function_discharge'] = function (x, next) {
-    xml = `<block type="function_discharge" id="${gen_xml_id()}"><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
+    let xml = `<block type="function_discharge" id="${gen_xml_id()}"><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
     if (next) {
         xml += '<next>' + next + '</next>';
     }
@@ -103,7 +105,7 @@ bmgen_xml_converter['function_discharge'] = function (x, next) {
 }
 
 bmgen_xml_converter['function_pause'] = function (x, next) {
-    xml = `<block type="function_pause" id="${gen_xml_id()}"><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
+    let xml = `<block type="function_pause" id="${gen_xml_id()}"><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
     if (next) {
         xml += '<next>' + next + '</next>';
     }
@@ -112,7 +114,7 @@ bmgen_xml_converter['function_pause'] = function (x, next) {
 }
 
 bmgen_xml_converter['comment'] = function (x, next) {
-    xml = `<block type="comment" id="${gen_xml_id()}"><field name="TEXT">${x.text}</field>`;
+    let xml = `<block type="comment" id="${gen_xml_id()}"><field name="TEXT">${x.text}</field>`;
     if (next) {
         xml += '<next>' + next + '</next>';
     }
@@ -121,7 +123,7 @@ bmgen_xml_converter['comment'] = function (x, next) {
 }
 
 bmgen_xml_converter['label'] = function (x, next) {
-    xml = `<block type="label" id="${gen_xml_id()}"><field name="LABEL">${x.name}</field>`;
+    let xml = `<block type="label" id="${gen_xml_id()}"><field name="LABEL">${x.name}</field>`;
     if (next) {
         xml += '<next>' + next + '</next>';
     }
@@ -153,3 +155,5 @@ function bmgen_to_xml(program) {
     const xml = bmgen_obj_list_to_xml(program);
     return '<xml xmlns="https://developers.google.com/blockly/xml">' + xml + '</xml>';
 }
+
+exports = { bmgen_to_xml };

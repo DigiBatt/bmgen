@@ -1,5 +1,7 @@
 goog.module("BMGen3000.BTS600.parser");
 
+const Parsetree = goog.require("BMGen3000.BTS600.Parsetree");
+
 function bts_parse_program(program) {
     var lines = [];
     const statements = program.split(';');
@@ -21,7 +23,7 @@ function bts_parse_program(program) {
             lines.push(bts_parse_statement(stmt, label));
         }
     }
-    return new BTSProgram(lines);
+    return new Parsetree.BTSProgram(lines);
 }
 
 function bts_parse_comment(comment) {
@@ -29,7 +31,7 @@ function bts_parse_comment(comment) {
     if (!comment.startsWith('!')) {
         error('Invalid comment');
     }
-    return new BTSComment(comment.substring(1).trim());
+    return new Parsetree.BTSComment(comment.substring(1).trim());
 }
 
 function bts_parse_statement(statement, label) {
@@ -64,7 +66,7 @@ function bts_parse_statement(statement, label) {
             arg = tokens[i] + ' ' + arg;
         }
     }
-    let bts_statement = new BTSStatement(operator, values, limits, registrations);
+    let bts_statement = new Parsetree.BTSStatement(operator, values, limits, registrations);
     if (label) {
         bts_statement.label = label;
     }
@@ -74,10 +76,10 @@ function bts_parse_statement(statement, label) {
 function bts_parse_action(action) {
     const tokens = action.trim().split(' ');
     if (tokens[0].toUpperCase() == 'GOTO') {
-        return new BTSGoto(tokens[1]);
+        return new Parsetree.BTSGoto(tokens[1]);
     }
     else if (tokens[0].toUpperCase() == 'ERR') {
-        return new BTSError(Number(tokens[1]));
+        return new Parsetree.BTSError(Number(tokens[1]));
     }
 }
 
@@ -85,7 +87,7 @@ function bts_parse_limit(limit, action) {
     const tokens = limit.trim().split(' ');
     const operator = tokens[0];
     const numvalue = bts_parse_numvalue(tokens.slice(1).join(' '));
-    return new BTSLimit(operator, numvalue, action);
+    return new Parsetree.BTSLimit(operator, numvalue, action);
 }
 
 function bts_parse_value(value) {
@@ -93,13 +95,13 @@ function bts_parse_value(value) {
     if (tokens[1] == '=') {
         const numvalue = bts_parse_numvalue(tokens.slice(2).join(' '));
         const variable = bts_parse_numvalue(tokens[0]);
-        return new BTSAssignment(variable, numvalue);
+        return new Parsetree.BTSAssignment(variable, numvalue);
     } else if (tokens[tokens.length - 1] == '*') {
         const numvalue = bts_parse_numvalue(tokens.slice(0, tokens.length - 1).join(' '));
-        return new BTSCycleCount(numvalue);
+        return new Parsetree.BTSCycleCount(numvalue);
     } else {
         const numvalue = bts_parse_numvalue(tokens.join(' '));
-        return new BTSValue(numvalue);
+        return new Parsetree.BTSValue(numvalue);
     }
 }
 
@@ -108,20 +110,20 @@ function bts_parse_numvalue(numvalue) {
     if (tokens.length > 1) {
         const lhs = bts_parse_numvalue(tokens[0]);
         const rhs = bts_parse_numvalue(tokens.slice(1, tokens.length).join(' '));
-        return new BTSMultiplication(lhs, rhs);
+        return new Parsetree.BTSMultiplication(lhs, rhs);
     }
     else {
         const value = Number(tokens[0]);
         if (isNaN(value)) {
-            return new BTSVariable(tokens[0]);
+            return new Parsetree.BTSVariable(tokens[0]);
         } else {
-            return new BTSNumber(value);
+            return new Parsetree.BTSNumber(value);
         }
     }
 }
 
 function bts_parse_registration(registration) {
-    return new BTSRegistration(bts_parse_numvalue(registration));
+    return new Parsetree.BTSRegistration(bts_parse_numvalue(registration));
 }
 
 exports = { bts_parse_program }

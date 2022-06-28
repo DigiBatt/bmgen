@@ -1,36 +1,39 @@
-BTSVariable.prototype.toText = function () {
+goog.module("BMGen3000.BTS600.ProgramToText");
+let Parsetree = goog.require("BMGen3000.BTS600.Parsetree");
+
+Parsetree.BTSVariable.prototype.toText = function () {
     return this.name;
 }
 
-BTSNumber.prototype.toText = function () {
+Parsetree.BTSNumber.prototype.toText = function () {
     return String(this.value);
 }
 
-BTSMultiplication.prototype.toText = function () {
+Parsetree.BTSMultiplication.prototype.toText = function () {
     return this.lhs.toText() + " " + this.rhs.toText();
 }
 
-BTSValue.prototype.toText = function () {
+Parsetree.BTSValue.prototype.toText = function () {
     return "VALUE " + this.numvalue.toText();
 }
 
-BTSCycleCount.prototype.toText = function () {
+Parsetree.BTSCycleCount.prototype.toText = function () {
     return "VALUE " + this.numvalue.toText() + " *";
 }
 
-BTSAssignment.prototype.toText = function () {
+Parsetree.BTSAssignment.prototype.toText = function () {
     return "VALUE " + this.variable.toText() + " = " + this.numvalue.toText();
 }
 
-BTSGoto.prototype.toText = function () {
+Parsetree.BTSGoto.prototype.toText = function () {
     return "GOTO " + this.label;
 }
 
-BTSError.prototype.toText = function () {
+Parsetree.BTSError.prototype.toText = function () {
     return "ERR " + this.errnum;
 }
 
-BTSLimit.prototype.toText = function () {
+Parsetree.BTSLimit.prototype.toText = function () {
     var action = "";
     if (this.action) {
         action = " " + this.action[0].toText();
@@ -38,11 +41,11 @@ BTSLimit.prototype.toText = function () {
     return "LIMIT " + this.operator + " " + this.numvalue.toText();
 }
 
-BTSRegistration.prototype.toText = function () {
+Parsetree.BTSRegistration.prototype.toText = function () {
     return "REGISTRATION " + this.numvalue.toText();
 }
 
-BTSStatement.prototype.toText = function () {
+Parsetree.BTSStatement.prototype.toText = function () {
     var text = this.operator;
     const sep = '\n' + ' '.repeat(this.operator.length + 1);
     var prefix = " ";
@@ -73,10 +76,10 @@ BTSStatement.prototype.toText = function () {
     return text;
 }
 
-BTSComment.prototype.toText = function () {
+Parsetree.BTSComment.prototype.toText = function () {
     return "! " + this.text;
 }
 
-BTSProgram.prototype.toText = function () {
+Parsetree.BTSProgram.prototype.toText = function () {
     return this.lines.map(x => x.toText()).join("\n");
 }

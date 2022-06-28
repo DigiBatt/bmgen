@@ -1,16 +1,19 @@
-BTSNumValue.prototype.toBM = function () {
+goog.module("BMGen3000.BTS600.ProgramToBM");
+let Parsetree = goog.require("BMGen3000.BTS600.Parsetree");
+
+Parsetree.BTSNumValue.prototype.toBM = function () {
     return this.toText();
 }
 
-BTSCycleCount.prototype.toBM = function () {
+Parsetree.BTSCycleCount.prototype.toBM = function () {
     return this.numvalue.toText() + " *";
 }
 
-BTSAssignment.prototype.toBM = function () {
+Parsetree.BTSAssignment.prototype.toBM = function () {
     return this.variable.toText() + " = " + this.numvalue.toText();
 }
 
-BTSLimit.prototype.toBM = function () {
+Parsetree.BTSLimit.prototype.toBM = function () {
     const limit = this.operator + " " + this.numvalue.toText();
     var action = "";
     if (this.action) {
@@ -19,15 +22,15 @@ BTSLimit.prototype.toBM = function () {
     return [limit, action];
 }
 
-BTSRegistration.prototype.toBM = function () {
+Parsetree.BTSRegistration.prototype.toBM = function () {
     return this.numvalue.toText();
 }
 
-BTSValue.prototype.toBM = function () {
+Parsetree.BTSValue.prototype.toBM = function () {
     return this.numvalue.toText();
 }
 
-BTSStatement.prototype.toBM = function (linenumber) {
+Parsetree.BTSStatement.prototype.toBM = function (linenumber) {
     const value = this.values ? this.values.map(x => x.toBM()).join("\\r\\n") : "";
     const registration = this.registrations ? this.registrations.map(x => x.toBM()).join("\\r\\n") : "";
     var limit = [];
@@ -45,11 +48,11 @@ BTSStatement.prototype.toBM = function (linenumber) {
     return `\t${linenumber}\t${label}\t${this.operator}\t${value}\t${limit}\t${action}\t${registration}\n`;
 }
 
-BTSComment.prototype.toBM = function () {
+Parsetree.BTSComment.prototype.toBM = function () {
     return `\t\t!\t${this.text}`;
 }
 
-BTSProgram.prototype.toBM = function () {
+Parsetree.BTSProgram.prototype.toBM = function () {
     var program = '';
     var linenumber = 1;
     for (var i = 0; i < this.lines.length; i++) {

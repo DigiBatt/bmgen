@@ -1,6 +1,8 @@
-bmgen_bts_converter = {};
+goog.module("BMGen3000.BMGenToBTS");
 
-bmgen_function_map = {
+let bmgen_bts_converter = {};
+
+const bmgen_function_map = {
     'pause': 'PAU',
     'charge': 'CHA',
     'discharge': 'DCH'
@@ -86,3 +88,5 @@ function obj_to_bts(json) {
 function bmgen_to_bts(program) {
     return program.map(x => obj_to_bts(x)).join('\n') + '\nSTO;';
 }
+
+exports = { bmgen_to_bts };

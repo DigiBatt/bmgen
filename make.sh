@@ -15,4 +15,4 @@ cat << EOF >> custom/toolbox/toolbox.js
 exports = { toolbox };
 EOF
 
-./node_modules/.bin/closure-make-deps -f bmgen3000.js -r bts600/ -r custom/ --closure-path blockly/closure/goog/ > deps.js
+./node_modules/.bin/closure-make-deps -f bmgen3000.js -r bts600/ -r custom/ -r parser --closure-path blockly/closure/goog/ > deps.js
