@@ -1,3 +1,7 @@
+goog.module("BMGen3000.Generator");
+
+//goog.require("BMGen3000.Generator.Channels");
+
 class CustomGenerator {
   /**
    * @param {string} name Language name of this generator.
@@ -428,10 +432,10 @@ Object.defineProperties(CustomGenerator.prototype, {
   },
 });
 
-Blockly.BMGen = new CustomGenerator('BMGen');
+let Generator = new CustomGenerator('BMGen');
 
 
-Blockly.BMGen.scrub_ = function (block, code, opt_thisOnly) {
+Generator.scrub_ = function (block, code, opt_thisOnly) {
   const nextBlock = block.nextConnection && block.nextConnection.targetBlock();
   const nextCode = opt_thisOnly ? null : this.blockToCode(nextBlock);
   if (nextCode) {
@@ -441,7 +445,7 @@ Blockly.BMGen.scrub_ = function (block, code, opt_thisOnly) {
   }
 };
 
-Blockly.BMGen.fillDynamicCategoriesFromProgram = function (program) {
+Generator.fillDynamicCategoriesFromProgram = function (program) {
   const findObjects = function (root, type) {
     let list = [];
     if ('type' in root && root.type === type) {
@@ -462,8 +466,4 @@ Blockly.BMGen.fillDynamicCategoriesFromProgram = function (program) {
   this.channels = this.channels.concat(programChannels).filter((v, i, a) => a.indexOf(v) === i).sort();
 };
 
-loadScript("custom/generators/bmgen/statements.js");
-loadScript("custom/generators/bmgen/limits.js");
-loadScript("custom/generators/bmgen/channels.js");
-loadScript("custom/generators/bmgen/variables.js");
-loadScript("custom/generators/bmgen/other.js");
+exports = { Generator };

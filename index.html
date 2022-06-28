@@ -20,15 +20,17 @@
     <script src="blockly/blocks_compressed.js"></script>
     <script src="blockly/msg/js/en.js"></script>
 
-    <script src="bmgen3000.js"></script>
+    <script src="blockly/closure/goog/base.js"></script>
+    <script src="deps.js"></script>
+    <script>goog.require("BMGen3000");</script>
 </head>
 
-<body onload="loadBMGen()">
+<body onload="BMGen3000.loadBMGen()">
     <h1>BM Generator 3000</h1>
-    <button onclick="saveProgram()">Save</button>
-    <input type="file" name="Load" onchange="loadProgram(this.files)" />
-    <button onclick="addVariable()">Add variable</button>
-    <button onclick="addChannel()">Add channel</button>
+    <button onclick="BMGen3000.saveProgram()">Save</button>
+    <input type="file" name="Load" onchange="BMGen3000.loadProgram(this.files)" />
+    <button onclick="BMGen3000.addVariable()">Add variable</button>
+    <button onclick="BMGen3000.addChannel()">Add channel</button>
     Program Name:
     <input type="text" id="programName" />
     <div id="wrapper" style="height: 90%;">

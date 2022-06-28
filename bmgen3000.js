@@ -1,17 +1,26 @@
+goog.module("BMGen3000");
+goog.module.declareLegacyNamespace();
+
 function loadScript(url) {
     var script = document.createElement("script");
     script.src = url;
     document.head.appendChild(script);
 }
 
-loadScript("custom/blockly_developer_tools/bmgen_blocks.js");
-loadScript("custom/generators/bmgen.js");
-loadScript("custom/toolbox/toolbox.js");
-loadScript("custom/toolbox/dynamic_categories.js");
+const { bts_parse_program } = goog.require("BMGen3000.BTS600.parser");
+goog.require("BMGen3000.Blocks");
+const { Generator } = goog.require("BMGen3000.Generator");
+goog.require("BMGen3000.Generator.Channels");
+goog.require("BMGen3000.Generator.Limits");
+goog.require("BMGen3000.Generator.Other");
+goog.require("BMGen3000.Generator.Statements");
+goog.require("BMGen3000.Generator.Variables");
+const { registerToolboxCallbacks, addChannelNameToToolbox, addVariableNameToToolbox } = goog.require("BMGen3000.Toolbox.DynamicCategories");
+let { toolbox } = goog.require("BMGen3000.Toolbox");
+
 loadScript("parser/bmgen_parser.js");
 loadScript("parser/bmgen_to_bts.js");
 loadScript("custom/bts600/parsetree.js");
-loadScript("custom/bts600/parser.js");
 loadScript("custom/bts600/program_to_text.js");
 loadScript("custom/bts600/program_to_table.js");
 loadScript("custom/bts600/program_to_bm.js");
@@ -24,7 +33,7 @@ function loadBMGen() {
     var blocklyArea = document.getElementById('blocklyArea');
     var blocklyDiv = document.getElementById('blocklyDiv');
 
-    for (category of toolbox.getElementsByTagName("category")) {
+    for (let category of toolbox.getElementsByTagName("category")) {
         if (category.getAttribute("name") === "Variables") {
             category.setAttribute("custom", "BM_VARIABLES");
         }
@@ -63,7 +72,7 @@ function loadBMGen() {
 }
 
 function myUpdateFunction(event) {
-    var code = Blockly.BMGen.workspaceToCode(workspace);
+    var code = Generator.workspaceToCode(workspace);
     var bts_code = bts_parse_program(bmgen_to_bts(BMGenParser.parse(code))).simplify();
     document.getElementById('codearea').value = code;
     if (document.getElementById('bm_format').checked) {
@@ -88,11 +97,11 @@ function import_json_program(program) {
     const doc = parser.parseFromString(xml, 'application/xml');
     workspace.clear();
     Blockly.Xml.domToWorkspace(doc.documentElement, workspace);
-    Blockly.BMGen.fillDynamicCategoriesFromProgram(program);
+    Generator.fillDynamicCategoriesFromProgram(program);
 }
 
 function saveProgram() {
-    const code = Blockly.BMGen.workspaceToCode(workspace);
+    const code = Generator.workspaceToCode(workspace);
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
     filename = document.getElementById('programName').value
@@ -144,3 +153,5 @@ function addVariable() {
     let variablename = window.prompt("Variable name:", "");
     addVariableNameToToolbox(variablename);
 }
+
+exports = { loadBMGen, addChannel, addVariable, loadProgram, saveProgram };

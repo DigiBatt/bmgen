@@ -1,6 +1,9 @@
+goog.module("BMGen3000.Toolbox.DynamicCategories");
+var { Generator } = goog.require("BMGen3000.Generator");
+
 // Returns an array of objects.
 var channelsFlyoutCallback = function (workspace) {
-    const channelnames = Blockly.BMGen.channels;
+    const channelnames = Generator.channels;
     var blockList = [];
     for (var i = 0; i < channelnames.length; i++) {
         blockList.push({
@@ -15,7 +18,7 @@ var channelsFlyoutCallback = function (workspace) {
 };
 
 var variablesFlyoutCallback = function (workspace) {
-    const variablenames = Blockly.BMGen.variables;
+    const variablenames = Generator.variables;
     var blockList = [];
     for (var i = 0; i < variablenames.length; i++) {
         blockList.push({
@@ -35,9 +38,11 @@ var registerToolboxCallbacks = function (workspace) {
 };
 
 var addChannelNameToToolbox = function (channelname) {
-    Blockly.BMGen.channels.push(channelname);
+    Generator.channels.push(channelname);
 };
 
 var addVariableNameToToolbox = function (variablename) {
-    Blockly.BMGen.variables.push(variablename);
+    Generator.variables.push(variablename);
 };
+
+exports = { registerToolboxCallbacks, addChannelNameToToolbox, addVariableNameToToolbox };

@@ -1,33 +1,36 @@
-Blockly.BMGen['action_error'] = function (block) {
+goog.module("BMGen3000.Generator.Limits");
+let { Generator } = goog.require("BMGen3000.Generator");
+
+Generator['action_error'] = function (block) {
     const errnum = block.getFieldValue('ERRNUM');
     return `error(${errnum})`;
 }
 
-Blockly.BMGen['action_goto'] = function (block) {
+Generator['action_goto'] = function (block) {
     const label = block.getFieldValue('LABEL');
     return `goto(${label})`;
 }
 
-Blockly.BMGen['time'] = function (block) {
+Generator['time'] = function (block) {
     const value = block.getFieldValue('VALUE');
     const unit = block.getFieldValue('UNIT');
     return `${value} ${unit}`;
 }
 
-Blockly.BMGen['comparison'] = function (block) {
-    const lhs = Blockly.BMGen.valueToCode(block, 'LHS');
-    const rhs = Blockly.BMGen.valueToCode(block, 'RHS');
+Generator['comparison'] = function (block) {
+    const lhs = Generator.valueToCode(block, 'LHS');
+    const rhs = Generator.valueToCode(block, 'RHS');
     const operator = block.getFieldValue('OPERATOR');
     return `${lhs} ${operator} ${rhs}`;
 }
 
-Blockly.BMGen['limit'] = function (block) {
-    const condition = Blockly.BMGen.valueToCode(block, 'CONDITION');
+Generator['limit'] = function (block) {
+    const condition = Generator.valueToCode(block, 'CONDITION');
     return `limit(${condition});`;
 }
 
-Blockly.BMGen['limit_action'] = function (block) {
-    const condition = Blockly.BMGen.valueToCode(block, 'CONDITION');
-    const action = Blockly.BMGen.valueToCode(block, 'ACTION');
+Generator['limit_action'] = function (block) {
+    const condition = Generator.valueToCode(block, 'CONDITION');
+    const action = Generator.valueToCode(block, 'ACTION');
     return `limit(${condition}, ${action});`;
 }

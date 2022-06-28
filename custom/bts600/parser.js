@@ -1,3 +1,5 @@
+goog.module("BMGen3000.BTS600.parser");
+
 function bts_parse_program(program) {
     var lines = [];
     const statements = program.split(';');
@@ -121,3 +123,5 @@ function bts_parse_numvalue(numvalue) {
 function bts_parse_registration(registration) {
     return new BTSRegistration(bts_parse_numvalue(registration));
 }
+
+exports = { bts_parse_program }
