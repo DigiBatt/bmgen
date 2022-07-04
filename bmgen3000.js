@@ -15,7 +15,8 @@ goog.require("BMGen3000.Generator.Limits");
 goog.require("BMGen3000.Generator.Other");
 goog.require("BMGen3000.Generator.Statements");
 goog.require("BMGen3000.Generator.Variables");
-const { registerToolboxCallbacks, addChannelNameToToolbox, addVariableNameToToolbox } = goog.require("BMGen3000.Toolbox.DynamicCategories");
+goog.require("BMGen3000.Generator.Registrations");
+const { registerToolboxCallbacks, addChannelNameToToolbox, addVariableNameToToolbox, addRegistrationNameToToolbox } = goog.require("BMGen3000.Toolbox.DynamicCategories");
 let { toolbox } = goog.require("BMGen3000.Toolbox");
 const BMGenParser = goog.require("BMGen3000.Parser");
 const { bmgen_to_bts } = goog.require("BMGen3000.BMGenToBTS");
@@ -37,6 +38,9 @@ function loadBMGen() {
         }
         else if (category.getAttribute("name") === "Channels") {
             category.setAttribute("custom", "CHANNELS");
+        }
+        else if (category.getAttribute("name") === "Registrations") {
+            category.setAttribute("custom", "REGISTRATIONS");
         }
     }
 
@@ -152,4 +156,9 @@ function addVariable() {
     addVariableNameToToolbox(variablename);
 }
 
-exports = { loadBMGen, addChannel, addVariable, loadProgram, saveProgram };
+function addRegistration() {
+    let regname = window.prompt("Registration name:", "");
+    addRegistrationNameToToolbox(regname);
+}
+
+exports = { loadBMGen, addChannel, addVariable, addRegistration, loadProgram, saveProgram };

@@ -4,6 +4,7 @@ program =
 statement =
     assignment
     / limit_global
+    / registration_global
     / function
     / cycle
     / comment
@@ -13,19 +14,28 @@ cycle =
 	"cycle" _ "(" _ count:INT _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
     
 limit_global =
-	"limit" _ "(" condition:limit_condition action:(_ "," _ error)? ")" _ ";" { return {'type': 'limit_global', 'condition': condition, 'action': action ? action[3] : null}; }
+	lim:limit _ ";" { lim.type = 'limit_global'; return lim; }
     
 limit =
 	"limit" _ "(" condition:limit_condition action:(_ "," _ error)? ")" { return {'type': 'limit', 'condition': condition, 'action': action ? action[3] : null}; }
     
 error =
 	"error" _ "(" errnum:INT ")" { return {'type': 'error', 'errnum': errnum}; }
+
+registration_global =
+	reg:registration _ ";" { reg.type = 'registration_global'; return reg; }
+
+registration =
+	"registration" _ "(" args:regargslist ")" { return {'type': 'registration', 'args': args}; }
     
 function =
 	name:ID _ "(" args:argslist ")" _ ";" { return {'type': 'function', 'name': name, 'args': args}; }
     
 argslist =
 	x0:arg? x:(_ "," _ arg)* { return x ? [x0, ...(x.map(elem => elem[3]))] : x0  }
+    
+regargslist =
+	x0:regarg? x:(_ "," _ regarg)* { return x ? [x0, ...(x.map(elem => elem[3]))] : x0  }
 
 limit_condition =
 	comparison
@@ -36,8 +46,15 @@ arg =
     / comparison
     / time
     / limit
+    / registration
     / error
     / numvalue
+    
+regarg =
+	regname
+    / comparison
+    / time
+    / setvalue
 
 assignment =
 	lhs:variable _ "=" _ rhs:numvalue _ ";" { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
@@ -64,6 +81,9 @@ variable =
 channel =
 	name:ID { return {'type': 'channel', 'name': name}; }
     
+regname =
+	name:ID { return {'type': 'regname', 'name': name}; }
+    
 number =
 	value:FLOAT { return {'type': 'number', 'value': value}; }
     
@@ -74,5 +94,5 @@ TIMEUNIT = $("sec" / "min" / "h")
 COMPARE = $([><]"="?)
 INT = $("-"?[0-9]+)
 FLOAT = $("-"?[0-9]+(.[0-9]+)?)
-ID = $([A-Za-z][A-Za-z0-9]*)
+ID = $([A-Za-z][A-Za-z0-9_]*)
 _ = $([ \t\r\n]*)

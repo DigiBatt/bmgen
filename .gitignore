@@ -1,5 +1,6 @@
 /node_modules
 custom/toolbox/toolbox.js
+custom/blocks.js
 parser/bmgen_parser.js
 deps.js
 package.json

@@ -106,6 +106,7 @@ class CustomGenerator {
 
     this.channels = [];
     this.variables = [];
+    this.registrations = [];
   }
 
   /**
@@ -464,6 +465,9 @@ Generator.fillDynamicCategoriesFromProgram = function (program) {
 
   let programChannels = findObjects(program, 'channel').map(x => x.name);
   this.channels = this.channels.concat(programChannels).filter((v, i, a) => a.indexOf(v) === i).sort();
+
+  let programRegistrations = findObjects(program, 'regname').map(x => x.name);
+  this.registrations = this.registrations.concat(programRegistrations).filter((v, i, a) => a.indexOf(v) === i).sort();
 };
 
 exports = { Generator };

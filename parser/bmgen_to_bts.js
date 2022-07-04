@@ -77,6 +77,18 @@ bmgen_bts_converter['label'] = function (json) {
     return `LABEL ${json.name}`;
 }
 
+bmgen_bts_converter['registration'] = function (json) {
+    return json.args.map(x => 'REGISTRATION ' + obj_to_bts(x)).join(' ');
+}
+
+bmgen_bts_converter['registration_global'] = function (json) {
+    return 'SET ' + json.args.map(x => 'REGISTRATION ' + obj_to_bts(x)).join(' ') + ';';
+}
+
+bmgen_bts_converter['regname'] = function (json) {
+    return `${json.name}`;
+}
+
 function obj_to_bts(json) {
     if (typeof json === 'object' && json !== null) {
         return bmgen_bts_converter[json.type](json);

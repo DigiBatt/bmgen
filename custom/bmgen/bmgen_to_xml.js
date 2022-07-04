@@ -62,8 +62,6 @@ bmgen_xml_converter['limit'] = function (x, next) {
     return xml;
 }
 
-bmgen_xml_converter['limit_global'] = bmgen_xml_converter['limit'];
-
 bmgen_xml_converter['cycle'] = function (x, next) {
     var xml = `<block type="function_cycle" id="${gen_xml_id()}"><field name="COUNT">${x.count}</field><statement name="ARGS">${bmgen_obj_list_to_xml(x.program)}</statement>`;
     if (next) {
@@ -130,6 +128,22 @@ bmgen_xml_converter['label'] = function (x, next) {
     xml += "</block>";
     return xml;
 }
+
+bmgen_xml_converter['registration'] = function (x, next) {
+    let xml = `<block type="registration" id="${gen_xml_id()}"><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
+bmgen_xml_converter['regname'] = function (x) {
+    return `<block type="regname" id="${gen_xml_id()}"><field name="NAME">${x.name}</field></block>`;
+}
+
+bmgen_xml_converter['limit_global'] = bmgen_xml_converter['limit'];
+bmgen_xml_converter['registration_global'] = bmgen_xml_converter['registration'];
 
 function bmgen_obj_to_xml(json) {
     if (typeof json === 'object' && json !== null) {
