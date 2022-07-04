@@ -256,3 +256,18 @@ Blockly.Blocks['regname'] = {
  this.setHelpUrl("");
   }
 };
+
+Blockly.Blocks['setvalue'] = {
+  init: function() {
+    this.appendValueInput("VALUE")
+        .setCheck(["Number", "Variable", "Numvalue"]);
+    this.appendValueInput("CHANNEL")
+        .setCheck("Channel");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(60);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};

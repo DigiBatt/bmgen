@@ -43,6 +43,7 @@ limit_condition =
 
 arg =
 	setvalue
+    / setvalue_equal
     / comparison
     / time
     / limit
@@ -60,7 +61,10 @@ assignment =
 	lhs:variable _ "=" _ rhs:numvalue _ ";" { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
     
 setvalue =
-	lhs:channel _ "=" _ rhs:numvalue { return {'type': 'setvalue', 'lhs': lhs, 'rhs': rhs}; }
+	value:numvalue _ channel:channel { return {'type': 'setvalue', 'channel': channel, 'value': value}; }
+    
+setvalue_equal =
+	channel:channel _ "=" _ value:numvalue { return {'type': 'setvalue_equal', 'channel': channel, 'value': value}; }
     
 comparison =
 	lhs:channel _ operator:COMPARE _ rhs:numvalue { return {'type': 'comparison', 'lhs': lhs, 'rhs': rhs, 'operator': operator}; }

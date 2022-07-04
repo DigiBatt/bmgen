@@ -46,7 +46,11 @@ bmgen_bts_converter['error'] = function (json) {
 }
 
 bmgen_bts_converter['setvalue'] = function (json) {
-    return `VALUE ${obj_to_bts(json.rhs)} ${obj_to_bts(json.lhs)}`;
+    return `VALUE ${obj_to_bts(json.value)} ${obj_to_bts(json.channel)}`;
+}
+
+bmgen_bts_converter['setvalue_equal'] = function (json) {
+    return `VALUE ${obj_to_bts(json.value)} ${obj_to_bts(json.channel)}`;
 }
 
 bmgen_bts_converter['time'] = function (json) {

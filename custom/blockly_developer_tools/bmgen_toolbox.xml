@@ -1,6 +1,7 @@
 <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
   <category name="Statements" colour="#5b80a5">
     <block type="assignment"></block>
+    <block type="setvalue"></block>
     <block type="function_charge">
       <statement name="ARGS">
         <block type="assignment">

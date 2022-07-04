@@ -35,6 +35,24 @@ bmgen_xml_converter['comparison'] = function (x) {
 }
 
 bmgen_xml_converter['setvalue'] = function (x, next) {
+    var xml = `<block type="setvalue" id="${gen_xml_id()}"><value name="VALUE">${bmgen_obj_to_xml(x.value)}</value><value name="CHANNEL">${bmgen_obj_to_xml(x.channel)}</value>`;
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
+bmgen_xml_converter['setvalue_equal'] = function (x, next) {
+    var xml = `<block type="assignment" id="${gen_xml_id()}"><value name="LHS">${bmgen_obj_to_xml(x.channel)}</value><value name="RHS">${bmgen_obj_to_xml(x.value)}</value>`;
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
+bmgen_xml_converter['assignment'] = function (x, next) {
     var xml = `<block type="assignment" id="${gen_xml_id()}"><value name="LHS">${bmgen_obj_to_xml(x.lhs)}</value><value name="RHS">${bmgen_obj_to_xml(x.rhs)}</value>`;
     if (next) {
         xml += '<next>' + next + '</next>';
@@ -43,7 +61,6 @@ bmgen_xml_converter['setvalue'] = function (x, next) {
     return xml;
 }
 
-bmgen_xml_converter['assignment'] = bmgen_xml_converter['setvalue'];
 
 bmgen_xml_converter['error'] = function (x) {
     return `<block type="action_error" id="${gen_xml_id()}"><field name="ERRNUM">${x.errnum}</field></block>`;

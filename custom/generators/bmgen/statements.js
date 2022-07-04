@@ -7,6 +7,12 @@ Generator['assignment'] = function (block) {
     return `${lhs} = ${rhs};`;
 }
 
+Generator['setvalue'] = function (block) {
+    const channel = Generator.valueToCode(block, 'CHANNEL');
+    const value = Generator.valueToCode(block, 'VALUE');
+    return `${value} ${channel}`;
+}
+
 Generator['function'] = function (block) {
     const name = block.getFieldValue('NAME');
     var args = Generator.statementToCode(block, 'ARGS').replace(/\n/g, ', ').replace(/;/g, '');
