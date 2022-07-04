@@ -57,7 +57,7 @@ Parsetree.BTSProgram.prototype.toBM = function () {
     var linenumber = 1;
     for (var i = 0; i < this.lines.length; i++) {
         const line = this.lines[i];
-        if (line instanceof BTSComment) {
+        if (line instanceof Parsetree.BTSComment) {
             program += line.toBM(); + "\n";
         } else {
             program += line.toBM(linenumber);

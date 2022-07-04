@@ -102,7 +102,7 @@ function saveProgram() {
     const code = Generator.workspaceToCode(workspace);
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
-    filename = document.getElementById('programName').value
+    let filename = document.getElementById('programName').value
     if (filename) {
         filename += '.bmgen';
     } else {
