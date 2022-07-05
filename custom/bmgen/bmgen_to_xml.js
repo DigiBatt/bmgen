@@ -66,6 +66,10 @@ bmgen_xml_converter['error'] = function (x) {
     return `<block type="action_error" id="${gen_xml_id()}"><field name="ERRNUM">${x.errnum}</field></block>`;
 }
 
+bmgen_xml_converter['goto'] = function (x) {
+    return `<block type="action_goto" id="${gen_xml_id()}"><field name="LABEL">${x.label}</field></block>`;
+}
+
 bmgen_xml_converter['limit'] = function (x, next) {
     if (x.action) {
         var xml = `<block type="limit_action" id="${gen_xml_id()}"><value name="CONDITION">${bmgen_obj_to_xml(x.condition)}</value><value name="ACTION">${bmgen_obj_to_xml(x.action)}</value>`;

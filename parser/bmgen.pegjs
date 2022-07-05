@@ -18,10 +18,17 @@ limit_global =
 	lim:limit _ ";" { lim.type = 'limit_global'; return lim; }
     
 limit =
-	"limit" _ "(" condition:limit_condition action:(_ "," _ error)? ")" { return {'type': 'limit', 'condition': condition, 'action': action ? action[3] : null}; }
+	"limit" _ "(" condition:limit_condition action:(_ "," _ limit_action)? ")" { return {'type': 'limit', 'condition': condition, 'action': action ? action[3] : null}; }
+    
+limit_action =
+	error
+    / goto
     
 error =
 	"error" _ "(" errnum:INT ")" { return {'type': 'error', 'errnum': errnum}; }
+    
+goto =
+	"goto" _ "(" label:ID ")" { return {'type': 'goto', 'label': label}; }
 
 registration_global =
 	reg:registration _ ";" { reg.type = 'registration_global'; return reg; }

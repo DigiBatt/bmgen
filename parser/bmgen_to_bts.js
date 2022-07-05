@@ -45,6 +45,10 @@ bmgen_bts_converter['error'] = function (json) {
     return `ACTION ERR ${json.errnum}`;
 }
 
+bmgen_bts_converter['goto'] = function (json) {
+    return `ACTION GOTO ${json.label}`;
+}
+
 bmgen_bts_converter['setvalue'] = function (json) {
     return `VALUE ${obj_to_bts(json.value)} ${obj_to_bts(json.channel)}`;
 }
