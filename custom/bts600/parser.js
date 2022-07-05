@@ -87,13 +87,19 @@ function bts_parse_limit(limit, action) {
     let condition;
     const parts = limit.trim().split('&');
     for (let i = 0; i < parts.length; i++) {
+        let new_condition;
         const tokens = parts[i].trim().split(' ');
-        const operator = tokens[0];
-        const numvalue = bts_parse_numvalue(tokens.slice(1).join(' '));
-        if (condition) {
-            condition = new Parsetree.BTSLimitAnd(condition, new Parsetree.BTSLimitSingleCondition(operator, numvalue));
+        if (tokens[1] === '=') {
+            new_condition = new Parsetree.BTSLimitEqual(tokens[0], tokens[2]);
         } else {
-            condition = new Parsetree.BTSLimitSingleCondition(operator, numvalue);
+            const operator = tokens[0];
+            const numvalue = bts_parse_numvalue(tokens.slice(1).join(' '));
+            new_condition = new Parsetree.BTSLimitSingleCondition(operator, numvalue);
+        }
+        if (condition) {
+            condition = new Parsetree.BTSLimitAnd(condition, new_condition);
+        } else {
+            condition = new_condition;
         }
     }
     return new Parsetree.BTSLimit(condition, action);

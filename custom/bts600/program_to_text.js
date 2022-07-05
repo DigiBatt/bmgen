@@ -37,6 +37,10 @@ Parsetree.BTSLimitSingleCondition.prototype.toText = function () {
     return this.operator + " " + this.numvalue.toText();
 }
 
+Parsetree.BTSLimitEqual.prototype.toText = function () {
+    return this.lhs + " = " + this.rhs;
+}
+
 Parsetree.BTSLimitAnd.prototype.toText = function () {
     return this.lhs.toText() + " & " + this.rhs.toText();
 }

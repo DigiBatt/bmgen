@@ -17,7 +17,7 @@ Parsetree.BTSValue.prototype.toTable = function () {
     return this.numvalue.toText();
 }
 
-Parsetree.BTSLimitSingleCondition.prototype.toTable = function () {
+Parsetree.BTSLimitCondition.prototype.toTable = function () {
     return this.toText();
 }
 

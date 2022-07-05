@@ -72,6 +72,14 @@ class BTSLimitSingleCondition extends BTSLimitCondition {
     }
 }
 
+class BTSLimitEqual extends BTSLimitCondition {
+    constructor(lhs, rhs) {
+        super();
+        this.lhs = lhs;
+        this.rhs = rhs;
+    }
+}
+
 class BTSLimitAnd extends BTSLimitCondition {
     constructor(lhs, rhs) {
         super();
@@ -147,4 +155,4 @@ function BTSConcat(top, bottom) {
     }
 }
 
-exports = { BTSNode, BTSNumValue, BTSVariable, BTSNumber, BTSMultiplication, BTSValue, BTSCycleCount, BTSAssignment, BTSAction, BTSGoto, BTSError, BTSLimitCondition, BTSLimitSingleCondition, BTSLimitAnd, BTSLimit, BTSRegistration, BTSLine, BTSStatement, BTSComment, BTSProgram };
+exports = { BTSNode, BTSNumValue, BTSVariable, BTSNumber, BTSMultiplication, BTSValue, BTSCycleCount, BTSAssignment, BTSAction, BTSGoto, BTSError, BTSLimitCondition, BTSLimitSingleCondition, BTSLimitEqual, BTSLimitAnd, BTSLimit, BTSRegistration, BTSLine, BTSStatement, BTSComment, BTSProgram };

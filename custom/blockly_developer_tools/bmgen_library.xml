@@ -450,7 +450,7 @@
             <field name="ALIGN">LEFT</field>
             <statement name="FIELDS">
               <block type="field_dropdown" id="[u8!*=LLj|N)ci51Xf+[">
-                <mutation options="[&quot;text&quot;,&quot;text&quot;,&quot;text&quot;,&quot;text&quot;]"></mutation>
+                <mutation options="[&quot;text&quot;,&quot;text&quot;,&quot;text&quot;,&quot;text&quot;,&quot;text&quot;]"></mutation>
                 <field name="FIELDNAME">OPERATOR</field>
                 <field name="USER0">&lt;</field>
                 <field name="CPU0">&lt;</field>
@@ -460,6 +460,8 @@
                 <field name="CPU2">&lt;=</field>
                 <field name="USER3">&gt;=</field>
                 <field name="CPU3">&gt;=</field>
+                <field name="USER4">=</field>
+                <field name="CPU4">=</field>
               </block>
             </statement>
             <value name="TYPE">

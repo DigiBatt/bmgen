@@ -13,7 +13,7 @@ Parsetree.BTSAssignment.prototype.toBM = function () {
     return this.variable.toText() + " = " + this.numvalue.toText();
 }
 
-Parsetree.BTSLimitSingleCondition.prototype.toBM = function () {
+Parsetree.BTSLimitCondition.prototype.toBM = function () {
     return this.toText();
 }
 

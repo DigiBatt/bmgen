@@ -38,7 +38,11 @@ bmgen_bts_converter['limit'] = function (json) {
 }
 
 bmgen_bts_converter['comparison'] = function (json) {
-    return `${json.operator} ${obj_to_bts(json.rhs)} ${obj_to_bts(json.lhs)}`;
+    if (json.operator === '=') {
+        return `${obj_to_bts(json.lhs)} = ${obj_to_bts(json.rhs)}`;
+    } else {
+        return `${json.operator} ${obj_to_bts(json.rhs)} ${obj_to_bts(json.lhs)}`;
+    }
 }
 
 bmgen_bts_converter['error'] = function (json) {

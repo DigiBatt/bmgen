@@ -122,7 +122,7 @@ Blockly.Blocks['comparison'] = {
         .setCheck(["Channel", "Variable"]);
     this.appendValueInput("RHS")
         .setCheck(["Number", "Variable", "Channel"])
-        .appendField(new Blockly.FieldDropdown([["<","<"], [">",">"], ["<=","<="], [">=",">="]]), "OPERATOR");
+        .appendField(new Blockly.FieldDropdown([["<","<"], [">",">"], ["<=","<="], [">=",">="], ["=","="]]), "OPERATOR");
     this.setInputsInline(true);
     this.setOutput(true, "LimitCondition");
     this.setColour(90);

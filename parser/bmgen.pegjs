@@ -110,7 +110,7 @@ math =
 	lhs:numvalue _ operator:("+=" / "-=") _ rhs:numvalue _ ";" { return {'type': 'math', 'lhs': lhs, 'rhs': rhs, 'operator': operator} }
 
 TIMEUNIT = $("sec" / "min" / "h")
-COMPARE = $([><]"="?)
+COMPARE = $(([><]"="?) / "=")
 INT = $("-"?[0-9]+)
 FLOAT = $("-"?[0-9]+(.[0-9]+)?)
 ID = $([A-Za-z][A-Za-z0-9_]*)
