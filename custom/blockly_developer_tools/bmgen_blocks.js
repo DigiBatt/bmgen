@@ -60,7 +60,7 @@ Blockly.Blocks['assignment'] = {
     this.appendValueInput("LHS")
         .setCheck(["Variable", "Channel"]);
     this.appendValueInput("RHS")
-        .setCheck(["Number", "Variable", "Numvalue"])
+        .setCheck(["Number", "Variable", "Numvalue", "Channel"])
         .appendField("=");
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
@@ -280,6 +280,22 @@ Blockly.Blocks['empty_function'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(210);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['math'] = {
+  init: function() {
+    this.appendValueInput("LHS")
+        .setCheck(["Variable", "Channel"]);
+    this.appendValueInput("RHS")
+        .setCheck(["Number", "Variable", "Numvalue", "Channel"])
+        .appendField(new Blockly.FieldDropdown([["+=","+="], ["-=","-="]]), "OPERATOR");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(60);
  this.setTooltip("");
  this.setHelpUrl("");
   }

@@ -9,6 +9,7 @@ statement =
     / cycle
     / comment
     / label
+    / math
     
 cycle =
 	"cycle" _ "(" _ count:INT _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
@@ -70,13 +71,13 @@ comparison =
 	lhs:channel _ operator:COMPARE _ rhs:numvalue { return {'type': 'comparison', 'lhs': lhs, 'rhs': rhs, 'operator': operator}; }
     
 comment =
-	"//" text:$([^\n]*) { return {'type': 'comment', 'text': text}; }
+	"//" " "? text:$([^\n]*) { return {'type': 'comment', 'text': text}; }
 	
 time =
 	value:FLOAT _ unit:TIMEUNIT { return {'type': 'time', 'value': value, 'unit': unit}; }
     
 numvalue =
-	variable
+	channel
     / number
     
 variable =
@@ -93,6 +94,9 @@ number =
     
 label =
 	_ ":" _ name:ID { return {'type': 'label', 'name': name}; }
+    
+math =
+	lhs:numvalue _ operator:("+=" / "-=") _ rhs:numvalue _ ";" { return {'type': 'math', 'lhs': lhs, 'rhs': rhs, 'operator': operator} }
 
 TIMEUNIT = $("sec" / "min" / "h")
 COMPARE = $([><]"="?)

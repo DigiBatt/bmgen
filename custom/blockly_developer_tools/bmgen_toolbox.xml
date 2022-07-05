@@ -71,9 +71,18 @@
       <field name="LABEL">label</field>
     </block>
   </category>
+  <category name="Math" colour="#9fa55b">
+    <block type="assignment"></block>
+    <block type="math">
+      <field name="OPERATOR">+=</field>
+    </block>
+    <block type="number">
+      <field name="NUMBER">0</field>
+    </block>
+  </category>
   <category name="Variables" colour="#a55b80"></category>
   <category name="Channels" colour="#995ba5"></category>
-  <category name="Registrations">
+  <category name="Registrations" colour="#a55b80">
     <block type="registration"></block>
   </category>
   <category name="Other" colour="#5ba58c">

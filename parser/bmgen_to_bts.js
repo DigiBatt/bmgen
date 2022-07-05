@@ -93,6 +93,16 @@ bmgen_bts_converter['regname'] = function (json) {
     return `${json.name}`;
 }
 
+bmgen_bts_converter['math'] = function (json) {
+    if (json.operator === '+=') {
+        return `ADD VALUE ${obj_to_bts(json.lhs)} VALUE ${obj_to_bts(json.rhs)};`;
+    } else if (json.operator === '-=') {
+        return `SUB VALUE ${obj_to_bts(json.lhs)} VALUE ${obj_to_bts(json.rhs)};`;
+    } else {
+        console.error('unknown operator');
+    }
+}
+
 function obj_to_bts(json) {
     if (typeof json === 'object' && json !== null) {
         return bmgen_bts_converter[json.type](json);

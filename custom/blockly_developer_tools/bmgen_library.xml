@@ -229,7 +229,7 @@
             <value name="TYPE">
               <shadow type="type_null" id="Z_JfN]9.6Zhw+j[.Z4+S"></shadow>
               <block type="type_group" id="QS%pp]vu~GU!3xkZ`b/e">
-                <mutation types="3"></mutation>
+                <mutation types="4"></mutation>
                 <value name="TYPE0">
                   <block type="type_number" id="qsETU|?(Ag`c|2aI$r7O"></block>
                 </value>
@@ -241,6 +241,11 @@
                 <value name="TYPE2">
                   <block type="type_other" id="M8RFT$t?IOB6mV+OVxv/">
                     <field name="TYPE">Numvalue</field>
+                  </block>
+                </value>
+                <value name="TYPE3">
+                  <block type="type_other" id="S0+{NIF*=YM0jMkyic-R">
+                    <field name="TYPE">Channel</field>
                   </block>
                 </value>
               </block>
@@ -1002,6 +1007,95 @@
       <block type="colour_hue" id="Z9K66SnarHmtDxxmcO~:">
         <mutation colour="#5b80a5"></mutation>
         <field name="HUE">210</field>
+      </block>
+    </value>
+  </block><block type="factory_base" id="kxJkU1mEW3*6+DTwFAa=" deletable="false" movable="false" x="10" y="10">
+    <mutation connections="BOTH"></mutation>
+    <field name="NAME">math</field>
+    <field name="INLINE">INT</field>
+    <field name="CONNECTIONS">BOTH</field>
+    <statement name="INPUTS">
+      <block type="input_value" id="e)3PN`v?,c^=cOZreyKW">
+        <field name="INPUTNAME">LHS</field>
+        <field name="ALIGN">LEFT</field>
+        <value name="TYPE">
+          <shadow type="type_null" id="IHF7([WhFO!8aP9Q=ndZ"></shadow>
+          <block type="type_group" id="?p[d.]D?,F9+?UIj/A$|">
+            <mutation types="2"></mutation>
+            <value name="TYPE0">
+              <block type="type_other" id="{VZ#1JM_n^DlgrfU2Otc">
+                <field name="TYPE">Variable</field>
+              </block>
+            </value>
+            <value name="TYPE1">
+              <block type="type_other" id="HY[@/^mqnA_D`:8RkAN~">
+                <field name="TYPE">Channel</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="input_value" id=".aG1bH`H`QuV9PL9Pz*~">
+            <field name="INPUTNAME">RHS</field>
+            <field name="ALIGN">LEFT</field>
+            <statement name="FIELDS">
+              <block type="field_dropdown" id="H7YH6=!@]}VfmVQaZrXa">
+                <mutation options="[&quot;text&quot;,&quot;text&quot;]"></mutation>
+                <field name="FIELDNAME">OPERATOR</field>
+                <field name="USER0">+=</field>
+                <field name="CPU0">+=</field>
+                <field name="USER1">-=</field>
+                <field name="CPU1">-=</field>
+              </block>
+            </statement>
+            <value name="TYPE">
+              <shadow type="type_null" id="Z_JfN]9.6Zhw+j[.Z4+S"></shadow>
+              <block type="type_group" id="QS%pp]vu~GU!3xkZ`b/e">
+                <mutation types="4"></mutation>
+                <value name="TYPE0">
+                  <block type="type_number" id="qsETU|?(Ag`c|2aI$r7O"></block>
+                </value>
+                <value name="TYPE1">
+                  <block type="type_other" id="boa/,dO,P,pU4nC%TzOr">
+                    <field name="TYPE">Variable</field>
+                  </block>
+                </value>
+                <value name="TYPE2">
+                  <block type="type_other" id="M8RFT$t?IOB6mV+OVxv/">
+                    <field name="TYPE">Numvalue</field>
+                  </block>
+                </value>
+                <value name="TYPE3">
+                  <block type="type_other" id="iOc-]$VL{VueOa?2hY}m">
+                    <field name="TYPE">Channel</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <value name="TOOLTIP">
+      <block type="text" id="_6=q_UNr9uX05Kk$1cp?" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="HELPURL">
+      <block type="text" id="ju0mx}WH-846?[3(=/ex" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="TOPTYPE">
+      <shadow type="type_null" id="EnWba[A{!sq%Q`JL4?9d"></shadow>
+    </value>
+    <value name="BOTTOMTYPE">
+      <shadow type="type_null" id="WNJ^?[ySxU1rbW4#Mo2a"></shadow>
+    </value>
+    <value name="COLOUR">
+      <block type="colour_hue" id="#_Rt_YBzeQ;1KrL1Mvaq">
+        <mutation colour="#a5a55b"></mutation>
+        <field name="HUE">60</field>
       </block>
     </value>
   </block></xml>

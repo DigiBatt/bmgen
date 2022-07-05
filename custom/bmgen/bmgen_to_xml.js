@@ -164,6 +164,15 @@ bmgen_xml_converter['regname'] = function (x) {
     return `<block type="regname" id="${gen_xml_id()}"><field name="NAME">${x.name}</field></block>`;
 }
 
+bmgen_xml_converter['math'] = function (x, next) {
+    var xml = `<block type="math" id="${gen_xml_id()}"><value name="LHS">${bmgen_obj_to_xml(x.lhs)}</value><value name="RHS">${bmgen_obj_to_xml(x.rhs)}</value><field name="OPERATOR">${bmgen_escape_xml(x.operator)}</field>`;
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
 bmgen_xml_converter['limit_global'] = bmgen_xml_converter['limit'];
 bmgen_xml_converter['registration_global'] = bmgen_xml_converter['registration'];
 

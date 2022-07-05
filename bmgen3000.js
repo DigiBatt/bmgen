@@ -16,6 +16,7 @@ goog.require("BMGen3000.Generator.Other");
 goog.require("BMGen3000.Generator.Statements");
 goog.require("BMGen3000.Generator.Variables");
 goog.require("BMGen3000.Generator.Registrations");
+goog.require("BMGen3000.Generator.Math");
 const { registerToolboxCallbacks, addChannelNameToToolbox, addVariableNameToToolbox, addRegistrationNameToToolbox } = goog.require("BMGen3000.Toolbox.DynamicCategories");
 let { toolbox } = goog.require("BMGen3000.Toolbox");
 const BMGenParser = goog.require("BMGen3000.Parser");
