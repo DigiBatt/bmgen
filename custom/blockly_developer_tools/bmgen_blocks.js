@@ -271,3 +271,16 @@ Blockly.Blocks['setvalue'] = {
  this.setHelpUrl("");
   }
 };
+
+Blockly.Blocks['empty_function'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldTextInput("function"), "NAME");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(210);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};

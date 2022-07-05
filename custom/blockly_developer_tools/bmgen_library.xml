@@ -966,4 +966,42 @@
         <field name="HUE">60</field>
       </block>
     </value>
+  </block><block type="factory_base" id="kxJkU1mEW3*6+DTwFAa=" deletable="false" movable="false" x="10" y="10">
+    <mutation connections="BOTH"></mutation>
+    <field name="NAME">empty_function</field>
+    <field name="INLINE">INT</field>
+    <field name="CONNECTIONS">BOTH</field>
+    <statement name="INPUTS">
+      <block type="input_dummy" id="tb9?HMdq/sNTxj8+t!F]">
+        <field name="ALIGN">LEFT</field>
+        <statement name="FIELDS">
+          <block type="field_input" id="LY2@iKy,}?2A/MVx$wA6">
+            <field name="TEXT">function</field>
+            <field name="FIELDNAME">NAME</field>
+          </block>
+        </statement>
+      </block>
+    </statement>
+    <value name="TOOLTIP">
+      <block type="text" id="_6=q_UNr9uX05Kk$1cp?" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="HELPURL">
+      <block type="text" id="ju0mx}WH-846?[3(=/ex" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="TOPTYPE">
+      <shadow type="type_null" id="EnWba[A{!sq%Q`JL4?9d"></shadow>
+    </value>
+    <value name="BOTTOMTYPE">
+      <shadow type="type_null" id="WNJ^?[ySxU1rbW4#Mo2a"></shadow>
+    </value>
+    <value name="COLOUR">
+      <block type="colour_hue" id="Z9K66SnarHmtDxxmcO~:">
+        <mutation colour="#5b80a5"></mutation>
+        <field name="HUE">210</field>
+      </block>
+    </value>
   </block></xml>

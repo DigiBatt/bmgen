@@ -32,10 +32,10 @@ function =
 	name:ID _ "(" args:argslist ")" _ ";" { return {'type': 'function', 'name': name, 'args': args}; }
     
 argslist =
-	x0:arg? x:(_ "," _ arg)* { return x ? [x0, ...(x.map(elem => elem[3]))] : x0  }
+	x0:arg? x:(_ "," _ arg)* { return x0 ? [x0, ...(x.map(elem => elem[3]))] : [] }
     
 regargslist =
-	x0:regarg? x:(_ "," _ regarg)* { return x ? [x0, ...(x.map(elem => elem[3]))] : x0  }
+	x0:regarg? x:(_ "," _ regarg)* { return x0 ? [x0, ...(x.map(elem => elem[3]))] : []  }
 
 limit_condition =
 	comparison

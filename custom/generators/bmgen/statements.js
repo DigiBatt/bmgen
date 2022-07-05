@@ -13,6 +13,11 @@ Generator['setvalue'] = function (block) {
     return `${value} ${channel}`;
 }
 
+Generator['empty_function'] = function (block) {
+    const name = block.getFieldValue('NAME');
+    return `${name}();`;
+}
+
 Generator['function'] = function (block) {
     const name = block.getFieldValue('NAME');
     var args = Generator.statementToCode(block, 'ARGS').replace(/\n/g, ', ').replace(/;/g, '');

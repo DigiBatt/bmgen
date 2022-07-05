@@ -50,6 +50,9 @@
     <block type="function">
       <field name="NAME">function</field>
     </block>
+    <block type="empty_function">
+      <field name="NAME">function</field>
+    </block>
   </category>
   <category name="Limits" colour="#5ba55b">
     <block type="limit"></block>

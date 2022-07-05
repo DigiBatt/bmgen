@@ -93,7 +93,12 @@ bmgen_xml_converter['function'] = function (x, next) {
     if (blockname in bmgen_xml_converter) {
         return bmgen_xml_converter[blockname](x, next);
     }
-    let xml = `<block type="function" id="${gen_xml_id()}"><field name="NAME">${x.name}</field><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
+    let xml;
+    if (x.args.length > 0) {
+        xml = `<block type="function" id="${gen_xml_id()}"><field name="NAME">${x.name}</field><statement name="ARGS">${bmgen_obj_list_to_xml(x.args)}</statement>`;
+    } else {
+        xml = `<block type="empty_function" id="${gen_xml_id()}"><field name="NAME">${x.name}</field>`;
+    }
     if (next) {
         xml += '<next>' + next + '</next>';
     }
