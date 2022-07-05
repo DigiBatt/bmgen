@@ -119,9 +119,9 @@ Blockly.Blocks['function_pause'] = {
 Blockly.Blocks['comparison'] = {
   init: function() {
     this.appendValueInput("LHS")
-        .setCheck("Channel");
+        .setCheck(["Channel", "Variable"]);
     this.appendValueInput("RHS")
-        .setCheck(["Number", "Variable"])
+        .setCheck(["Number", "Variable", "Channel"])
         .appendField(new Blockly.FieldDropdown([["<","<"], [">",">"], ["<=","<="], [">=",">="]]), "OPERATOR");
     this.setInputsInline(true);
     this.setOutput(true, "LimitCondition");
@@ -296,6 +296,21 @@ Blockly.Blocks['math'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(60);
+ this.setTooltip("");
+ this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['limit_and'] = {
+  init: function() {
+    this.appendValueInput("LHS")
+        .setCheck("LimitCondition");
+    this.appendValueInput("RHS")
+        .setCheck("LimitCondition")
+        .appendField("&");
+    this.setInputsInline(true);
+    this.setOutput(true, "LimitCondition");
+    this.setColour(90);
  this.setTooltip("");
  this.setHelpUrl("");
   }

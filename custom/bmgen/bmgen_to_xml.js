@@ -173,6 +173,10 @@ bmgen_xml_converter['math'] = function (x, next) {
     return xml;
 }
 
+bmgen_xml_converter['limit_and'] = function (x) {
+    return `<block type="limit_and" id="${gen_xml_id()}"><value name="LHS">${bmgen_obj_to_xml(x.lhs)}</value><value name="RHS">${bmgen_obj_to_xml(x.rhs)}</value></block>`;
+}
+
 bmgen_xml_converter['limit_global'] = bmgen_xml_converter['limit'];
 bmgen_xml_converter['registration_global'] = bmgen_xml_converter['registration'];
 

@@ -103,6 +103,10 @@ bmgen_bts_converter['math'] = function (json) {
     }
 }
 
+bmgen_bts_converter['limit_and'] = function (json) {
+    return `${obj_to_bts(json.lhs)} & ${obj_to_bts(json.rhs)}`;
+}
+
 function obj_to_bts(json) {
     if (typeof json === 'object' && json !== null) {
         return bmgen_bts_converter[json.type](json);

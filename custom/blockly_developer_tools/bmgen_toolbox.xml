@@ -64,6 +64,7 @@
       <field name="VALUE">0</field>
       <field name="UNIT">sec</field>
     </block>
+    <block type="limit_and"></block>
     <block type="action_error">
       <field name="ERRNUM">0</field>
     </block>

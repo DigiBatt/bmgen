@@ -39,8 +39,12 @@ regargslist =
 	x0:regarg? x:(_ "," _ regarg)* { return x0 ? [x0, ...(x.map(elem => elem[3]))] : []  }
 
 limit_condition =
-	comparison
+	limit_and
+	/ comparison
     / time
+    
+limit_and =
+	lhs:(comparison / time) _ "&" _ rhs:limit_condition { return {'type': 'limit_and', 'lhs': lhs, 'rhs': rhs}; }
 
 arg =
 	setvalue

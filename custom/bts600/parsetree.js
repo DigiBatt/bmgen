@@ -62,11 +62,28 @@ class BTSError extends BTSAction {
     }
 }
 
-class BTSLimit extends BTSNode {
-    constructor(operator, numvalue, action) {
+class BTSLimitCondition extends BTSNode { }
+
+class BTSLimitSingleCondition extends BTSLimitCondition {
+    constructor(operator, numvalue) {
         super();
         this.operator = operator;
         this.numvalue = numvalue;
+    }
+}
+
+class BTSLimitAnd extends BTSLimitCondition {
+    constructor(lhs, rhs) {
+        super();
+        this.lhs = lhs;
+        this.rhs = rhs;
+    }
+}
+
+class BTSLimit extends BTSNode {
+    constructor(condition, action) {
+        super();
+        this.condition = condition;
         this.action = action;
     }
 }
@@ -130,4 +147,4 @@ function BTSConcat(top, bottom) {
     }
 }
 
-exports = { BTSNode, BTSNumValue, BTSVariable, BTSNumber, BTSMultiplication, BTSValue, BTSCycleCount, BTSAssignment, BTSAction, BTSGoto, BTSError, BTSLimit, BTSRegistration, BTSLine, BTSStatement, BTSComment, BTSProgram };
+exports = { BTSNode, BTSNumValue, BTSVariable, BTSNumber, BTSMultiplication, BTSValue, BTSCycleCount, BTSAssignment, BTSAction, BTSGoto, BTSError, BTSLimitCondition, BTSLimitSingleCondition, BTSLimitAnd, BTSLimit, BTSRegistration, BTSLine, BTSStatement, BTSComment, BTSProgram };

@@ -33,12 +33,21 @@ Parsetree.BTSError.prototype.toText = function () {
     return "ERR " + this.errnum;
 }
 
+Parsetree.BTSLimitSingleCondition.prototype.toText = function () {
+    return this.operator + " " + this.numvalue.toText();
+}
+
+Parsetree.BTSLimitAnd.prototype.toText = function () {
+    return this.lhs.toText() + " & " + this.rhs.toText();
+}
+
 Parsetree.BTSLimit.prototype.toText = function () {
     var action = "";
     if (this.action) {
         action = " " + this.action[0].toText();
     }
-    return "LIMIT " + this.operator + " " + this.numvalue.toText();
+    const condition = this.condition.toText();
+    return "LIMIT " + this.operator + " " + this.numvalue.toText() + action;
 }
 
 Parsetree.BTSRegistration.prototype.toText = function () {

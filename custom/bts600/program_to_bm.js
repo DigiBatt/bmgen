@@ -13,11 +13,20 @@ Parsetree.BTSAssignment.prototype.toBM = function () {
     return this.variable.toText() + " = " + this.numvalue.toText();
 }
 
+Parsetree.BTSLimitSingleCondition.prototype.toBM = function () {
+    return this.toText();
+}
+
+Parsetree.BTSLimitAnd.prototype.toBM = function () {
+    return this.lhs.toText() + " &\\r\\n" + this.rhs.toText();
+}
+
 Parsetree.BTSLimit.prototype.toBM = function () {
-    const limit = this.operator + " " + this.numvalue.toText();
+    const limit = this.condition.toBM();
+    const linebreaks = (limit.match(/\\r\\n/g) || []).length;
     var action = "";
     if (this.action) {
-        action = this.action.toText();
+        action = "\\r\\n".repeat(linebreaks) + this.action.toText();
     }
     return [limit, action];
 }

@@ -430,8 +430,18 @@
         <field name="ALIGN">LEFT</field>
         <value name="TYPE">
           <shadow type="type_null" id="IHF7([WhFO!8aP9Q=ndZ"></shadow>
-          <block type="type_other" id="{VZ#1JM_n^DlgrfU2Otc">
-            <field name="TYPE">Channel</field>
+          <block type="type_group" id="1k{K{qF-?jx0s$R0?tDl">
+            <mutation types="2"></mutation>
+            <value name="TYPE0">
+              <block type="type_other" id="A8NYof+G@$7b?yz1DQ@J">
+                <field name="TYPE">Channel</field>
+              </block>
+            </value>
+            <value name="TYPE1">
+              <block type="type_other" id="?X_|Ob2jaRyi@Aq.1ZvV">
+                <field name="TYPE">Variable</field>
+              </block>
+            </value>
           </block>
         </value>
         <next>
@@ -455,13 +465,18 @@
             <value name="TYPE">
               <shadow type="type_null" id="Z_JfN]9.6Zhw+j[.Z4+S"></shadow>
               <block type="type_group" id="a+ZsD5(t{Fc$:qG5TSpI">
-                <mutation types="2"></mutation>
+                <mutation types="3"></mutation>
                 <value name="TYPE0">
                   <block type="type_number" id="qsETU|?(Ag`c|2aI$r7O"></block>
                 </value>
                 <value name="TYPE1">
                   <block type="type_other" id="sgD6Y_Ky#S:.#?(Sq.w*">
                     <field name="TYPE">Variable</field>
+                  </block>
+                </value>
+                <value name="TYPE2">
+                  <block type="type_other" id="GFwiy`TlYrnyRg0h4gC2">
+                    <field name="TYPE">Channel</field>
                   </block>
                 </value>
               </block>
@@ -1096,6 +1111,62 @@
       <block type="colour_hue" id="#_Rt_YBzeQ;1KrL1Mvaq">
         <mutation colour="#a5a55b"></mutation>
         <field name="HUE">60</field>
+      </block>
+    </value>
+  </block><block type="factory_base" id="kxJkU1mEW3*6+DTwFAa=" deletable="false" movable="false" x="10" y="10">
+    <mutation connections="LEFT"></mutation>
+    <field name="NAME">limit_and</field>
+    <field name="INLINE">INT</field>
+    <field name="CONNECTIONS">LEFT</field>
+    <statement name="INPUTS">
+      <block type="input_value" id="e)3PN`v?,c^=cOZreyKW">
+        <field name="INPUTNAME">LHS</field>
+        <field name="ALIGN">LEFT</field>
+        <value name="TYPE">
+          <shadow type="type_null" id="IHF7([WhFO!8aP9Q=ndZ"></shadow>
+          <block type="type_other" id="^]s(qWFS(6}ZJQ4J%r5`">
+            <field name="TYPE">LimitCondition</field>
+          </block>
+        </value>
+        <next>
+          <block type="input_value" id=".aG1bH`H`QuV9PL9Pz*~">
+            <field name="INPUTNAME">RHS</field>
+            <field name="ALIGN">LEFT</field>
+            <statement name="FIELDS">
+              <block type="field_static" id="CDfrlGqpMS)ClP{ajvIc">
+                <field name="TEXT">&amp;</field>
+              </block>
+            </statement>
+            <value name="TYPE">
+              <shadow type="type_null" id="Z_JfN]9.6Zhw+j[.Z4+S"></shadow>
+              <block type="type_other" id="NIfxODs/c:A1]#~_A41c">
+                <field name="TYPE">LimitCondition</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+    <value name="TOOLTIP">
+      <block type="text" id="_6=q_UNr9uX05Kk$1cp?" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="HELPURL">
+      <block type="text" id="ju0mx}WH-846?[3(=/ex" deletable="false" movable="false">
+        <field name="TEXT"></field>
+      </block>
+    </value>
+    <value name="OUTPUTTYPE">
+      <shadow type="type_null" id="Io[`Du4Vq`y3.hGIJ3zj"></shadow>
+      <block type="type_other" id="dlpw-4D$1+GM`h,{FsXU">
+        <field name="TYPE">LimitCondition</field>
+      </block>
+    </value>
+    <value name="COLOUR">
+      <block type="colour_hue" id="soF%GV2MZ4NgtJ@y!Eur">
+        <mutation colour="#80a55b"></mutation>
+        <field name="HUE">90</field>
       </block>
     </value>
   </block></xml>

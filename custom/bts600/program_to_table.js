@@ -17,11 +17,20 @@ Parsetree.BTSValue.prototype.toTable = function () {
     return this.numvalue.toText();
 }
 
+Parsetree.BTSLimitSingleCondition.prototype.toTable = function () {
+    return this.toText();
+}
+
+Parsetree.BTSLimitAnd.prototype.toTable = function () {
+    return this.lhs.toText() + " &<br>" + this.rhs.toText();
+}
+
 Parsetree.BTSLimit.prototype.toTable = function () {
-    const limit = this.operator + " " + this.numvalue.toText();
+    const limit = this.condition.toTable();
+    const linebreaks = (limit.match(/<br>/g) || []).length;
     var action = "";
     if (this.action) {
-        action = this.action.toText();
+        action = '<br>'.repeat(linebreaks) + this.action.toText();
     }
     return [limit, action];
 }

@@ -84,10 +84,19 @@ function bts_parse_action(action) {
 }
 
 function bts_parse_limit(limit, action) {
-    const tokens = limit.trim().split(' ');
-    const operator = tokens[0];
-    const numvalue = bts_parse_numvalue(tokens.slice(1).join(' '));
-    return new Parsetree.BTSLimit(operator, numvalue, action);
+    let condition;
+    const parts = limit.trim().split('&');
+    for (let i = 0; i < parts.length; i++) {
+        const tokens = parts[i].trim().split(' ');
+        const operator = tokens[0];
+        const numvalue = bts_parse_numvalue(tokens.slice(1).join(' '));
+        if (condition) {
+            condition = new Parsetree.BTSLimitAnd(condition, new Parsetree.BTSLimitSingleCondition(operator, numvalue));
+        } else {
+            condition = new Parsetree.BTSLimitSingleCondition(operator, numvalue);
+        }
+    }
+    return new Parsetree.BTSLimit(condition, action);
 }
 
 function bts_parse_value(value) {

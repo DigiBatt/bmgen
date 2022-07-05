@@ -34,3 +34,9 @@ Generator['limit_action'] = function (block) {
     const action = Generator.valueToCode(block, 'ACTION');
     return `limit(${condition}, ${action});`;
 }
+
+Generator['limit_and'] = function (block) {
+    const lhs = Generator.valueToCode(block, 'LHS');
+    const rhs = Generator.valueToCode(block, 'RHS');
+    return `${lhs} & ${rhs}`;
+}
