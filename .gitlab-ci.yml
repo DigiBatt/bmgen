@@ -12,5 +12,6 @@ pages:
       - .npm/
   before_script:
     - npm ci --cache .npm --prefer-offline
+    - git submodule init && git submodule update
   script:
     - ./make.sh
