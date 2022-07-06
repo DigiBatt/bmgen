@@ -3,7 +3,7 @@ stages:
 
 pages:
   stage: build
-  image: node:14.19.3-slim
+  image: node:14.19.3
   artifacts:
     paths:
       - public
