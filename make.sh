@@ -26,7 +26,7 @@ EOF
 cat custom/blockly_developer_tools/bmgen_blocks.js >> custom/blocks.js
 
 # generate dependencies for closure compiler
-./node_modules/.bin/closure-make-deps -f bmgen3000.js -r bts600/ -r custom/ -r parser --closure-path blockly/closure/goog/ > deps.js
+npx closure-make-deps -f bmgen3000.js -r bts600/ -r custom/ -r parser --closure-path blockly/closure/goog/ > deps.js
 
 # make compressed version
 mkdir -p ./public
@@ -39,4 +39,4 @@ cp ./blockly/blocks_compressed.js ./public/blockly/
 cp ./blockly/msg/js/en.js ./public/blockly/msg/js/
 cp ./index.html ./public/
 
-find ./custom/ ./bts600/ ./parser/ -name '*.js' | xargs google-closure-compiler --entry_point goog:BMGen3000 --js_output_file public/main.js bmgen3000.js
+find ./custom/ ./bts600/ ./parser/ -name '*.js' | xargs npx google-closure-compiler --entry_point goog:BMGen3000 --js_output_file public/main.js bmgen3000.js
