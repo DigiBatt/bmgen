@@ -8,6 +8,7 @@ pages:
     paths:
       - public
   cache:
+    key: bmgen-npm
     paths:
       - .npm/
   before_script:
