@@ -79,7 +79,7 @@ Parsetree.BTSProgram.prototype.toTable = function () {
     for (var i = 0; i < this.lines.length; i++) {
         const line = this.lines[i];
         if (line instanceof Parsetree.BTSComment) {
-            table += line.toTable(); + "\n";
+            table += line.toTable();
         } else {
             table += line.toTable(linenumber);
             linenumber++;

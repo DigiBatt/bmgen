@@ -58,7 +58,8 @@ Parsetree.BTSStatement.prototype.toBM = function (linenumber) {
 }
 
 Parsetree.BTSComment.prototype.toBM = function () {
-    return `\t\t!\t${this.text}`;
+    // return `\t\t!\t${this.text}\n`;
+    return '';
 }
 
 Parsetree.BTSProgram.prototype.toBM = function () {
@@ -67,7 +68,7 @@ Parsetree.BTSProgram.prototype.toBM = function () {
     for (var i = 0; i < this.lines.length; i++) {
         const line = this.lines[i];
         if (line instanceof Parsetree.BTSComment) {
-            program += line.toBM(); + "\n";
+            program += line.toBM();
         } else {
             program += line.toBM(linenumber);
             linenumber++;
