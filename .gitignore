@@ -3,6 +3,4 @@ custom/toolbox/toolbox.js
 custom/blocks.js
 parser/bmgen_parser.js
 deps.js
-package.json
-package-lock.json
 /public
