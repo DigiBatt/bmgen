@@ -12,7 +12,7 @@ var bmgen_label_count = 0;
 var bmgen_array_names = [];
 
 bmgen_bts_converter['assignment'] = function (json) {
-    return `SET VALUE ${obj_to_bts(json.lhs)} = ${obj_to_bts(json.rhs)};`;
+    return `SET VALUE ${obj_to_bts(json.lhs, json)} = ${obj_to_bts(json.rhs, json)};`;
 }
 
 bmgen_bts_converter['function'] = function (json) {
@@ -20,31 +20,31 @@ bmgen_bts_converter['function'] = function (json) {
     if (name in bmgen_function_map) {
         name = bmgen_function_map[name];
     }
-    return name + ' ' + json.args.map(x => obj_to_bts(x)).join(' ') + ';';
+    return name + ' ' + json.args.map(x => obj_to_bts(x, json)).join(' ') + ';';
 }
 
 bmgen_bts_converter['limit_global'] = function (json) {
-    var text = 'SET LIMIT ' + obj_to_bts(json.condition);
+    var text = 'SET LIMIT ' + obj_to_bts(json.condition, json);
     if (json.action) {
-        text += ' ' + obj_to_bts(json.action);
+        text += ' ' + obj_to_bts(json.action, json);
     }
     text += ';';
     return text;
 }
 
 bmgen_bts_converter['limit'] = function (json) {
-    var text = 'LIMIT ' + obj_to_bts(json.condition);
+    var text = 'LIMIT ' + obj_to_bts(json.condition, json);
     if (json.action) {
-        text += ' ' + obj_to_bts(json.action);
+        text += ' ' + obj_to_bts(json.action, json);
     }
     return text;
 }
 
 bmgen_bts_converter['comparison'] = function (json) {
     if (json.operator === '=') {
-        return `${obj_to_bts(json.lhs)} = ${obj_to_bts(json.rhs)}`;
+        return `${obj_to_bts(json.lhs, json)} = ${obj_to_bts(json.rhs, json)}`;
     } else {
-        return `${json.operator} ${obj_to_bts(json.rhs)} ${obj_to_bts(json.lhs)}`;
+        return `${json.operator} ${obj_to_bts(json.rhs, json)} ${obj_to_bts(json.lhs, json)}`;
     }
 }
 
@@ -57,19 +57,19 @@ bmgen_bts_converter['goto'] = function (json) {
 }
 
 bmgen_bts_converter['setvalue'] = function (json) {
-    return `VALUE ${obj_to_bts(json.value)} ${obj_to_bts(json.channel)}`;
+    return `VALUE ${obj_to_bts(json.value, json)} ${obj_to_bts(json.channel, json)}`;
 }
 
 bmgen_bts_converter['setvalue_equal'] = function (json) {
-    return `VALUE ${obj_to_bts(json.value)} ${obj_to_bts(json.channel)}`;
+    return `VALUE ${obj_to_bts(json.value, json)} ${obj_to_bts(json.channel, json)}`;
 }
 
 bmgen_bts_converter['time'] = function (json) {
-    return `> ${obj_to_bts(json.value)} ${json.unit}`;
+    return `> ${obj_to_bts(json.value, json)} ${json.unit}`;
 }
 
 bmgen_bts_converter['cycle'] = function (json) {
-    return 'BEG;\n' + json.program.map(x => obj_to_bts(x)).join('\n') + `\nCYC VALUE ${json.count} *;`;
+    return 'BEG;\n' + json.program.map(x => obj_to_bts(x, json)).join('\n') + `\nCYC VALUE ${json.count} *;`;
 }
 
 bmgen_bts_converter['while'] = function (json) {
@@ -108,11 +108,11 @@ bmgen_bts_converter['label'] = function (json) {
 }
 
 bmgen_bts_converter['registration'] = function (json) {
-    return json.args.map(x => 'REGISTRATION ' + obj_to_bts(x)).join(' ');
+    return json.args.map(x => 'REGISTRATION ' + obj_to_bts(x, json)).join(' ');
 }
 
 bmgen_bts_converter['registration_global'] = function (json) {
-    return 'SET ' + json.args.map(x => 'REGISTRATION ' + obj_to_bts(x)).join(' ') + ';';
+    return 'SET ' + json.args.map(x => 'REGISTRATION ' + obj_to_bts(x, json)).join(' ') + ';';
 }
 
 bmgen_bts_converter['regname'] = function (json) {
@@ -121,27 +121,42 @@ bmgen_bts_converter['regname'] = function (json) {
 
 bmgen_bts_converter['math'] = function (json) {
     if (json.operator === '+=') {
-        return `ADD VALUE ${obj_to_bts(json.lhs)} VALUE ${obj_to_bts(json.rhs)};`;
+        return `ADD VALUE ${obj_to_bts(json.lhs, json)} VALUE ${obj_to_bts(json.rhs, json)};`;
     } else if (json.operator === '-=') {
-        return `SUB VALUE ${obj_to_bts(json.lhs)} VALUE ${obj_to_bts(json.rhs)};`;
+        return `SUB VALUE ${obj_to_bts(json.lhs, json)} VALUE ${obj_to_bts(json.rhs, json)};`;
     } else {
         console.error('unknown operator');
     }
 }
 
 bmgen_bts_converter['limit_and'] = function (json) {
-    return `${obj_to_bts(json.lhs)} & ${obj_to_bts(json.rhs)}`;
+    return `${obj_to_bts(json.lhs, json)} & ${obj_to_bts(json.rhs, json)}`;
 }
 
 bmgen_bts_converter['array_init'] = function (json) {
     const arrayNum = bmgen_array_names.length;
     bmgen_array_names.push(json.array);
-    return `SET VALUE ${json.array}_IV = ${123454321 + arrayNum} VALUE ${json.array}_Val = 0 ${json.values.map((v, i) => `VALUE ${json.array}_${i} = ${v}`).join(' ')};`
+    return `SET VALUE ${json.array}_IV = ${123454321 + arrayNum} VALUE ${json.array}_Val = 0 ${json.values.map((v, i) => `VALUE ${json.array}_${i} = ${v}`).join(' ')};`;
 }
 
-function obj_to_bts(json) {
+bmgen_bts_converter['array_access'] = function (json) {
+    const arrayNum = bmgen_array_names.indexOf(json.array);
+    if (arrayNum < 0) {
+        throw new Error(`Array ${json.array} was not initialized`);
+    }
+    let wrapper = '';
+    if (json.parent.type === 'assignment' && json.parent.lhs === json) {
+        wrapper = `#pre{SET VALUE idx = ${obj_to_bts(json.index, json)}; ADD VALUE idx VALUE ${arrayNum * 1000};} #post{PAU LIMIT > idx arrSET;}`;
+    } else {
+        wrapper = `#pre{SET VALUE idx = ${obj_to_bts(json.index, json)}; ADD VALUE idx VALUE ${arrayNum * 1000}; PAU LIMIT > idx arrGET;}`;
+    }
+    return `${json.array}_Val ${wrapper}`;
+}
+
+function obj_to_bts(json, parent) {
     if (typeof json === 'object' && json !== null) {
         if (json.type in bmgen_bts_converter) {
+            json.parent = parent;
             return bmgen_bts_converter[json.type](json);
         } else {
             throw new Error(`Missing conversion function for type ${json.type}`);
@@ -151,10 +166,27 @@ function obj_to_bts(json) {
     }
 }
 
+function bts_postprocess(line) {
+    let pre = '';
+    let post = '';
+    const pattern = /#([a-zA-Z]+){([^}]*)}/g;
+    const matches = line.matchAll(pattern);
+    for (const m of matches) {
+        if (m[1] === 'pre') {
+            pre += m[2] + '\n';
+        } else if (m[1] === 'post') {
+            post += '\n' + m[2];
+        } else {
+            throw new Error(`Unknown postprocessing directive #${m[1]}`);
+        }
+    }
+    return pre + line.replace(pattern, '') + post;
+}
+
 function bmgen_to_bts(program) {
     bmgen_label_count = 0;
     bmgen_array_names = [];
-    return program.map(x => obj_to_bts(x)).join('\n') + '\nSTO;';
+    return program.map(x => bts_postprocess(obj_to_bts(x, program))).join('\n') + '\nSTO;';
 }
 
 exports = { bmgen_to_bts };
