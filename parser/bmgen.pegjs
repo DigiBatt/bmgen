@@ -10,7 +10,8 @@ line =
     / label
 
 statement =
-	assignment
+    assignment
+    / array_init
     / limit_global
     / registration_global
     / function
@@ -122,8 +123,8 @@ math =
 	lhs:numvalue _ operator:("+=" / "-=") _ rhs:numvalue { return {'type': 'math', 'lhs': lhs, 'rhs': rhs, 'operator': operator} }
 
 array_init =
-	"[" _ x0:FLOAT? x:(_ "," _ FLOAT)* _ "]" { return {'type': 'array_init', 'values': x0 ? [x0, ...(x.map(elem => elem[3]))] : []} }
-
+	array:ID _ "=" _ "[" _ x0:FLOAT? x:(_ "," _ FLOAT)* _ "]" { return {'type': 'array_init', 'array': array, 'values': x0 ? [x0, ...(x.map(elem => elem[3]))] : []} }
+    
 array_access =
 	array:ID _ "[" _ index:(variable / number) _ "]" { return {'type': 'array_access', 'array': array, 'index': index} }
 

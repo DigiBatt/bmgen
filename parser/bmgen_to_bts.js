@@ -9,6 +9,7 @@ const bmgen_function_map = {
 }
 
 var bmgen_label_count = 0;
+var bmgen_array_names = [];
 
 bmgen_bts_converter['assignment'] = function (json) {
     return `SET VALUE ${obj_to_bts(json.lhs)} = ${obj_to_bts(json.rhs)};`;
@@ -132,9 +133,19 @@ bmgen_bts_converter['limit_and'] = function (json) {
     return `${obj_to_bts(json.lhs)} & ${obj_to_bts(json.rhs)}`;
 }
 
+bmgen_bts_converter['array_init'] = function (json) {
+    const arrayNum = bmgen_array_names.length;
+    bmgen_array_names.push(json.array);
+    return `SET VALUE ${json.array}_IV = ${123454321 + arrayNum} VALUE ${json.array}_Val = 0 ${json.values.map((v, i) => `VALUE ${json.array}_${i} = ${v}`).join(' ')};`
+}
+
 function obj_to_bts(json) {
     if (typeof json === 'object' && json !== null) {
-        return bmgen_bts_converter[json.type](json);
+        if (json.type in bmgen_bts_converter) {
+            return bmgen_bts_converter[json.type](json);
+        } else {
+            throw new Error(`Missing conversion function for type ${json.type}`);
+        }
     } else {
         return `${json}`;
     }
@@ -142,6 +153,7 @@ function obj_to_bts(json) {
 
 function bmgen_to_bts(program) {
     bmgen_label_count = 0;
+    bmgen_array_names = [];
     return program.map(x => obj_to_bts(x)).join('\n') + '\nSTO;';
 }
 
