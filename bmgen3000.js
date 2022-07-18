@@ -162,4 +162,19 @@ function addRegistration() {
     addRegistrationNameToToolbox(regname);
 }
 
-exports = { loadBMGen, addChannel, addVariable, addRegistration, loadProgram, saveProgram };
+function loadWithoutBlockly() {
+    document.getElementById('bm_format').addEventListener('change', updateWithoutBlockly);
+    document.getElementById('codearea').addEventListener('change', updateWithoutBlockly);
+}
+
+function updateWithoutBlockly(event) {
+    var program = BMGenParser.parse(document.getElementById('codearea').value);
+    var bts_code = bts_parse_program(bmgen_to_bts(program)).simplify();
+    if (document.getElementById('bm_format').checked) {
+        document.getElementById('bmarea').innerHTML = '<textarea readonly style="overflow: auto; height: 95%; width: 100%">' + bts_code.toBM() + '</textarea>';
+    } else {
+        document.getElementById('bmarea').innerHTML = bts_code.toTable();
+    }
+}
+
+exports = { loadBMGen, addChannel, addVariable, addRegistration, loadProgram, saveProgram, loadWithoutBlockly };
