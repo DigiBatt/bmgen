@@ -70,7 +70,7 @@ regarg =
     / setvalue
 
 assignment =
-	lhs:variable _ "=" _ rhs:numvalue _ ";" { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
+	lhs:(array_access / variable) _ "=" _ rhs:(numvalue / array_init) _ ";" { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
     
 setvalue =
 	value:numvalue _ channel:channel { return {'type': 'setvalue', 'channel': channel, 'value': value}; }
@@ -88,7 +88,8 @@ time =
 	value:FLOAT _ unit:TIMEUNIT { return {'type': 'time', 'value': value, 'unit': unit}; }
     
 numvalue =
-	channel
+    array_access
+    / channel
     / number
     
 variable =
@@ -108,6 +109,12 @@ label =
     
 math =
 	lhs:numvalue _ operator:("+=" / "-=") _ rhs:numvalue _ ";" { return {'type': 'math', 'lhs': lhs, 'rhs': rhs, 'operator': operator} }
+
+array_init =
+	"[" _ x0:FLOAT? x:(_ "," _ FLOAT)* _ "]" { return {'type': 'array_init', 'values': x0 ? [x0, ...(x.map(elem => elem[3]))] : []} }
+
+array_access =
+	array:ID _ "[" _ index:(variable / number) _ "]" { return {'type': 'array_access', 'array': array, 'index': index} }
 
 TIMEUNIT = $("sec" / "min" / "h")
 COMPARE = $(([><]"="?) / "=")
