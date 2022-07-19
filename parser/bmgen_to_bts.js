@@ -76,6 +76,16 @@ bmgen_bts_converter['while'] = function (json) {
     return `LABEL ${label}\n` + json.program.map(x => obj_to_bts(x)).join('\n') + `\nPAU LIMIT ${obj_to_bts(json.condition)} ACTION GOTO ${label} LIMIT 1 sec;`;
 }
 
+bmgen_bts_converter['for'] = function (json) {
+    const label = `bmgen_${bmgen_label_count++}`;
+    let text = obj_to_bts(json.init_statement) + '\n';
+    text += `LABEL ${label}\n`;
+    text += json.program.map(x => obj_to_bts(x)).join('\n');
+    text += obj_to_bts(json.loop_statement) + '\n';
+    text += `\nPAU LIMIT ${obj_to_bts(json.condition)} ACTION GOTO ${label} LIMIT 1 sec;`;
+    return text;
+}
+
 bmgen_bts_converter['variable'] = function (json) {
     return `${json.name}`;
 }

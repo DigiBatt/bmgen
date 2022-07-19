@@ -1,25 +1,32 @@
 program =
-	_ statements:(statement _)* { return statements.map(x => x[0]); }
+	_ lines:(line _)* { return lines.map(x => x[0]); }
     
+line =
+    statement:statement _ ";" { return statement; }
+    / cycle
+    / while
+    / for
+    / comment
+    / label
+
 statement =
-    assignment
+	assignment
     / limit_global
     / registration_global
     / function
-    / cycle
-    / while
-    / comment
-    / label
     / math
-    
+
 cycle =
 	"cycle" _ "(" _ count:INT _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
-    
+
 while =
 	"while" _ "(" _ condition:limit_condition _ ")" _ "{" _ program:program _ "}" { return {'type': 'while', 'condition': condition, 'program': program}; }
 
+for =
+	"for" _ "(" _ init_statement:statement _ ";" _ condition:limit_condition _ ";" _ loop_statement:statement _ ")" _ "{" _ program:program _ "}" { return {'type': 'for', 'init_statement': init_statement, 'condition': condition, 'loop_statement': loop_statement, 'program': program}; }
+
 limit_global =
-	lim:limit _ ";" { lim.type = 'limit_global'; return lim; }
+	lim:limit { lim.type = 'limit_global'; return lim; }
     
 limit =
 	"limit" _ "(" condition:limit_condition action:(_ "," _ limit_action)? ")" { return {'type': 'limit', 'condition': condition, 'action': action ? action[3] : null}; }
@@ -35,13 +42,13 @@ goto =
 	"goto" _ "(" label:ID ")" { return {'type': 'goto', 'label': label}; }
 
 registration_global =
-	reg:registration _ ";" { reg.type = 'registration_global'; return reg; }
+	reg:registration { reg.type = 'registration_global'; return reg; }
 
 registration =
 	"registration" _ "(" args:regargslist ")" { return {'type': 'registration', 'args': args}; }
     
 function =
-	name:ID _ "(" args:argslist ")" _ ";" { return {'type': 'function', 'name': name, 'args': args}; }
+	name:ID _ "(" args:argslist ")" { return {'type': 'function', 'name': name, 'args': args}; }
     
 argslist =
 	x0:arg? x:(_ "," _ arg)* { return x0 ? [x0, ...(x.map(elem => elem[3]))] : [] }
@@ -74,7 +81,7 @@ regarg =
     / setvalue
 
 assignment =
-	lhs:(array_access / variable) _ "=" _ rhs:(numvalue / array_init) _ ";" { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
+	lhs:(array_access / variable) _ "=" _ rhs:(numvalue / array_init) { return {'type': 'assignment', 'lhs': lhs, 'rhs': rhs}; }
     
 setvalue =
 	value:numvalue _ channel:channel { return {'type': 'setvalue', 'channel': channel, 'value': value}; }
@@ -112,7 +119,7 @@ label =
 	_ ":" _ name:ID { return {'type': 'label', 'name': name}; }
     
 math =
-	lhs:numvalue _ operator:("+=" / "-=") _ rhs:numvalue _ ";" { return {'type': 'math', 'lhs': lhs, 'rhs': rhs, 'operator': operator} }
+	lhs:numvalue _ operator:("+=" / "-=") _ rhs:numvalue { return {'type': 'math', 'lhs': lhs, 'rhs': rhs, 'operator': operator} }
 
 array_init =
 	"[" _ x0:FLOAT? x:(_ "," _ FLOAT)* _ "]" { return {'type': 'array_init', 'values': x0 ? [x0, ...(x.map(elem => elem[3]))] : []} }
