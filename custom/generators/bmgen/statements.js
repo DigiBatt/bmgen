@@ -54,3 +54,11 @@ Generator['while'] = function (block) {
     var body = Generator.statementToCode(block, 'PROGRAM').replace(/\n/g, '\n\t');
     return `while (${condition}) {\n\t${body}\n}`;
 }
+
+Generator['for'] = function (block) {
+    const init_statement = Generator.statementToCode(block, 'INIT_STATEMENT').replace(/;$/, '');
+    const condition = Generator.valueToCode(block, 'CONDITION');
+    const loop_statement = Generator.statementToCode(block, 'LOOP_STATEMENT').replace(/;$/, '');
+    var body = Generator.statementToCode(block, 'PROGRAM').replace(/\n/g, '\n\t');
+    return `for (${init_statement}; ${condition}; ${loop_statement}) {\n\t${body}\n}`;
+}

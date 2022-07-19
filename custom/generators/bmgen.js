@@ -242,6 +242,9 @@ class CustomGenerator {
   statementToCode(block, name) {
     const targetBlock = block.getInputTargetBlock(name);
     let code = this.blockToCode(targetBlock);
+    if (code === null) {
+      return '';
+    }
     return code;
   }
 

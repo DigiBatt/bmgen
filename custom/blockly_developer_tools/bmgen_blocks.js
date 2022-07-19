@@ -106,7 +106,35 @@ Blockly.Blocks['while'] = {
   init: function () {
     this.appendValueInput("CONDITION")
       .setCheck("LimitCondition")
-      .appendField("while");
+      .appendField("while (");
+    this.appendDummyInput()
+      .appendField(")");
+    this.appendStatementInput("PROGRAM")
+      .setCheck(null);
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(210);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
+Blockly.Blocks['for'] = {
+  init: function () {
+    this.appendStatementInput("INIT_STATEMENT")
+      .setCheck(null)
+      .appendField("for (");
+    this.appendDummyInput()
+      .appendField(";");
+    this.appendValueInput("CONDITION")
+      .setCheck("LimitCondition");
+    this.appendDummyInput()
+      .appendField(";");
+    this.appendStatementInput("LOOP_STATEMENT")
+      .setCheck(null)
+    this.appendDummyInput()
+      .appendField(")");
     this.appendStatementInput("PROGRAM")
       .setCheck(null);
     this.setInputsInline(true);

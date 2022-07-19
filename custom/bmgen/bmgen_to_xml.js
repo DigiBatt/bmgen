@@ -101,6 +101,15 @@ bmgen_xml_converter['while'] = function (x, next) {
     return xml;
 }
 
+bmgen_xml_converter['for'] = function (x, next) {
+    var xml = `<block type="for" id="${gen_xml_id()}"><statement name="INIT_STATEMENT">${bmgen_obj_to_xml(x.init_statement)}</statement><value name="CONDITION">${bmgen_obj_to_xml(x.condition)}</value><statement name="LOOP_STATEMENT">${bmgen_obj_to_xml(x.loop_statement)}</statement><statement name="PROGRAM">${bmgen_obj_list_to_xml(x.program)}</statement>`;
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
 bmgen_xml_converter['function'] = function (x, next) {
     const blockname = `function_${x.name}`;
     if (blockname in bmgen_xml_converter) {
