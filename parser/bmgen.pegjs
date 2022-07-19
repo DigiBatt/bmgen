@@ -7,6 +7,7 @@ statement =
     / registration_global
     / function
     / cycle
+    / while
     / comment
     / label
     / math
@@ -14,6 +15,9 @@ statement =
 cycle =
 	"cycle" _ "(" _ count:INT _ ")" _ "{" program:program "}" { return {'type': 'cycle', 'count': count, 'program': program}; }
     
+while =
+	"while" _ "(" _ condition:limit_condition _ ")" _ "{" _ program:program _ "}" { return {'type': 'while', 'condition': condition, 'program': program}; }
+
 limit_global =
 	lim:limit _ ";" { lim.type = 'limit_global'; return lim; }
     

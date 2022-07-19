@@ -8,6 +8,8 @@ const bmgen_function_map = {
     'discharge': 'DCH'
 }
 
+var bmgen_label_count = 0;
+
 bmgen_bts_converter['assignment'] = function (json) {
     return `SET VALUE ${obj_to_bts(json.lhs)} = ${obj_to_bts(json.rhs)};`;
 }
@@ -69,6 +71,11 @@ bmgen_bts_converter['cycle'] = function (json) {
     return 'BEG;\n' + json.program.map(x => obj_to_bts(x)).join('\n') + `\nCYC VALUE ${json.count} *;`;
 }
 
+bmgen_bts_converter['while'] = function (json) {
+    const label = `bmgen_${bmgen_label_count++}`;
+    return `LABEL ${label}\n` + json.program.map(x => obj_to_bts(x)).join('\n') + `\nPAU LIMIT ${obj_to_bts(json.condition)} ACTION GOTO ${label} LIMIT 1 sec;`;
+}
+
 bmgen_bts_converter['variable'] = function (json) {
     return `${json.name}`;
 }
@@ -124,6 +131,7 @@ function obj_to_bts(json) {
 }
 
 function bmgen_to_bts(program) {
+    bmgen_label_count = 0;
     return program.map(x => obj_to_bts(x)).join('\n') + '\nSTO;';
 }
 
