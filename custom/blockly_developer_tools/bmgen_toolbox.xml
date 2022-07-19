@@ -32,9 +32,6 @@
         </block>
       </statement>
     </block>
-    <block type="function_cycle">
-      <field name="COUNT">5</field>
-    </block>
     <block type="function_pause">
       <statement name="ARGS">
         <block type="limit">
@@ -47,8 +44,6 @@
         </block>
       </statement>
     </block>
-    <block type="while"></block>
-    <block type="for"></block>
     <block type="function">
       <field name="NAME">function</field>
     </block>
@@ -81,6 +76,13 @@
     </block>
     <block type="number">
       <field name="NUMBER">0</field>
+    </block>
+  </category>
+  <category name="Control flow" colour="#5b80a5">
+    <block type="while"></block>
+    <block type="for"></block>
+    <block type="function_cycle">
+      <field name="COUNT">5</field>
     </block>
   </category>
   <category name="Variables" colour="#a55b80"></category>
