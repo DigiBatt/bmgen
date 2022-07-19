@@ -48,3 +48,9 @@ Generator['function_cycle'] = function (block) {
     var body = Generator.statementToCode(block, 'ARGS').replace(/\n/g, '\n\t');
     return `${name}(${count}) {\n\t${body}\n}`;
 }
+
+Generator['while'] = function (block) {
+    const condition = Generator.valueToCode(block, 'CONDITION');
+    var body = Generator.statementToCode(block, 'PROGRAM').replace(/\n/g, '\n\t');
+    return `while (${condition}) {\n\t${body}\n}`;
+}

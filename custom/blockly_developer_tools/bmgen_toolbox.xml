@@ -47,6 +47,7 @@
         </block>
       </statement>
     </block>
+    <block type="while"></block>
     <block type="function">
       <field name="NAME">function</field>
     </block>

@@ -92,6 +92,15 @@ bmgen_xml_converter['cycle'] = function (x, next) {
     return xml;
 }
 
+bmgen_xml_converter['while'] = function (x, next) {
+    var xml = `<block type="while" id="${gen_xml_id()}"><value name="CONDITION">${bmgen_obj_to_xml(x.condition)}</value><statement name="PROGRAM">${bmgen_obj_list_to_xml(x.program)}</statement>`;
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
 bmgen_xml_converter['function'] = function (x, next) {
     const blockname = `function_${x.name}`;
     if (blockname in bmgen_xml_converter) {
