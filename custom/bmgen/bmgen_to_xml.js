@@ -217,6 +217,21 @@ bmgen_xml_converter['array_access'] = function (x) {
     return `<block type="array_access" id="${gen_xml_id()}"><value name="ARRAY"><block type="variable" id="${gen_xml_id()}"><field name="NAME">${x.array}</field></block></value><value name="INDEX">${bmgen_obj_to_xml(x.index)}</value></block>`;
 }
 
+bmgen_xml_converter['if'] = function (x, next) {
+    var xml = `<block type="if_else" id="${gen_xml_id()}"><mutation elseif="${x.elseif.length}" else="${x.else ? 1 : 0}"/><value name="IF0">${bmgen_obj_to_xml(x.condition)}</value><statement name="DO0">${bmgen_obj_list_to_xml(x.program)}</statement>`;
+    for (let i = 0; i < x.elseif.length; i++) {
+        xml += `<value name="IF${i + 1}">${bmgen_obj_to_xml(x.elseif[i].condition)}</value><statement name="DO${i + 1}">${bmgen_obj_list_to_xml(x.elseif[i].program)}</statement>`;
+    }
+    if (x.else) {
+        xml += `<statement name="ELSE">${bmgen_obj_list_to_xml(x.else)}</statement>`;
+    }
+    if (next) {
+        xml += '<next>' + next + '</next>';
+    }
+    xml += "</block>";
+    return xml;
+}
+
 bmgen_xml_converter['limit_global'] = bmgen_xml_converter['limit'];
 bmgen_xml_converter['registration_global'] = bmgen_xml_converter['registration'];
 

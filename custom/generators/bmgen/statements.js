@@ -41,24 +41,3 @@ Generator['function_pause'] = function (block) {
     var args = Generator.statementToCode(block, 'ARGS').replace(/\n/g, ', ').replace(/;/g, '');
     return `${name}(${args});`;
 }
-
-Generator['function_cycle'] = function (block) {
-    const name = 'cycle';
-    const count = block.getFieldValue('COUNT');
-    var body = Generator.statementToCode(block, 'ARGS').replace(/\n/g, '\n\t');
-    return `${name}(${count}) {\n\t${body}\n}`;
-}
-
-Generator['while'] = function (block) {
-    const condition = Generator.valueToCode(block, 'CONDITION');
-    var body = Generator.statementToCode(block, 'PROGRAM').replace(/\n/g, '\n\t');
-    return `while (${condition}) {\n\t${body}\n}`;
-}
-
-Generator['for'] = function (block) {
-    const init_statement = Generator.statementToCode(block, 'INIT_STATEMENT').replace(/;$/, '');
-    const condition = Generator.valueToCode(block, 'CONDITION');
-    const loop_statement = Generator.statementToCode(block, 'LOOP_STATEMENT').replace(/;$/, '');
-    var body = Generator.statementToCode(block, 'PROGRAM').replace(/\n/g, '\n\t');
-    return `for (${init_statement}; ${condition}; ${loop_statement}) {\n\t${body}\n}`;
-}

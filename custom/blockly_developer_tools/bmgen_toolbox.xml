@@ -87,6 +87,7 @@
     <block type="function_cycle">
       <field name="COUNT">5</field>
     </block>
+    <block type="if_else"></block>
   </category>
   <category name="Variables" colour="#a55b80"></category>
   <category name="Channels" colour="#995ba5"></category>
