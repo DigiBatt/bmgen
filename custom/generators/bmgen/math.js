@@ -7,3 +7,9 @@ Generator['math'] = function (block) {
     const operator = block.getFieldValue('OPERATOR');
     return `${lhs} ${operator} ${rhs};`;
 }
+
+Generator['math_unary'] = function (block) {
+    const lhs = Generator.valueToCode(block, 'LHS');
+    const operator = block.getFieldValue('OPERATOR');
+    return `${lhs}${operator};`;
+}

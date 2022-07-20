@@ -187,7 +187,12 @@ bmgen_xml_converter['regname'] = function (x) {
 }
 
 bmgen_xml_converter['math'] = function (x, next) {
-    var xml = `<block type="math" id="${gen_xml_id()}"><value name="LHS">${bmgen_obj_to_xml(x.lhs)}</value><value name="RHS">${bmgen_obj_to_xml(x.rhs)}</value><field name="OPERATOR">${bmgen_escape_xml(x.operator)}</field>`;
+    let xml;
+    if (x.operator === '++' || x.operator === '--') {
+        xml = `<block type="math_unary" id="${gen_xml_id()}"><value name="LHS">${bmgen_obj_to_xml(x.lhs)}</value><field name="OPERATOR">${bmgen_escape_xml(x.operator)}</field>`;
+    } else {
+        xml = `<block type="math" id="${gen_xml_id()}"><value name="LHS">${bmgen_obj_to_xml(x.lhs)}</value><value name="RHS">${bmgen_obj_to_xml(x.rhs)}</value><field name="OPERATOR">${bmgen_escape_xml(x.operator)}</field>`;
+    }
     if (next) {
         xml += '<next>' + next + '</next>';
     }

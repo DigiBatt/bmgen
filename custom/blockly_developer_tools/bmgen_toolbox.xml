@@ -74,6 +74,9 @@
     <block type="math">
       <field name="OPERATOR">+=</field>
     </block>
+    <block type="math_unary">
+      <field name="OPERATOR">++</field>
+    </block>
     <block type="number">
       <field name="NUMBER">0</field>
     </block>

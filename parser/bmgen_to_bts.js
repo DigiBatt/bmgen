@@ -124,8 +124,12 @@ bmgen_bts_converter['math'] = function (json) {
         return `ADD VALUE ${obj_to_bts(json.lhs, json)} VALUE ${obj_to_bts(json.rhs, json)};`;
     } else if (json.operator === '-=') {
         return `SUB VALUE ${obj_to_bts(json.lhs, json)} VALUE ${obj_to_bts(json.rhs, json)};`;
+    } else if (json.operator === '++') {
+        return `ADD VALUE ${obj_to_bts(json.lhs, json)} VALUE 1;`;
+    } else if (json.operator === '--') {
+        return `SUB VALUE ${obj_to_bts(json.lhs, json)} VALUE 1;`;
     } else {
-        console.error('unknown operator');
+        console.error(`unknown operator ${json.operator}`);
     }
 }
 

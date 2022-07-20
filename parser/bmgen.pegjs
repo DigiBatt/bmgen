@@ -120,6 +120,7 @@ label =
     
 math =
 	lhs:numvalue _ operator:("+=" / "-=") _ rhs:numvalue { return {'type': 'math', 'lhs': lhs, 'rhs': rhs, 'operator': operator} }
+    / lhs:numvalue _ operator:("++" / "--") { return {'type': 'math', 'lhs': lhs, 'operator': operator} }
 
 array_init =
 	"[" _ x0:FLOAT? x:(_ "," _ FLOAT)* _ "]" { return {'type': 'array_init', 'values': x0 ? [x0, ...(x.map(elem => elem[3]))] : []} }

@@ -350,6 +350,21 @@ Blockly.Blocks['math'] = {
   }
 };
 
+Blockly.Blocks['math_unary'] = {
+  init: function () {
+    this.appendValueInput("LHS")
+      .setCheck(["Variable", "Channel"]);
+    this.appendDummyInput("RHS")
+      .appendField(new Blockly.FieldDropdown([["++", "++"], ["--", "--"]]), "OPERATOR");
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(60);
+    this.setTooltip("");
+    this.setHelpUrl("");
+  }
+};
+
 Blockly.Blocks['limit_and'] = {
   init: function () {
     this.appendValueInput("LHS")
