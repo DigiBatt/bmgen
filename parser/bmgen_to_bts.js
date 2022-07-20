@@ -134,9 +134,13 @@ bmgen_bts_converter['limit_and'] = function (json) {
 }
 
 bmgen_bts_converter['array_init'] = function (json) {
+    if (json.parent.type !== 'assignment' || json.parent.lhs.type !== 'variable') {
+        throw new Error("Array initialization can only be used in assignment to a variable");
+    }
+    const arrayName = json.parent.lhs.name;
     const arrayNum = bmgen_array_names.length;
-    bmgen_array_names.push(json.array);
-    return `SET VALUE ${json.array}_IV = ${123454321 + arrayNum} VALUE ${json.array}_Val = 0 ${json.values.map((v, i) => `VALUE ${json.array}_${i} = ${v}`).join(' ')};`;
+    bmgen_array_names.push(arrayName);
+    return `SET VALUE ${arrayName}_IV = ${123454321 + arrayNum} VALUE ${arrayName}_Val = 0 ${json.values.map((v, i) => `VALUE ${arrayName}_${i} = ${v}`).join(' ')};`;
 }
 
 bmgen_bts_converter['array_access'] = function (json) {

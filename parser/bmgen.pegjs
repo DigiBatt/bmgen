@@ -11,7 +11,6 @@ line =
 
 statement =
     assignment
-    / array_init
     / limit_global
     / registration_global
     / function
@@ -123,7 +122,7 @@ math =
 	lhs:numvalue _ operator:("+=" / "-=") _ rhs:numvalue { return {'type': 'math', 'lhs': lhs, 'rhs': rhs, 'operator': operator} }
 
 array_init =
-	array:ID _ "=" _ "[" _ x0:FLOAT? x:(_ "," _ FLOAT)* _ "]" { return {'type': 'array_init', 'array': array, 'values': x0 ? [x0, ...(x.map(elem => elem[3]))] : []} }
+	"[" _ x0:FLOAT? x:(_ "," _ FLOAT)* _ "]" { return {'type': 'array_init', 'values': x0 ? [x0, ...(x.map(elem => elem[3]))] : []} }
     
 array_access =
 	array:ID _ "[" _ index:(variable / number) _ "]" { return {'type': 'array_access', 'array': array, 'index': index} }
@@ -131,6 +130,6 @@ array_access =
 TIMEUNIT = $("sec" / "min" / "h")
 COMPARE = $(([><]"="?) / "=")
 INT = $("-"?[0-9]+)
-FLOAT = $("-"?[0-9]+(.[0-9]+)?)
+FLOAT = $("-"?[0-9]+("."[0-9]+)?)
 ID = $([A-Za-z][A-Za-z0-9_]*)
 _ = $([ \t\r\n]*)
