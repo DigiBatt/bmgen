@@ -6,6 +6,7 @@ line =
     / cycle
     / while
     / for
+    / ifelse
     / comment
     / label
 
@@ -24,6 +25,12 @@ while =
 
 for =
 	"for" _ "(" _ init_statement:statement _ ";" _ condition:limit_condition _ ";" _ loop_statement:statement _ ")" _ "{" _ program:program _ "}" { return {'type': 'for', 'init_statement': init_statement, 'condition': condition, 'loop_statement': loop_statement, 'program': program}; }
+
+ifelse =
+	ifblock:if _  elseif0:("else" if)? _ elseif:("else" if)* _ elseprogram:("else" _ "{" _ program _ "}")? { return {'type': 'if', 'condition': ifblock.condition, 'program': ifblock.program, 'elseif': elseif0 ? [elseif0[1], ...(elseif.map(elem => elem[1]))] : [], 'else': elseprogram ? elseprogram[4] : undefined} }
+
+if =
+	"if" _ "(" _ condition:limit_condition _ ")" _ "{" _ program:program _ "}" { return {'condition': condition, 'program': program} }
 
 limit_global =
 	lim:limit { lim.type = 'limit_global'; return lim; }

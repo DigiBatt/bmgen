@@ -87,6 +87,29 @@ bmgen_bts_converter['for'] = function (json) {
     return text;
 }
 
+bmgen_bts_converter['if'] = function (json) {
+    const labelnum = bmgen_label_count++;
+    const iflabel = `bmgen_${labelnum}_if`;
+    const endlabel = `bmgen_${labelnum}_end`;
+    const ifcode = `LABEL ${iflabel}\n` + json.program.map(x => bts_postprocess(obj_to_bts(x))).join('\n') + `\nGOTO VALUE ${endlabel};\n`;
+    const ifgoto = `LIMIT ${bts_postprocess(obj_to_bts(json.condition))} ACTION GOTO ${iflabel}`;
+    let elseifgoto = '';
+    let elseifcode = '';
+    if (json.elseif) {
+        for (let i = 0; i < json.elseif.length; i++) {
+            const elseiflabel = `bmgen_${labelnum}_elseif_${i}`;
+            elseifgoto = `LIMIT ${bts_postprocess(obj_to_bts(json.elseif[i].condition))} ACTION GOTO ${elseiflabel} ` + elseifgoto;
+            elseifcode += `LABEL ${elseiflabel}\n` + json.elseif[i].program.map(x => bts_postprocess(obj_to_bts(x))).join('\n') + `\nGOTO VALUE ${endlabel};\n`;
+        }
+    }
+    const elselabel = `bmgen_${labelnum}_else`;
+    const elsegoto = json.else ? `LIMIT 1 sec ACTION GOTO ${elselabel}` : `LIMIT 1 sec ACTION GOTO ${endlabel}`;
+    const elseblock = json.else ? json.else.map(x => bts_postprocess(obj_to_bts(x))).join('\n') + '\n' : '';
+    const elsecode = `LABEL ${elselabel}\n${elseblock}`;
+    const goto = `PAU ${elseifgoto}${ifgoto} ${elsegoto};\n`;
+    return `${goto}${ifcode}${elseifcode}${elsecode}LABEL ${endlabel}`;
+}
+
 bmgen_bts_converter['variable'] = function (json) {
     return `${json.name}`;
 }
