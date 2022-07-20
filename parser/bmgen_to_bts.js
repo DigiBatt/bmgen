@@ -145,10 +145,13 @@ bmgen_bts_converter['array_access'] = function (json) {
         throw new Error(`Array ${json.array} was not initialized`);
     }
     let wrapper = '';
-    if (json.parent.type === 'assignment' && json.parent.lhs === json) {
-        wrapper = `#pre{SET VALUE idx = ${obj_to_bts(json.index, json)};\nADD VALUE idx VALUE ${arrayNum * 1000};} #post{PAU LIMIT > idx arrSET;}`;
-    } else {
-        wrapper = `#pre{SET VALUE idx = ${obj_to_bts(json.index, json)};\nADD VALUE idx VALUE ${arrayNum * 1000};\nPAU LIMIT > idx arrGET;}`;
+    const idx_var = arrayNum > 0 ? `bmgen_idx` : obj_to_bts(json.index, json);
+    const idx_set = arrayNum > 0 ? `SET VALUE ${idx_var} = ${obj_to_bts(json.index, json)};\n` : '';
+    const idx_add = arrayNum > 0 ? `ADD VALUE ${idx_var} VALUE ${arrayNum * 1000};\n` : '';
+    if (json.parent.type === 'assignment' && json.parent.lhs === json) { // set array value
+        wrapper = `#pre{${idx_set}${idx_add}} #post{PAU LIMIT > ${idx_var} arrSET;}`;
+    } else { // get array value
+        wrapper = `#pre{${idx_set}${idx_add}PAU LIMIT > ${idx_var} arrGET;}`;
     }
     return `${json.array}_Val ${wrapper}`;
 }
