@@ -69,21 +69,21 @@ bmgen_bts_converter['time'] = function (json) {
 }
 
 bmgen_bts_converter['cycle'] = function (json) {
-    return 'BEG;\n' + json.program.map(x => obj_to_bts(x, json)).join('\n') + `\nCYC VALUE ${json.count} *;`;
+    return 'BEG;\n' + json.program.map(x => bts_postprocess(obj_to_bts(x, json))).join('\n') + `\nCYC VALUE ${json.count} *;`;
 }
 
 bmgen_bts_converter['while'] = function (json) {
     const label = `bmgen_${bmgen_label_count++}`;
-    return `LABEL ${label}\n` + json.program.map(x => obj_to_bts(x)).join('\n') + `\nPAU LIMIT ${obj_to_bts(json.condition)} ACTION GOTO ${label} LIMIT 1 sec;`;
+    return `LABEL ${label}\n` + json.program.map(x => bts_postprocess(obj_to_bts(x))).join('\n') + `\nPAU LIMIT ${bts_postprocess(obj_to_bts(json.condition))} ACTION GOTO ${label} LIMIT 1 sec;`;
 }
 
 bmgen_bts_converter['for'] = function (json) {
     const label = `bmgen_${bmgen_label_count++}`;
-    let text = obj_to_bts(json.init_statement) + '\n';
+    let text = bts_postprocess(obj_to_bts(json.init_statement)) + '\n';
     text += `LABEL ${label}\n`;
-    text += json.program.map(x => obj_to_bts(x)).join('\n');
-    text += obj_to_bts(json.loop_statement) + '\n';
-    text += `\nPAU LIMIT ${obj_to_bts(json.condition)} ACTION GOTO ${label} LIMIT 1 sec;`;
+    text += json.program.map(x => bts_postprocess(obj_to_bts(x))).join('\n');
+    text += '\n' + bts_postprocess(obj_to_bts(json.loop_statement));
+    text += `\nPAU LIMIT ${bts_postprocess(obj_to_bts(json.condition))} ACTION GOTO ${label} LIMIT 1 sec;`;
     return text;
 }
 
@@ -146,9 +146,9 @@ bmgen_bts_converter['array_access'] = function (json) {
     }
     let wrapper = '';
     if (json.parent.type === 'assignment' && json.parent.lhs === json) {
-        wrapper = `#pre{SET VALUE idx = ${obj_to_bts(json.index, json)}; ADD VALUE idx VALUE ${arrayNum * 1000};} #post{PAU LIMIT > idx arrSET;}`;
+        wrapper = `#pre{SET VALUE idx = ${obj_to_bts(json.index, json)};\nADD VALUE idx VALUE ${arrayNum * 1000};} #post{PAU LIMIT > idx arrSET;}`;
     } else {
-        wrapper = `#pre{SET VALUE idx = ${obj_to_bts(json.index, json)}; ADD VALUE idx VALUE ${arrayNum * 1000}; PAU LIMIT > idx arrGET;}`;
+        wrapper = `#pre{SET VALUE idx = ${obj_to_bts(json.index, json)};\nADD VALUE idx VALUE ${arrayNum * 1000};\nPAU LIMIT > idx arrGET;}`;
     }
     return `${json.array}_Val ${wrapper}`;
 }
