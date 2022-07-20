@@ -37,6 +37,6 @@ cp ./blockly/blockly_compressed.js ./public/blockly/
 cp ./blockly/javascript_compressed.js ./public/blockly/
 cp ./blockly/blocks_compressed.js ./public/blockly/
 cp ./blockly/msg/js/en.js ./public/blockly/msg/js/
-cp ./index.html ./public/
+cp ./index.html ./no_blockly.html ./public/
 
 find ./custom/ ./bts600/ ./parser/ -name '*.js' | xargs npx google-closure-compiler --entry_point goog:BMGen3000 --js_output_file public/main.js bmgen3000.js
