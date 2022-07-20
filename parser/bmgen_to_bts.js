@@ -167,7 +167,7 @@ bmgen_bts_converter['array_init'] = function (json) {
     const arrayName = json.parent.lhs.name;
     const arrayNum = bmgen_array_names.length;
     bmgen_array_names.push(arrayName);
-    return `SET VALUE ${arrayName}_IV = ${123454321 + arrayNum} VALUE ${arrayName}_Val = 0 ${json.values.map((v, i) => `VALUE ${arrayName}_${i} = ${v}`).join(' ')};`;
+    return `#start{}SET VALUE ${arrayName}_IV = ${123454321 + arrayNum} VALUE ${arrayName}_Val = 0 ${json.values.map((v, i) => `VALUE ${arrayName}_${i} = ${v}`).join(' ')};`;
 }
 
 bmgen_bts_converter['array_access'] = function (json) {
@@ -209,6 +209,9 @@ function bts_postprocess(line) {
         if (m[1] === 'pre') {
             pre += m[2] + '\n';
         } else if (m[1] === 'post') {
+            post += '\n' + m[2];
+        } else if (m[1] === 'start') {
+            line = line.replace(/^.*#start{}/, '');
             post += '\n' + m[2];
         } else {
             throw new Error(`Unknown postprocessing directive #${m[1]}`);

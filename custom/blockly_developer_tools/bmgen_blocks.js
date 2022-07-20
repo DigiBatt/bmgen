@@ -309,7 +309,7 @@ Blockly.Blocks['regname'] = {
 Blockly.Blocks['setvalue'] = {
   init: function () {
     this.appendValueInput("VALUE")
-      .setCheck(["Number", "Variable", "Numvalue"]);
+      .setCheck(["Number", "Variable", "Numvalue", "Channel"]);
     this.appendValueInput("CHANNEL")
       .setCheck("Channel");
     this.setInputsInline(true);
