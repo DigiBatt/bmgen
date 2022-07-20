@@ -8,3 +8,7 @@ Generator['array_init'] = function (block) {
     }
     return '[' + values.join(', ') + ']';
 }
+
+Generator['array_access'] = function (block) {
+    return `${Generator.valueToCode(block, 'ARRAY')}[${Generator.valueToCode(block, 'INDEX')}]`;
+}

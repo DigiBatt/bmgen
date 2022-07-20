@@ -505,3 +505,20 @@ Blockly.Blocks['array_init'] = {
     }
   },
 };
+
+Blockly.Blocks['array_access'] = {
+  init: function () {
+    this.appendValueInput("ARRAY")
+      .setCheck(["Variable"]);
+    this.appendValueInput("INDEX")
+      .setCheck(["Number", "Variable"])
+      .appendField("[");
+    this.appendDummyInput()
+      .appendField("]");
+    this.setInputsInline(true);
+    this.setColour(60);
+    this.setTooltip("");
+    this.setHelpUrl("");
+    this.setOutput(true, "Variable");
+  }
+};

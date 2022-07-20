@@ -92,6 +92,7 @@
   </category>
   <category name="Arrays" colour="#a55b80">
     <block type="array_init"></block>
+    <block type="array_access"></block>
   </category>
   <category name="Other" colour="#5ba58c">
     <block type="number">

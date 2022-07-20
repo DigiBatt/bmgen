@@ -208,6 +208,10 @@ bmgen_xml_converter['array_init'] = function (x) {
     return xml;
 }
 
+bmgen_xml_converter['array_access'] = function (x) {
+    return `<block type="array_access" id="${gen_xml_id()}"><value name="ARRAY"><block type="variable" id="${gen_xml_id()}"><field name="NAME">${x.array}</field></block></value><value name="INDEX">${bmgen_obj_to_xml(x.index)}</value></block>`;
+}
+
 bmgen_xml_converter['limit_global'] = bmgen_xml_converter['limit'];
 bmgen_xml_converter['registration_global'] = bmgen_xml_converter['registration'];
 
