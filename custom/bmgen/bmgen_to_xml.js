@@ -199,6 +199,15 @@ bmgen_xml_converter['limit_and'] = function (x) {
     return `<block type="limit_and" id="${gen_xml_id()}"><value name="LHS">${bmgen_obj_to_xml(x.lhs)}</value><value name="RHS">${bmgen_obj_to_xml(x.rhs)}</value></block>`;
 }
 
+bmgen_xml_converter['array_init'] = function (x) {
+    let xml = `<block type="array_init" id="${gen_xml_id()}"><mutation items="${x.values.length}"/>`;
+    for (let i = 0; i < x.values.length; i++) {
+        xml += `<value name="ADD${i}"><block type="number"><field name="NUMBER">${x.values[i]}</field></block></value>`;
+    }
+    xml += '</block>';
+    return xml;
+}
+
 bmgen_xml_converter['limit_global'] = bmgen_xml_converter['limit'];
 bmgen_xml_converter['registration_global'] = bmgen_xml_converter['registration'];
 

@@ -90,6 +90,9 @@
   <category name="Registrations" colour="#a55b80">
     <block type="registration"></block>
   </category>
+  <category name="Arrays" colour="#a55b80">
+    <block type="array_init"></block>
+  </category>
   <category name="Other" colour="#5ba58c">
     <block type="number">
       <field name="NUMBER">0</field>
