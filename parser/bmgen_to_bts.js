@@ -167,7 +167,7 @@ bmgen_bts_converter['array_init'] = function (json) {
     const arrayName = json.parent.lhs.name;
     const arrayNum = bmgen_array_names.length;
     bmgen_array_names.push(arrayName);
-    return `#start{}SET VALUE ${arrayName}_IV = ${123454321 + arrayNum} VALUE ${arrayName}_Val = 0 ${json.values.map((v, i) => `VALUE ${arrayName}_${i} = ${v}`).join(' ')};`;
+    return `#start{}!\nSET VALUE ${arrayName}_IV = ${123454321 + arrayNum} VALUE ${arrayName}_Val = 0 ${json.values.map((v, i) => `VALUE ${arrayName}_${i} = ${v}`).join(' ')};\n!#stop{}`;
 }
 
 bmgen_bts_converter['array_access'] = function (json) {
@@ -184,7 +184,7 @@ bmgen_bts_converter['array_access'] = function (json) {
     } else { // get array value
         wrapper = `#pre{${idx_set}${idx_add}PAU LIMIT > ${idx_var} arrGET;}`;
     }
-    return `${json.array}_Val ${wrapper}`;
+    return `${json.array}_Val${wrapper}`;
 }
 
 function obj_to_bts(json, parent) {
@@ -212,6 +212,9 @@ function bts_postprocess(line) {
             post += '\n' + m[2];
         } else if (m[1] === 'start') {
             line = line.replace(/^.*#start{}/, '');
+            post += '\n' + m[2];
+        } else if (m[1] === 'stop') {
+            line = line.replace(/#stop{}.*$/, '');
             post += '\n' + m[2];
         } else {
             throw new Error(`Unknown postprocessing directive #${m[1]}`);

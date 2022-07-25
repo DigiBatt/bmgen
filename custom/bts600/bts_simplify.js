@@ -1,5 +1,5 @@
 goog.module("BMGen3000.BTS600.Simplify");
-let { BTSProgram } = goog.require("BMGen3000.BTS600.Parsetree");
+let { BTSProgram, BTSComment } = goog.require("BMGen3000.BTS600.Parsetree");
 
 BTSProgram.prototype.simplify = function () {
     // combine SET statements
@@ -27,6 +27,10 @@ BTSProgram.prototype.simplify = function () {
                 if (line.label === null) {
                     curr_set_limit = true;
                 }
+            }
+        } else if (line instanceof BTSComment) {
+            if (line.text.trim().length === 0) {
+                this.lines[i] = null;
             }
         }
         prev_set_value = curr_set_value;

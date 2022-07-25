@@ -29,7 +29,7 @@ function bts_parse_program(program) {
 function bts_parse_comment(comment) {
     comment = comment.trim();
     if (!comment.startsWith('!')) {
-        error('Invalid comment');
+        throw new Error('Invalid comment');
     }
     return new Parsetree.BTSComment(comment.substring(1).trim());
 }
