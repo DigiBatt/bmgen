@@ -123,7 +123,7 @@ bmgen_bts_converter['number'] = function (json) {
 }
 
 bmgen_bts_converter['comment'] = function (json) {
-    return `! ${json.text}`;
+    return `! ${json.text.replace(/;/g, '')}`;
 }
 
 bmgen_bts_converter['label'] = function (json) {
