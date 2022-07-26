@@ -65,7 +65,7 @@ bmgen_bts_converter['setvalue_equal'] = function (json) {
 }
 
 bmgen_bts_converter['time'] = function (json) {
-    return `> ${obj_to_bts(json.value, json)} ${json.unit}`;
+    return `${obj_to_bts(json.value, json)} ${json.unit}`;
 }
 
 bmgen_bts_converter['cycle'] = function (json) {
