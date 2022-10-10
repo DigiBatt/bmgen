@@ -1,0 +1,12 @@
+EOCV = UGas;
+EODV = CutOff;
+CRate = 0.2;
+EOCRate = 0.02;
+
+limit(V > EOCV, error(1));
+limit(V < EODV, error(1));
+
+charge(CRate ACn1, V = EOCV, limit(ACn1 < EOCRate));
+Ah = 0;
+discharge(CRate ACn1, limit(V <= EODV));
+pause(limit(AhDef > 1));
