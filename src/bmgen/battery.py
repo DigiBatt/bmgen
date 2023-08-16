@@ -1,0 +1,1 @@
+nominalCapacity: float
