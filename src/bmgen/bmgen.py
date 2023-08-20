@@ -4,15 +4,46 @@ import ast
 import astor
 import sys
 from bmgen.transformer import Transformer
+import click
+import bmgen
+from importlib import import_module
 
 
-def main():
-    filename = sys.argv[1]
-    target = "bm"
-    with open(filename, "r") as f:
-        tree = ast.parse(f.read())
+@click.command()
+@click.argument("filename", required=True)
+@click.option("-t", "--target", default="bm")
+@click.option("-f", "--format")
+@click.option("-i", "--intermediate")
+@click.option("-o", "--out")
+def main(filename, target, format, intermediate, out):
+    if filename == "-":
+        tree = ast.parse(sys.stdin.read())
+    else:
+        with open(filename, "r") as f:
+            tree = ast.parse(f.read())
 
-    # print(ast.dump(tree, indent=2))
+    if intermediate == "ast":
+        output(out, ast.dump(tree, indent=2))
+        return
 
     newtree = Transformer(target).visit(tree)
-    print(astor.to_source(newtree))
+    newtree = ast.fix_missing_locations(newtree)
+    if intermediate == "flat":
+        output(out, astor.to_source(newtree))
+        return
+
+    if intermediate == "flatast":
+        output(out, ast.dump(newtree, indent=2))
+        return
+
+    target_module = import_module("bmgen.targets." + target)
+    exec(compile(newtree, filename="<ast>", mode="exec"))
+    output(out, target_module.generator.generate())
+
+
+def output(target, text):
+    if target:
+        with open(target, "w") as f:
+            f.write(text)
+    else:
+        print(text)

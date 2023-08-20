@@ -1,4 +1,12 @@
-from bmgen.targets.bm.ast import BMVariable, BMStatement, BMAssignment, BMNumber
+from bmgen.targets.bm.ast import (
+    BMVariable,
+    BMStatement,
+    BMAssignment,
+    BMNumber,
+    BMLimit,
+    BMLimitCondition,
+    BMAction,
+)
 from bmgen.targets.bm import generator
 
 
@@ -12,3 +20,7 @@ def variable(name: str, value: float | None = None):
             )
         )
     return var
+
+
+def limit(condition: BMLimitCondition, action: BMAction):
+    return BMLimit(condition=condition, action=action)

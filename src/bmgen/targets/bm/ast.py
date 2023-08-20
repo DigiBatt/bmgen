@@ -28,6 +28,8 @@ class BMVariable(BMNumValue):
         return self.name
 
     def __compare__(self, other: BMNumValue, operator: str):
+        if isinstance(other, (int, float)):
+            other = BMNumber(other)
         return BMLimitCompare(lhs=self, rhs=other, operator=operator)
 
 
@@ -148,7 +150,7 @@ class BMLimit(BMNode):
         linebreaks = condition.count("<br>")
         action = ""
         if self.action:
-            action = "<br>".repleat(linebreaks) + self.action.toTable()
+            action = "<br>" * linebreaks + self.action.toTable()
         return (condition, action)
 
 
@@ -164,6 +166,12 @@ class BMLine(BMNode):
     pass
 
 
+# needs to be comined with the next statement before output is generated
+@dataclass
+class BMLabel(BMLine):
+    label: str
+
+
 @dataclass
 class BMStatement(BMLine):
     operator: str
@@ -173,7 +181,6 @@ class BMStatement(BMLine):
     label: str | None = None
 
     def toTable(self, linenumber):
-        x = 5
         value = "<br>".join([v.toTable() for v in self.values])
         registration = "<br>".join([r.toTable() for r in self.registrations])
         label = self.label if self.label else ""
@@ -205,6 +212,8 @@ class BMProgram(BMNode):
         linenumber = 1
         for i in range(len(self.lines)):
             line = self.lines[i]
+            if not line:
+                continue
             if isinstance(line, BMComment):
                 table += line.toTable()
             else:

@@ -26,6 +26,7 @@ class ctrl_for:
         else:
             # TODO: generic loop
             pass
+        return self.var
 
     def __exit__(self, type, value, traceback):
         if self.simple:
@@ -37,3 +38,30 @@ class ctrl_for:
         else:
             # TODO: generic loop
             pass
+
+
+class ctrl_if:
+    def __init__(self, condition: BMLimitCondition):
+        self.condition = condition
+        self.baselabel = generator.label()
+
+    def __enter__(self):
+        generator.add(
+            BMStatement(
+                operator="PAU",
+                limits=[
+                    BMLimit(
+                        condition=self.condition, action=BMGoto(self.baselabel + "_if")
+                    ),
+                    BMLimit(
+                        condition=BMMultiplication(BMNumber(1), BMVariable("sec")),
+                        action=BMGoto(self.baselabel + "_end"),
+                    ),
+                ],
+            )
+        )
+        generator.add(BMLabel(self.baselabel + "_if"))
+
+    def __exit__(self, type, value, traceback):
+        generator.add(BMLabel(self.baselabel + "_end"))
+        pass

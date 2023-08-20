@@ -1,3 +1,4 @@
-from bmgen.targets.bm.generator import Generator
+from bmgen.targets.bm.generators.bm_generator import BMGenerator
+from bmgen.targets.bm.generators.table_generator import TableGenerator
 
-generator = Generator()
+generator: BMGenerator = TableGenerator()

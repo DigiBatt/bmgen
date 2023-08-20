@@ -7,13 +7,6 @@ class Transformer(ast.NodeTransformer):
         self.imports = {"ctrl": set(), "program": set()}
 
     def visit_Module(self, node):
-        # ImportFrom(
-        #   module='bmgen.channel',
-        #   names=[
-        #     alias(name='U'),
-        #     alias(name='A'),
-        #     alias(name='Ah')],
-        #   level=0),
         self.generic_visit(node)
         for module, names in self.imports.items():
             if not names:
@@ -55,6 +48,7 @@ class Transformer(ast.NodeTransformer):
             ),
             node,
         )
+        self.imports["ctrl"].add("ctrl_if")
         self.generic_visit(node)
         return a
 
@@ -74,7 +68,8 @@ class Transformer(ast.NodeTransformer):
                                 node.iter,
                             ],
                             keywords=[],
-                        )
+                        ),
+                        optional_vars=ast.Name(id=node.target.id, ctx=ast.Store()),
                     )
                 ],
                 body=node.body,
