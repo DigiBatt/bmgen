@@ -32,3 +32,30 @@ def discharge(
         values.append(BMMultiplication(voltage, "V"))
 
     generator.add(BMStatement(operator="DCH", values=[current], limits=limits))
+
+
+@autocast()
+def pause(
+    limits: List[BMLimit] = [],
+):
+    generator.add(BMStatement(operator="PAU", limits=limits))
+
+
+@autocast()
+def time(
+    hours: BMNumValue | None = None,
+    minutes: BMNumValue | None = None,
+    seconds: BMNumValue | None = None,
+) -> BMLimitCondition:
+    if hours:
+        if minutes or seconds:
+            raise NotImplementedError("BM time limit can only have one unit")
+        return BMLimitTime(value=hours, unit="h")
+    if minutes:
+        if hours or seconds:
+            raise NotImplementedError("BM time limit can only have one unit")
+        return BMLimitTime(value=hours, unit="min")
+    if seconds:
+        if hours or minutes:
+            raise NotImplementedError("BM time limit can only have one unit")
+        return BMLimitTime(value=hours, unit="s")

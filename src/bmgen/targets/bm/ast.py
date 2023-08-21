@@ -137,11 +137,20 @@ class BMLimitAnd(BMLimitCondition):
 
 
 @dataclass
+class BMLimitTime(BMLimitCondition):
+    value: BMNumValue
+    unit: str
+
+    def toText(self):
+        return self.value.toText() + " " + self.unit
+
+
+@dataclass
 class BMLimit(BMNode):
     condition: BMLimitCondition
     action: BMAction | None = None
 
-    def toReadable(self):
+    def toText(self):
         condition = self.condition.toText()
         linebreaks = condition.count("\\r\\n")
         action = ""
@@ -149,7 +158,7 @@ class BMLimit(BMNode):
             action = "\\r\\n" * linebreaks + self.action.toText()
         return (condition, action)
 
-    def toText(self):
+    def toReadable(self):
         if self.action:
             return (
                 "LIMIT " + self.condition.toText() + " ACTION " + self.action.toText()
@@ -194,10 +203,10 @@ class BMStatement(BMLine):
 
     def toText(self, linenumber):
         value = "\\r\\n".join([v.toText() for v in self.values])
-        registration = "\\r\\n".join([r.toTable() for r in self.registrations])
+        registration = "\\r\\n".join([r.toText() for r in self.registrations])
         label = self.label if self.label else ""
         if self.limits:
-            limit, action = zip(*[l.toTable() for l in self.limits])
+            limit, action = zip(*[l.toText() for l in self.limits])
         else:
             limit = ""
             action = ""

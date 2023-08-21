@@ -1,4 +1,4 @@
 from bmgen.targets.bm.generators.bm_generator import BMGenerator
-from bmgen.targets.bm.generators.table_generator import TableGenerator
+from bmgen.targets.bm.generators.text_generator import TextGenerator
 
-generator: BMGenerator = TableGenerator()
+generator: BMGenerator = TextGenerator()

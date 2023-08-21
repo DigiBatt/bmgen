@@ -1,5 +1,5 @@
 # from bmgen import battery
-from bmgen.function import charge, discharge
+from bmgen.function import charge, discharge, pause, time
 from bmgen import battery
 from bmgen.channel import I, V
 
@@ -12,6 +12,7 @@ for i in range(3):
         voltage=4.2,
         limits=[I < EOCCurrent],
     )
+    pause(limits=[time(hours=1)])
     if i < 2:
         discharge(CRate * battery.nominalCapacity, limits=[V <= 2.5])
     CRate += 0.2
