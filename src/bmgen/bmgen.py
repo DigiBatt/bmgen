@@ -36,7 +36,13 @@ def main(filename, target, format, intermediate, out):
         output(out, ast.dump(newtree, indent=2))
         return
 
-    target_module = import_module("bmgen.targets." + target)
+    target_module = import_module(f"bmgen.targets.{target}")
+    if format:
+        FormatGenerator = getattr(
+            import_module(f"bmgen.targets.{target}.generators.{format}_generator"),
+            f"{format.capitalize()}Generator",
+        )
+        target_module.generator = FormatGenerator()
     exec(compile(newtree, filename="<ast>", mode="exec"))
     output(out, target_module.generator.generate())
 

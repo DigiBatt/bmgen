@@ -1,6 +1,8 @@
 from typing import List
 from dataclasses import dataclass, field
 from bmgen.targets.bm.helper.compare import compare
+from bmgen.targets.bm.helper.cast import autocast
+import bmgen.targets.bm as bm
 
 
 class BMNode:
@@ -27,10 +29,14 @@ class BMVariable(BMNumValue):
     def toText(self):
         return self.name
 
+    @autocast("other")
     def __compare__(self, other: BMNumValue, operator: str):
-        if isinstance(other, (int, float)):
-            other = BMNumber(other)
         return BMLimitCompare(lhs=self, rhs=other, operator=operator)
+
+    @autocast()
+    def __iadd__(self, other: BMNumValue):
+        bm.generator.add(BMStatement(operator="ADD", values=[self, other]))
+        return self
 
 
 @dataclass
@@ -55,11 +61,6 @@ class BMMultiplication(BMValue):
 
     def toText(self):
         return self.numvalue.toText() + " " + self.variable.toText()
-
-
-# @dataclass
-# class BMName(BMValue):
-#     name: str
 
 
 @dataclass
@@ -125,8 +126,11 @@ class BMLimitAnd(BMLimitCondition):
     lhs: BMLimitCondition
     rhs: BMLimitCondition
 
-    def toText(self):
+    def toReadable(self):
         return self.lhs.toText() + " & " + self.rhs.toText()
+
+    def toText(self):
+        return self.lhs.toText() + " &\\r\\n " + self.rhs.toText()
 
     def toTable(self):
         return self.lhs.toText() + " &<br>" + self.rhs.toText()
@@ -136,6 +140,14 @@ class BMLimitAnd(BMLimitCondition):
 class BMLimit(BMNode):
     condition: BMLimitCondition
     action: BMAction | None = None
+
+    def toReadable(self):
+        condition = self.condition.toText()
+        linebreaks = condition.count("\\r\\n")
+        action = ""
+        if self.action:
+            action = "\\r\\n" * linebreaks + self.action.toText()
+        return (condition, action)
 
     def toText(self):
         if self.action:
@@ -180,6 +192,19 @@ class BMStatement(BMLine):
     registrations: List[BMRegistration] = field(default_factory=list)
     label: str | None = None
 
+    def toText(self, linenumber):
+        value = "\\r\\n".join([v.toText() for v in self.values])
+        registration = "\\r\\n".join([r.toTable() for r in self.registrations])
+        label = self.label if self.label else ""
+        if self.limits:
+            limit, action = zip(*[l.toTable() for l in self.limits])
+        else:
+            limit = ""
+            action = ""
+        limit = "\\r\\n".join(limit)
+        action = "\\r\\n".join(action)
+        return f"\t{linenumber}\t{label}\t{self.operator}\t{value}\t{limit}\t{action}\t{registration}\n"
+
     def toTable(self, linenumber):
         value = "<br>".join([v.toTable() for v in self.values])
         registration = "<br>".join([r.toTable() for r in self.registrations])
@@ -198,6 +223,10 @@ class BMStatement(BMLine):
 class BMComment(BMLine):
     text: str
 
+    def toText(self):
+        # return f"\t\t!\t{self.text}\n
+        return ""
+
     def toTable(self):
         return f'<tr><td></td><td>!</td><td colspan="5" style="text-align: left;">{self.text}</td></tr>'
 
@@ -205,6 +234,20 @@ class BMComment(BMLine):
 @dataclass
 class BMProgram(BMNode):
     lines: List[BMLine] = field(default_factory=list)
+
+    def toText(self):
+        program = ""
+        linenumber = 1
+        for i in range(len(self.lines)):
+            line = self.lines[i]
+            if not line:
+                continue
+            if isinstance(line, BMComment):
+                program += line.toText()
+            else:
+                program += line.toText(linenumber)
+                linenumber += 1
+        return program
 
     def toTable(self):
         table = '<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; }</style></head><body>'

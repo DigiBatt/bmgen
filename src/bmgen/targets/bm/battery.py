@@ -1,3 +1,3 @@
 from bmgen.targets.bm.ast import BMVariable
 
-nominalCapacity = BMVariable("CNom")
+nominalCapacity = BMVariable("ACn1")

@@ -4,7 +4,7 @@ from bmgen.targets.bm.helper.cast import autocast
 from typing import List
 
 
-@autocast
+@autocast()
 def charge(
     current: BMNumValue | BMMultiplication,
     voltage: BMNumValue | None = None,
@@ -19,7 +19,7 @@ def charge(
     generator.add(BMStatement(operator="CHA", values=[current], limits=limits))
 
 
-@autocast
+@autocast()
 def discharge(
     current: BMNumValue | BMMultiplication,
     voltage: BMNumValue | None = None,

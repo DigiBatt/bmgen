@@ -14,3 +14,4 @@ for i in range(3):
     )
     if i < 2:
         discharge(CRate * battery.nominalCapacity, limits=[V <= 2.5])
+    CRate += 0.2
