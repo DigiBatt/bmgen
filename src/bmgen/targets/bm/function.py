@@ -59,3 +59,19 @@ def time(
         if hours or minutes:
             raise NotImplementedError("BM time limit can only have one unit")
         return BMLimitTime(value=hours, unit="s")
+
+
+def limit(condition: BMLimitCondition, action: BMAction | None = None):
+    return BMLimit(condition=condition, action=action)
+
+
+def limit_global(condition: BMLimitCondition, action: BMAction | None = None):
+    generator.add(
+        BMStatement(
+            operator="SET", limits=[BMLimit(condition=condition, action=action)]
+        )
+    )
+
+
+def error(errnum: int):
+    return BMError(errnum)

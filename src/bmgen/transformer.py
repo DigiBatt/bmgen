@@ -4,7 +4,7 @@ import ast
 class Transformer(ast.NodeTransformer):
     def __init__(self, target):
         self.target = target
-        self.imports = {"ctrl": set(), "program": set()}
+        self.imports = {"ctrl": set(), "program": set(), "function": set()}
 
     def visit_Module(self, node):
         self.generic_visit(node)
@@ -98,3 +98,10 @@ class Transformer(ast.NodeTransformer):
         self.imports["program"].add("variable")
         self.generic_visit(node)
         return a
+
+    def visit_Expr(self, node):
+        if isinstance(node.value, ast.Call) and node.value.func.id == "limit":
+            node.value.func.id = "limit_global"
+        self.imports["function"].add("limit_global")
+        self.generic_visit(node)
+        return node

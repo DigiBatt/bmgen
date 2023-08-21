@@ -19,3 +19,11 @@ def time(
     seconds: float | None = None,
 ) -> bool:
     pass
+
+
+def limit(condition: bool, action=None) -> bool:
+    pass
+
+
+def error(errnum: int):
+    pass

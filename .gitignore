@@ -6,3 +6,4 @@ deps.js
 /public
 __pycache__
 *.egg-info
+/out

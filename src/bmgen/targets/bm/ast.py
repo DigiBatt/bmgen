@@ -114,6 +114,15 @@ class BMLimitCompare(BMLimitCondition):
     rhs: BMNumValue
     operator: str
 
+    def __post_init__(self):
+        if isinstance(self.lhs, BMVariable) and self.lhs.name == "A":
+            if (
+                isinstance(self.rhs, BMMultiplication)
+                and self.rhs.variable.name == "ACn1"
+            ):
+                self.lhs = self.rhs.variable
+                self.rhs = self.rhs.numvalue
+
     def toText(self):
         if self.operator == "==":
             return self.lhs.toText() + " = " + self.rhs.toText()

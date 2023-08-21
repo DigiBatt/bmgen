@@ -2,21 +2,23 @@ from bmgen.targets.bm.ast import (
     BMVariable,
     BMStatement,
     BMAssignment,
-    BMNumber,
     BMLimit,
     BMLimitCondition,
     BMAction,
+    BMNumValue,
 )
 from bmgen.targets.bm import generator
+from bmgen.targets.bm.helper.cast import autocast
 
 
-def variable(name: str, value: float | None = None):
+@autocast("value")
+def variable(name: str, value: BMNumValue | None = None):
     var = BMVariable(name)
     if value:
         generator.add(
             BMStatement(
                 operator="SET",
-                values=[BMAssignment(variable=var, numvalue=BMNumber(value))],
+                values=[BMAssignment(variable=var, numvalue=value)],
             )
         )
     return var
