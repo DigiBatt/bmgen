@@ -6,6 +6,7 @@ class BMGenerator(BaseGenerator):
     def __init__(self):
         self.program = BMProgram()
         self.labelcount = 0
+        self.arraycount = 0
 
     def finish(self):
         # add stop line
@@ -52,3 +53,7 @@ class BMGenerator(BaseGenerator):
     def label(self):
         self.labelcount += 1
         return f"bmgen_{self.labelcount}"
+
+    def array(self):
+        self.arraycount += 1
+        return self.arraycount - 1

@@ -18,4 +18,7 @@ def compare(c):
         def __ne__(self, other):
             return self.__compare__(other, "!=")
 
+    c2.__name__ = c.__name__
+    c2.__module__ = c.__module__
+
     return c2

@@ -25,6 +25,7 @@ class BMNumValue(BMNode):
 @dataclass
 class BMVariable(BMNumValue):
     name: str
+    arraynum: int | None = None
 
     def toText(self):
         return self.name
@@ -37,6 +38,63 @@ class BMVariable(BMNumValue):
     def __iadd__(self, other: BMNumValue):
         bm.generator.add(BMStatement(operator="ADD", values=[self, other]))
         return self
+
+    @autocast()
+    def __getitem__(self, key: BMNumValue):
+        if self.arraynum == None:
+            raise NotImplementedError("Scalar variable cannot be accessed as an array")
+        if self.arraynum > 0:
+            idx = BMVariable("bmgen_idx")
+            bm.generator.add(
+                BMStatement(
+                    operator="SET",
+                    values=[BMAssignment(numvalue=key, variable=idx)],
+                )
+            )
+            bm.generator.add(
+                BMStatement(
+                    operator="ADD",
+                    values=[idx, BMNumber(self.arraynum * 1000)],
+                )
+            )
+        else:
+            idx = key
+        bm.generator.add(
+            BMStatement(operator="PAU", limits=[BMLimit(BMVariable("arrGET") > idx)])
+        )
+        return BMVariable(self.name + "_Val")
+
+    @autocast()
+    def __setitem__(self, key: BMNumValue, value: BMNumValue):
+        if self.arraynum == None:
+            raise NotImplementedError("Scalar variable cannot be accessed as an array")
+        if self.arraynum > 0:
+            idx = BMVariable("bmgen_idx")
+            bm.generator.add(
+                BMStatement(
+                    operator="SET",
+                    values=[BMAssignment(numvalue=key, variable=idx)],
+                )
+            )
+            bm.generator.add(
+                BMStatement(
+                    operator="ADD",
+                    values=[idx, BMNumber(self.arraynum * 1000)],
+                )
+            )
+        else:
+            idx = key
+        valuevar = BMVariable(self.name + "_Val")
+        bm.generator.add(
+            BMStatement(
+                operator="SET",
+                values=[BMAssignment(numvalue=value, variable=valuevar)],
+            )
+        )
+        bm.generator.add(
+            BMStatement(operator="PAU", limits=[BMLimit(BMVariable("arrSET") > idx)])
+        )
+        return valuevar
 
 
 @dataclass

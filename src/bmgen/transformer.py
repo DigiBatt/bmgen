@@ -81,21 +81,24 @@ class Transformer(ast.NodeTransformer):
         return a
 
     def visit_Assign(self, node):
-        a = ast.copy_location(
-            ast.Assign(
-                value=ast.Call(
-                    func=ast.Name(id="variable", ctx=ast.Load()),
-                    args=[
-                        ast.Constant(value=node.targets[0].id),
-                        node.value,
-                    ],
-                    keywords=[],
+        if isinstance(node.targets[0], ast.Subscript):
+            a = node
+        else:
+            a = ast.copy_location(
+                ast.Assign(
+                    value=ast.Call(
+                        func=ast.Name(id="variable", ctx=ast.Load()),
+                        args=[
+                            ast.Constant(value=node.targets[0].id),
+                            node.value,
+                        ],
+                        keywords=[],
+                    ),
+                    targets=[node.targets[0]],
                 ),
-                targets=[node.targets[0]],
-            ),
-            node,
-        )
-        self.imports["program"].add("variable")
+                node,
+            )
+            self.imports["program"].add("variable")
         self.generic_visit(node)
         return a
 

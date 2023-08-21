@@ -1,6 +1,7 @@
 import bmgen.targets.bm.ast as ast
 from typing import List
 import inspect
+from functools import wraps
 
 
 def cast_literal(x):
@@ -21,6 +22,7 @@ def autocast(names: str | List[str] | None = None):
         names = [names]
 
     def decorator(f):
+        @wraps(f)
         def g(*args, **kwargs):
             if names:
                 params = list(inspect.signature(f).parameters)
