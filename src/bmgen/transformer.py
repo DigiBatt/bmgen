@@ -105,6 +105,6 @@ class Transformer(ast.NodeTransformer):
     def visit_Expr(self, node):
         if isinstance(node.value, ast.Call) and node.value.func.id == "limit":
             node.value.func.id = "limit_global"
-        self.imports["function"].add("limit_global")
+            self.imports["function"].add("limit_global")
         self.generic_visit(node)
         return node
