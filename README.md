@@ -30,6 +30,8 @@ To see the test programs that are generated, expand the sections below.
 <details>
 <summary>Battery Manager</summary>
 
+Command for this example: <code>bmgen --target bm --format table examples/simple_program.py</code>
+
 <table>
 <tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>
 <tr><td>1</td><td></td><td>SET</td><td></td><td>> 4.2 V<br>< 2.5 V<br>> 5 A<br>< -5 A</td><td>ERR 1<br>ERR 1<br>ERR 1<br>ERR 1</td><td></td></tr>
@@ -46,6 +48,8 @@ To see the test programs that are generated, expand the sections below.
 <details>
 <summary>Neware</summary>
 
+Command for this example: <code>bmgen --target neware --format table examples/simple_program.py</code>
+
 <table>
 <tr><th>Step Index</th><th>Step Name</th><th>Step Time (hh:mm:ss.ms)</th><th>Voltage (V)</th><th>Current (A)</th><th>Cutoff voltage (V)</th><th>Cutoff current (A)</th><th>Capacity (Ah)</th><th>Others</th></tr>
 <tr style="color: #81bc06"><td>1</td><td>CCCV Chg</td><td></td><td>4.2</td><td>2.0</td><td></td><td>0.2</td><td></td><td></td></tr>
@@ -60,6 +64,8 @@ To see the test programs that are generated, expand the sections below.
 <p>
 <details>
 <summary>Basytec</summary>
+
+Command for this example: <code>bmgen --target basytec --format table examples/simple_program.py</code>
 
 <table>
 <tr><th></th><th>Level</th><th>Label</th><th>Command</th><th>Parameter</th><th>Termination</th><th>Action</th><th>Registration</th><th>Comment</th></tr>
