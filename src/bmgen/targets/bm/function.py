@@ -35,13 +35,6 @@ def discharge(
 
 
 @autocast()
-def pause(
-    limits: List[BMLimit] = [],
-):
-    generator.add(BMStatement(operator="PAU", limits=limits))
-
-
-@autocast()
 def time(
     hours: BMNumValue | None = None,
     minutes: BMNumValue | None = None,
@@ -59,6 +52,18 @@ def time(
         if hours or minutes:
             raise NotImplementedError("BM time limit can only have one unit")
         return BMLimitTime(value=hours, unit="s")
+
+
+@autocast()
+def pause(
+    limits: List[BMLimit] = [],
+    hours: BMNumValue | None = None,
+    minutes: BMNumValue | None = None,
+    seconds: BMNumValue | None = None,
+):
+    if hours or minutes or seconds:
+        limits.append(BMLimit(time(hours, minutes, seconds)))
+    generator.add(BMStatement(operator="PAU", limits=limits))
 
 
 def limit(condition: BMLimitCondition, action: BMAction | None = None):

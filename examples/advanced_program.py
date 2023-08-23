@@ -1,7 +1,6 @@
-# from bmgen import battery
 from bmgen.function import charge, discharge, pause, time
-from bmgen import battery
 from bmgen.channel import I, V
+from bmgen import battery
 
 CRate = 0.5
 EOCCurrent = 0.05
@@ -11,11 +10,14 @@ PauseLen[1] = 5
 
 for i in range(3):
     charge(
-        CRate * battery.nominalCapacity,
+        current=CRate * battery.nominalCapacity,
         voltage=4.2,
-        limits=[I < EOCCurrent],
+        limits=[I < EOCCurrent, time(hours=5)],
     )
-    pause(limits=[time(hours=PauseLen[i])])
+    pause(hours=PauseLen[i])
     if i < 2:
-        discharge(CRate * battery.nominalCapacity, limits=[V <= 2.5])
+        discharge(
+            CRate * battery.nominalCapacity,
+            limits=[V <= 2.5],
+        )
     CRate += 0.2

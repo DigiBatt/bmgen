@@ -87,8 +87,13 @@ def discharge(
 
 
 def pause(
-    limits: Dict[LimitType, float] = {},
+    limits: List[NewareLimit] = [],
+    hours: float = 0,
+    minutes: float = 0,
+    seconds: float = 0,
 ):
+    if hours or minutes or seconds:
+        limits.append(time(hours, minutes, seconds))
     args, protections = _limits_to_args(limits, {LimitType.Time: "steptime"})
     generator.add(NewareStatement(operator=StepType.Rest, **args))
 

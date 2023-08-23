@@ -1,9 +1,11 @@
-# from bmgen import battery
-from bmgen.function import charge, discharge, pause, time, limit, error
-from bmgen.channel import I, V
+from bmgen.function import *
+from bmgen.channel import *
 
-limit(V > 4.3, error(1))
+limit(V > 4.2, error(1))
+limit(V < 2.5, error(1))
+limit(I > 5, error(1))
+limit(I < -5, error(1))
 
-charge(2.0, voltage=4.2, limits=[I < 0.2])
-pause(limits=[time(hours=5)])
-discharge(1.5, limits=[V < 3.0])
+charge(current=2.0, voltage=4.2, limits=[I < 0.2])
+pause(hours=1)
+discharge(current=1.5, limits=[V < 3.0])

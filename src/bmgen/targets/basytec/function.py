@@ -34,7 +34,14 @@ def discharge(
     )
 
 
-def pause(limits: List[BasytecLimit]):
+def pause(
+    limits: List[BasytecLimit] = [],
+    hours: float | None = None,
+    minutes: float | None = None,
+    seconds: float | None = None,
+):
+    if hours or minutes or seconds:
+        limits.append(time(hours, minutes, seconds))
     generator.add(BasytecStatement(operator=StepType.Pause, limits=limits))
 
 
