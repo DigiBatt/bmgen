@@ -30,14 +30,14 @@ To see the test programs that are generated, expand the sections below.
 <details>
 <summary>Battery Manager</summary>
 
-<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; }</style></head><body><table>
+<table>
 <tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>
 <tr><td>1</td><td></td><td>SET</td><td></td><td>> 4.2 V<br>< 2.5 V<br>> 5 A<br>< -5 A</td><td>ERR 1<br>ERR 1<br>ERR 1<br>ERR 1</td><td></td></tr>
 <tr><td>2</td><td></td><td>CHA</td><td>2.0 A</td><td>< 0.2 A</td><td></td><td></td></tr>
 <tr><td>3</td><td></td><td>PAU</td><td></td><td>1 h</td><td></td><td></td></tr>
 <tr><td>4</td><td></td><td>DCH</td><td>1.5 A</td><td>< 3.0 V</td><td></td><td></td></tr>
 <tr><td>5</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
-</table></body></html>
+</table>
 
 </details>
 </p>
@@ -46,13 +46,13 @@ To see the test programs that are generated, expand the sections below.
 <details>
 <summary>Neware</summary>
 
-<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; } table {float: left}</style></head><body><table>
+<table>
 <tr><th>Step Index</th><th>Step Name</th><th>Step Time (hh:mm:ss.ms)</th><th>Voltage (V)</th><th>Current (A)</th><th>Cutoff voltage (V)</th><th>Cutoff current (A)</th><th>Capacity (Ah)</th><th>Others</th></tr>
 <tr style="color: #81bc06"><td>1</td><td>CCCV Chg</td><td></td><td>4.2</td><td>2.0</td><td></td><td>0.2</td><td></td><td></td></tr>
 <tr style="color: #eec908"><td>2</td><td>Rest</td><td>1:00:00.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr style="color: #f35325"><td>3</td><td>CC DChg</td><td></td><td></td><td>1.5</td><td>3.0</td><td></td><td></td><td></td></tr>
 <tr style="color: #000000"><td>4</td><td>End</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-</table></body></html>
+</table>
 
 </details>
 </p>
@@ -61,9 +61,9 @@ To see the test programs that are generated, expand the sections below.
 <details>
 <summary>Basytec</summary>
 
-<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; } table {float: left}</style></head><body><table>
+<table>
 <tr><th></th><th>Level</th><th>Label</th><th>Command</th><th>Parameter</th><th>Termination</th><th>Action</th><th>Registration</th><th>Comment</th></tr>
-<tr><td>1</td><td></td><td></td><td>Start</td><td></td><td>U>4.2V<br>U<2.5V<br>I>5A<br>I<-5A</td><td><br><br><br></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td>Charge</td><td>I=2.0A<br>U=4.2V</td><td>I<0.2A</td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td>Pause</td><td></td><td>t>1h</td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td>Discharge</td><td>I=1.5A</td><td>U<3.0V</td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td>STOP</td><td>Stop</td><td></td><td></td><td></td><td></td><td></td></tr></table></body></html>
+<tr><td>1</td><td></td><td></td><td>Start</td><td></td><td>U>4.2V<br>U<2.5V<br>I>5A<br>I<-5A</td><td><br><br><br></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td>Charge</td><td>I=2.0A<br>U=4.2V</td><td>I<0.2A</td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td>Pause</td><td></td><td>t>1h</td><td></td><td></td><td></td></tr><tr><td>4</td><td></td><td></td><td>Discharge</td><td>I=1.5A</td><td>U<3.0V</td><td></td><td></td><td></td></tr><tr><td>5</td><td></td><td>STOP</td><td>Stop</td><td></td><td></td><td></td><td></td><td></td></tr></table>
 
 </details>
 </p>
