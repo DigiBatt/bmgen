@@ -24,4 +24,4 @@ class StepType(Enum):
     Message = 20
 
 
-Newline = "\u00fe\u00fd"
+Newline = "\xfe\xfd"

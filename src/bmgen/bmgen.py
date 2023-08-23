@@ -49,7 +49,11 @@ def main(filename, target, format, intermediate, out):
 
 def output(target, text):
     if target:
-        with open(target, "w") as f:
-            f.write(text)
+        if isinstance(text, str):
+            with open(target, "w") as f:
+                f.write(text)
+        else:
+            with open(target, "wb") as f:
+                f.write(text)
     else:
         print(text)
