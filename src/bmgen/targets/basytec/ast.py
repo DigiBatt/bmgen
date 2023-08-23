@@ -1,0 +1,153 @@
+from bmgen.targets.basytec.constants import StepType, Newline
+from dataclasses import dataclass, field
+from typing import List
+
+
+@dataclass
+class BasytecUnit:
+    name: str
+
+
+@dataclass
+class BasytecChannel:
+    name: str
+    unit: BasytecUnit
+
+    def __lt__(self, other):
+        if isinstance(other, BasytecValue):
+            value = other
+        else:
+            value = BasytecValue(other, self.unit)
+        return BasytecLimit(self, "<", value)
+
+    def __gt__(self, other):
+        if isinstance(other, BasytecValue):
+            value = other
+        else:
+            value = BasytecValue(other, self.unit)
+        return BasytecLimit(self, ">", value)
+
+
+class BasytecAction:
+    def toText(self):
+        raise NotImplementedError()
+
+
+class BasytecNext(BasytecAction):
+    def toText(self):
+        return "Next"
+
+
+@dataclass
+class BasytecGoto(BasytecAction):
+    target: str
+    pass
+
+    def toText(self):
+        return f"Goto {self.target}"
+
+
+@dataclass
+class BasytecValue:
+    value: float
+    unit: BasytecUnit
+
+    def toText(self):
+        return f"{self.value}{self.unit.name}"
+
+
+@dataclass
+class BasytecLimit:
+    channel: BasytecChannel
+    operator: str
+    value: BasytecValue
+    action: BasytecAction | None = None
+
+    def toText(self):
+        return (
+            f"{self.channel.name}{self.operator}{self.value.toText()}",
+            self.action.toText() if self.action else None,
+        )
+
+
+@dataclass
+class BasytecParameter:
+    channel: BasytecChannel
+    value: BasytecValue
+
+    def toText(self):
+        return f"{self.channel.name}={self.value.toText()}"
+
+
+@dataclass
+class BasytecStatement:
+    operator: StepType
+    parameters: List[BasytecParameter] = field(default_factory=list)
+    limits: List[BasytecLimit] = field(default_factory=list)
+    label: str | None = None
+
+    def toText(self, linenumber: int):
+        text = f"0 {linenumber} {linenumber}\n"
+        text += f"1 {linenumber}\n"
+        text += f"2 {linenumber} {self._str(self.label)}\n"
+        text += f"3 {linenumber} {str(self.operator).split('.')[1].replace('_', '-')}\n"
+        text += (
+            f"4 {linenumber} {Newline.join([p.toText() for p in self.parameters])}\n"
+        )
+        if self.limits:
+            limit, action = zip(*[l.toText() for l in self.limits])
+            limit = Newline.join(limit)
+            action = Newline.join([a if a else "" for a in action]).rstrip(Newline)
+        else:
+            limit = ""
+            action = ""
+        text += f"5 {linenumber} {limit}\n"
+        text += f"6 {linenumber} {action}\n"
+        text += f"7 {linenumber}\n"
+        text += f"8 {linenumber}\n"
+        return text
+
+    def toTable(self, linenumber):
+        table = f"<tr><td>{linenumber}</td>"
+        table += f"<td></td>"
+        table += f"<td>{self._str(self.label)}</td>"
+        table += f"<td>{str(self.operator).split('.')[1].replace('_', '-')}</td>"
+        table += f"<td>{'<br>'.join([p.toText() for p in self.parameters])}</td>"
+        if self.limits:
+            limit, action = zip(*[l.toText() for l in self.limits])
+        else:
+            limit = ""
+            action = ""
+        limit = "<br>".join(limit)
+        action = "<br>".join([a if a else "" for a in action])
+        table += f"<td>{limit}</td>"
+        table += f"<td>{action}</td>"
+        table += f"<td></td>"
+        table += f"<td></td></tr>"
+        return table
+
+    def _str(self, value):
+        if value == None:
+            return ""
+        return str(value)
+
+
+@dataclass
+class BasytecProgram:
+    lines: List[BasytecStatement] = field(default_factory=list)
+    limits: List[BasytecLimit] = field(default_factory=list)
+
+    def toText(self):
+        text = "0 0\n1 0 Level\n2 0 Label\n3 0 Command\n4 0 Parameter\n5 0 Termination\n6 0 Action\n7 0 Registration\n8 0 Comment\n"
+        for i, line in enumerate(self.lines, 1):
+            text += line.toText(i)
+        return text
+
+    def toTable(self):
+        table = '<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; } table {float: left}</style></head><body>'
+        table += "<table>\n<tr><th></th><th>Level</th><th>Label</th><th>Command</th><th>Parameter</th><th>Termination</th><th>Action</th><th>Registration</th><th>Comment</th></tr>\n"
+        for i, line in enumerate(self.lines, 1):
+            table += line.toTable(i)
+        table += "</table>"
+        table += "</body></html>"
+        return table

@@ -50,7 +50,3 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
                 )
             )
     return var
-
-
-def limit(condition: BMLimitCondition, action: BMAction):
-    return BMLimit(condition=condition, action=action)
