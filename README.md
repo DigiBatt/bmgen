@@ -74,7 +74,7 @@ To see the test programs that are generated, expand the sections below.
 
  The bmgen package can be downloaded from the Gitlab server:
 
-    pip install --index-url https://token:glpat-MrnZe1pzMKcwjC_Qj_rc@git.isea.rwth-aachen.de/api/v4/projects/2105/packages/pypi/simple bmgen
+    pip install --index-url https://token:glpat-pNBLCU7BiNexQJA6GVNh@git.isea.rwth-aachen.de/api/v4/projects/2105/packages/pypi/simple bmgen
 
 ## Usage
 
