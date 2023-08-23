@@ -47,10 +47,9 @@ class Colors(str, Enum):
 
 
 LimitArgs = {
-    LimitType.VoltageLower: "voltage",
-    LimitType.VoltageUpper: "voltage",
+    LimitType.VoltageLower: "cutoffVoltage",
+    LimitType.VoltageUpper: "cutoffVoltage",
     LimitType.CurrentLower: "cutoffCurrent",
-    LimitType.CurrentUpper: "current",
     LimitType.CapacityUpper: "capacity",
     LimitType.Time: "steptime",
 }
@@ -68,3 +67,16 @@ StepColors = {
     StepType.CV_DChg: Colors.Red,
     StepType.CCCV_DChg: Colors.Red,
 }
+
+
+class RecordType(Enum):
+    Time = 1
+    Voltage = 2
+    Current = 3
+
+
+class NewareAction(Enum):
+    Finished = 1
+    Protected = 2
+    Stop = 3
+    NextStep = 4

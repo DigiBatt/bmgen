@@ -1,5 +1,12 @@
 from dataclasses import dataclass, field
-from bmgen.targets.neware.constants import StepType, Factor, LimitType, StepColors
+from bmgen.targets.neware.constants import (
+    StepType,
+    Factor,
+    LimitType,
+    StepColors,
+    RecordType,
+    NewareAction,
+)
 import xml.etree.ElementTree as ee
 from typing import List, Dict
 from datetime import datetime
@@ -9,7 +16,7 @@ from datetime import datetime
 class NewareLimit:
     type: LimitType
     value: float
-    protection: bool
+    action: NewareAction = NewareAction.NextStep
 
 
 @dataclass
@@ -87,6 +94,7 @@ class NewareStatement:
 class NewareProgram:
     lines: List[NewareStatement] = field(default_factory=list)
     protections: Dict[LimitType, float] = field(default_factory=dict)
+    record: Dict[RecordType, float] = field(default_factory=dict)
 
     def _header(self):
         header = ee.Element("Head_Info")
@@ -143,6 +151,19 @@ class NewareProgram:
         if LimitType.Time in self.protections:
             value = self.protections[LimitType.Time]
             _addLimit(main, "Delay", value, Factor.Time)
+
+        # record settings
+        if not self.record:
+            self.record[RecordType.Time] = 1
+
+        record = ee.SubElement(whole, "Record")
+        mainr = ee.SubElement(record, "Main")
+        if RecordType.Time in self.record:
+            _addLimit(mainr, "Time", self.record[RecordType.Time], Factor.Time)
+        if RecordType.Voltage in self.record:
+            _addLimit(mainr, "Volt", self.record[RecordType.Voltage], Factor.Voltage)
+        if RecordType.Current in self.record:
+            _addLimit(mainr, "Curr", self.record[RecordType.Current], Factor.Current)
 
         return whole
 
