@@ -67,8 +67,8 @@ def time(
     hours: float = 0,
     minutes: float = 0,
     seconds: float = 0,
-) -> float:
-    return seconds + (minutes + hours * 60) * 60
+) -> NewareLimit:
+    return NewareLimit(LimitType.Time, seconds + (minutes + hours * 60) * 60)
 
 
 def _limits_to_args(limits: List[NewareLimit]):
