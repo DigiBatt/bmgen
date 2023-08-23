@@ -1,6 +1,6 @@
 from bmgen.targets.neware import generator
 from bmgen.targets.neware.ast import *
-from bmgen.targets.neware.constants import StepType, LimitType, LimitArgs, NewareAction
+from bmgen.targets.neware.constants import StepType, LimitType, NewareAction
 from typing import List
 
 
@@ -9,11 +9,18 @@ def charge(
     voltage: float | None = None,
     limits: List[NewareLimit] = [],
 ):
-    args, protections = _limits_to_args(limits)
     if voltage:
+        args, protections = _limits_to_args(
+            limits,
+            {
+                LimitType.CurrentLower: "cutoffCurrent",
+                LimitType.CapacityUpper: "capacity",
+                LimitType.Time: "steptime",
+            },
+        )
         if not "cutoffCurrent" in args:
             raise NotImplementedError(
-                "CC charge step must have a current cutoff condition"
+                "CCCV charge step must have a current cutoff condition"
             )
         generator.add(
             NewareStatement(
@@ -21,9 +28,17 @@ def charge(
             )
         )
     else:
+        args, protections = _limits_to_args(
+            limits,
+            {
+                LimitType.VoltageUpper: "cutoffVoltage",
+                LimitType.CapacityUpper: "capacity",
+                LimitType.Time: "steptime",
+            },
+        )
         if not "cutoffVoltage" in args:
             raise NotImplementedError(
-                "CCCV charge step must have a voltage cutoff condition"
+                "CC charge step must have a voltage cutoff condition"
             )
         generator.add(
             NewareStatement(operator=StepType.CC_Chg, current=current, **args)
@@ -35,11 +50,18 @@ def discharge(
     voltage: float | None = None,
     limits: List[NewareLimit] = [],
 ):
-    args, protections = _limits_to_args(limits)
     if voltage:
+        args, protections = _limits_to_args(
+            limits,
+            {
+                LimitType.CurrentLower: "cutoffCurrent",
+                LimitType.CapacityUpper: "capacity",
+                LimitType.Time: "steptime",
+            },
+        )
         if not "cutoffCurrent" in args:
             raise NotImplementedError(
-                "CC discharge step must have a current cutoff condition"
+                "CCCV discharge step must have a current cutoff condition"
             )
         generator.add(
             NewareStatement(
@@ -47,9 +69,17 @@ def discharge(
             )
         )
     else:
+        args, protections = _limits_to_args(
+            limits,
+            {
+                LimitType.VoltageLower: "cutoffVoltage",
+                LimitType.CapacityUpper: "capacity",
+                LimitType.Time: "steptime",
+            },
+        )
         if not "cutoffVoltage" in args:
             raise NotImplementedError(
-                "CCCV discharge step must have a voltage cutoff condition"
+                "CC discharge step must have a voltage cutoff condition"
             )
         generator.add(
             NewareStatement(operator=StepType.CC_DChg, current=current, **args)
@@ -59,7 +89,7 @@ def discharge(
 def pause(
     limits: Dict[LimitType, float] = {},
 ):
-    args, protections = _limits_to_args(limits)
+    args, protections = _limits_to_args(limits, {LimitType.Time: "steptime"})
     generator.add(NewareStatement(operator=StepType.Rest, **args))
 
 
@@ -71,12 +101,12 @@ def time(
     return NewareLimit(LimitType.Time, seconds + (minutes + hours * 60) * 60)
 
 
-def _limits_to_args(limits: List[NewareLimit]):
+def _limits_to_args(limits: List[NewareLimit], limitArgs: Dict[LimitType, str]):
     args = {}
     protections = []
     for l in limits:
-        if l.type in LimitArgs and l.action == NewareAction.NextStep:
-            args[LimitArgs[l.type]] = l.value
+        if l.type in limitArgs and l.action == NewareAction.NextStep:
+            args[limitArgs[l.type]] = l.value
         else:
             protections.append(l)
     return (args, protections)

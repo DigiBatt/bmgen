@@ -46,14 +46,6 @@ class Colors(str, Enum):
     Red = "#f35325"
 
 
-LimitArgs = {
-    LimitType.VoltageLower: "cutoffVoltage",
-    LimitType.VoltageUpper: "cutoffVoltage",
-    LimitType.CurrentLower: "cutoffCurrent",
-    LimitType.CapacityUpper: "capacity",
-    LimitType.Time: "steptime",
-}
-
 StepColors = {
     StepType.CC_Chg: Colors.Green,
     StepType.CC_DChg: Colors.Red,
