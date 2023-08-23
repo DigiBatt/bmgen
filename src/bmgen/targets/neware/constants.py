@@ -40,6 +40,12 @@ class LimitType(Enum):
     Time = 6
 
 
+class Colors(str, Enum):
+    Green = "#81bc06"
+    Yellow = "#eec908"
+    Red = "#f35325"
+
+
 LimitArgs = {
     LimitType.VoltageLower: "voltage",
     LimitType.VoltageUpper: "voltage",
@@ -47,4 +53,18 @@ LimitArgs = {
     LimitType.CurrentUpper: "current",
     LimitType.CapacityUpper: "capacity",
     LimitType.Time: "steptime",
+}
+
+StepColors = {
+    StepType.CC_Chg: Colors.Green,
+    StepType.CC_DChg: Colors.Red,
+    StepType.CV_Chg: Colors.Green,
+    StepType.Rest: Colors.Yellow,
+    StepType.CCCV_Chg: Colors.Green,
+    StepType.CP_DChg: Colors.Red,
+    StepType.CP_Chg: Colors.Green,
+    StepType.CR_DChg: Colors.Red,
+    StepType.PCCCV_Chg: Colors.Green,
+    StepType.CV_DChg: Colors.Red,
+    StepType.CCCV_DChg: Colors.Red,
 }

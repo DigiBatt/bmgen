@@ -1,8 +1,7 @@
-from bmgen.targets.bm.ast import BMProgram, BMStatement, BMLabel
-from bmgen.targets.bm.generators.bm_generator import BMGenerator
+from bmgen.targets.neware.generators.neware_generator import NewareGenerator
 
 
-class TableGenerator(BMGenerator):
+class TableGenerator(NewareGenerator):
     def generate(self):
         self.finish()
         return self.program.toTable()

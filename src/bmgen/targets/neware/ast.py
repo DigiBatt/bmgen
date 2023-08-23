@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from bmgen.targets.neware.constants import StepType, Factor, LimitType
+from bmgen.targets.neware.constants import StepType, Factor, LimitType, StepColors
 import xml.etree.ElementTree as ee
 from typing import List, Dict
 from datetime import datetime
@@ -52,6 +52,35 @@ class NewareStatement:
         ee.SubElement(advamced, "Safe", {"N2GroupCount": "0"})
 
         return step
+
+    def _timestring(self):
+        t = self.steptime
+        if t == None:
+            return ""
+        hours = int(t / 3600)
+        t -= hours * 3600
+        minutes = int(t / 60)
+        t -= minutes * 60
+        return f"{hours}:{minutes}:{t:.3f}"
+
+    def _str(self, value):
+        if value == None:
+            return ""
+        return str(value)
+
+    def toTable(self, linenumber):
+        if self.operator in StepColors:
+            color = StepColors[self.operator]
+        else:
+            color = "#000000"
+        stepname = str(self.operator).split(".")[1].replace("_", " ")
+        steptime = self._timestring()
+        voltage = self._str(self.voltage)
+        current = self._str(self.current)
+        cutoffVoltage = self._str(self.cutoffVoltage)
+        cutoffCurrent = self._str(self.cutoffCurrent)
+        capacity = self._str(self.capacity)
+        return f'<tr style="color: {color}"><td>{linenumber}</td><td>{stepname}</td><td>{steptime}</td><td>{voltage}</td><td>{current}</td><td>{cutoffVoltage}</td><td>{cutoffCurrent}</td><td>{capacity}</td><td></td></tr>\n'
 
 
 @dataclass
@@ -144,6 +173,14 @@ class NewareProgram:
         ee.SubElement(smbus, "SMBUS_Info", {"Num": "0", "AdjacentInterval": "0"})
 
         return ee.tostring(root, "unicode")
+
+    def toTable(self):
+        table = '<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; }</style></head><body>'
+        table += "<table>\n<tr><th>Step Index</th><th>Step Name</th><th>Step Time (hh:mm:ss.ms)</th><th>Voltage (V)</th><th>Current (A)</th><th>Cutoff voltage (V)</th><th>Cutoff current (A)</th><th>Capacity (Ah)</th><th>Others</th></tr>\n"
+        for i, line in enumerate(self.lines, 1):
+            table += line.toTable(i)
+        table += "</table></body></html>"
+        return table
 
 
 def _addLimit(limitMain, name, value, factor):
