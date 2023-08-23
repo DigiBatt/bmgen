@@ -1,0 +1,21 @@
+stages:
+  - test
+  - package
+
+variables:
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  PACKAGE_NAME: bmgen
+
+cache:
+  paths:
+    - .cache/pip
+
+package:
+  stage: package
+  image: python:3.9
+  rules:
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+  script:
+    - pip install twine build
+    - python -m build
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token python -m twine upload --repository-url ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/packages/pypi dist/*
