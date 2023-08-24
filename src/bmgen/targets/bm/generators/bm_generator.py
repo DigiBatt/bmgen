@@ -7,6 +7,7 @@ class BMGenerator(BaseGenerator):
         self.program = BMProgram()
         self.labelcount = 0
         self.arraycount = 0
+        self.context = []
 
     def finish(self):
         # add stop line

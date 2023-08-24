@@ -48,6 +48,22 @@ class Transformer(ast.NodeTransformer):
             ),
             node,
         )
+        if node.orelse:
+            elsenode = ast.With(
+                items=[
+                    ast.withitem(
+                        context_expr=ast.Call(
+                            func=ast.Name(id="ctrl_else", ctx=ast.Load()),
+                            args=[],
+                            keywords=[],
+                        )
+                    )
+                ],
+                body=node.orelse,
+            )
+            a.body.append(elsenode)
+            a.items[0].context_expr.args.append(ast.Constant(value=True))
+            self.imports["ctrl"].add("ctrl_else")
         self.imports["ctrl"].add("ctrl_if")
         self.generic_visit(node)
         return a

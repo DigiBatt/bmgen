@@ -20,4 +20,11 @@ for i in range(3):
             CRate * battery.nominalCapacity,
             limits=[V <= 2.5],
         )
+    # elif i < 3:
+    #     pause(seconds=10)
+    else:
+        discharge(
+            CRate * battery.nominalCapacity,
+            limits=[V <= 2.0],
+        )
     CRate += 0.2

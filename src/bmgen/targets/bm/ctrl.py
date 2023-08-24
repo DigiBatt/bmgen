@@ -24,7 +24,9 @@ class ctrl_for:
                 )
             generator.add(BMStatement(operator="BEG", values=[self.var]))
         else:
-            # TODO: generic loop
+            raise NotImplementedError(
+                "BM loops current only work with ranges with stepsize 1 ( e.g. for i in range(10) )"
+            )
             pass
         return self.var
 
@@ -41,11 +43,16 @@ class ctrl_for:
 
 
 class ctrl_if:
-    def __init__(self, condition: BMLimitCondition):
+    def __init__(self, condition: BMLimitCondition, hasElse: bool = False):
         self.condition = condition
         self.baselabel = generator.label()
+        self.hasElse = hasElse
 
     def __enter__(self):
+        if self.hasElse:
+            notifLabel = self.baselabel + "_else"
+        else:
+            notifLabel = self.baselabel + "_end"
         generator.add(
             BMStatement(
                 operator="PAU",
@@ -55,13 +62,28 @@ class ctrl_if:
                     ),
                     BMLimit(
                         condition=BMMultiplication(BMNumber(1), BMVariable("sec")),
-                        action=BMGoto(self.baselabel + "_end"),
+                        action=BMGoto(notifLabel),
                     ),
                 ],
             )
         )
         generator.add(BMLabel(self.baselabel + "_if"))
+        generator.context.append(self)
 
     def __exit__(self, type, value, traceback):
         generator.add(BMLabel(self.baselabel + "_end"))
+        generator.context.remove(self)
+
+
+class ctrl_else:
+    def __init__(self):
+        self.baselabel = generator.context[-1].baselabel
+
+    def __enter__(self):
+        generator.add(
+            BMStatement(operator="GOTO", values=[BMVariable(self.baselabel + "_end")])
+        )
+        generator.add(BMLabel(self.baselabel + "_else"))
+
+    def __exit__(self, type, value, traceback):
         pass
