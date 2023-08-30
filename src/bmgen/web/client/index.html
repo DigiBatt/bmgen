@@ -1,0 +1,36 @@
+<html>
+
+<head>
+    <title>BM Generator 3000</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="./node_modules/monaco-editor/min/vs/loader.js"></script>
+    <script src="bmgen.js"></script>
+</head>
+
+<body onload="init()">
+    <h1>BM Generator 3000</h1>
+    <div id="wrapper">
+        <div>
+            Program Name:
+            <input type="text" id="programName" value="example" />
+            <button onclick="saveProgram()">Save</button>
+            <button onclick="document.getElementById('fileupload').click();">Load</button>
+            <input type="file" id="fileupload" name="Load" onchange="loadProgram(this.files)" />
+        </div>
+        <div>
+            Target:
+            <select id="target">
+                <option value="bm">Battery Manager</option>
+                <option value="neware">Neware</option>
+                <option value="basytec">Basytec</option>
+            </select>
+            <button onclick="downloadProgram()">Download program</button>
+        </div>
+        <div>
+            <div id="codearea"></div>
+            <div id="outputarea"></div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -8,7 +8,7 @@ from bmgen.targets.bm.ast import (
     BMNumValue,
     BMNumber,
 )
-from bmgen.targets.bm import generator
+import bmgen.targets.bm as target
 from bmgen.targets.bm.helper.cast import autocast
 from typing import List
 
@@ -18,8 +18,8 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
     var = BMVariable(name)
     if value:
         if isinstance(value, list):
-            arraynum = generator.array()
-            generator.add(
+            arraynum = target.generator.array()
+            target.generator.add(
                 BMStatement(
                     operator="SET",
                     values=[
@@ -43,7 +43,7 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
             )
             var.arraynum = arraynum
         else:
-            generator.add(
+            target.generator.add(
                 BMStatement(
                     operator="SET",
                     values=[BMAssignment(variable=var, numvalue=value)],

@@ -1,4 +1,4 @@
-from bmgen.targets.neware import generator
+import bmgen.targets.neware as target
 from bmgen.targets.neware.ast import *
 from bmgen.targets.neware.constants import StepType, LimitType, NewareAction
 from typing import List
@@ -7,8 +7,10 @@ from typing import List
 def charge(
     current: float,
     voltage: float | None = None,
-    limits: List[NewareLimit] = [],
+    limits: List[NewareLimit] | None = None,
 ):
+    if not limits:
+        limits = []
     if voltage:
         args, protections = _limits_to_args(
             limits,
@@ -22,7 +24,7 @@ def charge(
             raise NotImplementedError(
                 "CCCV charge step must have a current cutoff condition"
             )
-        generator.add(
+        target.generator.add(
             NewareStatement(
                 operator=StepType.CCCV_Chg, current=current, voltage=voltage, **args
             )
@@ -40,7 +42,7 @@ def charge(
             raise NotImplementedError(
                 "CC charge step must have a voltage cutoff condition"
             )
-        generator.add(
+        target.generator.add(
             NewareStatement(operator=StepType.CC_Chg, current=current, **args)
         )
 
@@ -48,8 +50,10 @@ def charge(
 def discharge(
     current: float,
     voltage: float | None = None,
-    limits: List[NewareLimit] = [],
+    limits: List[NewareLimit] | None = None,
 ):
+    if not limits:
+        limits = []
     if voltage:
         args, protections = _limits_to_args(
             limits,
@@ -63,7 +67,7 @@ def discharge(
             raise NotImplementedError(
                 "CCCV discharge step must have a current cutoff condition"
             )
-        generator.add(
+        target.generator.add(
             NewareStatement(
                 operator=StepType.CCCV_DChg, current=current, voltage=voltage, **args
             )
@@ -81,21 +85,23 @@ def discharge(
             raise NotImplementedError(
                 "CC discharge step must have a voltage cutoff condition"
             )
-        generator.add(
+        target.generator.add(
             NewareStatement(operator=StepType.CC_DChg, current=current, **args)
         )
 
 
 def pause(
-    limits: List[NewareLimit] = [],
+    limits: List[NewareLimit] | None = None,
     hours: float = 0,
     minutes: float = 0,
     seconds: float = 0,
 ):
+    if not limits:
+        limits = []
     if hours or minutes or seconds:
         limits.append(time(hours, minutes, seconds))
     args, protections = _limits_to_args(limits, {LimitType.Time: "steptime"})
-    generator.add(NewareStatement(operator=StepType.Rest, **args))
+    target.generator.add(NewareStatement(operator=StepType.Rest, **args))
 
 
 def time(
@@ -123,7 +129,7 @@ def limit(condition: NewareLimit, action: NewareAction = NewareAction.NextStep):
 
 
 def limit_global(condition: NewareLimit, action: NewareAction = NewareAction.NextStep):
-    generator.program.protections[condition.type] = condition.value
+    target.generator.program.protections[condition.type] = condition.value
 
 
 def error(errnum: int):

@@ -1,4 +1,4 @@
-from bmgen.targets.basytec import generator
+import bmgen.targets.basytec as target
 from bmgen.targets.basytec.ast import *
 from bmgen.targets.basytec.constants import StepType
 from bmgen.targets.basytec.helper.cast import autocast
@@ -10,12 +10,14 @@ from typing import List
 def charge(
     current: BasytecValue,
     voltage: BasytecValue | None = None,
-    limits: List[BasytecLimit] = [],
+    limits: List[BasytecLimit] | None = None,
 ):
+    if not limits:
+        limits = []
     params = [BasytecParameter(I, current)]
     if voltage:
         params.append(BasytecParameter(V, voltage))
-    generator.add(
+    target.generator.add(
         BasytecStatement(operator=StepType.Charge, parameters=params, limits=limits)
     )
 
@@ -24,25 +26,29 @@ def charge(
 def discharge(
     current: BasytecValue,
     voltage: BasytecValue | None = None,
-    limits: List[BasytecLimit] = [],
+    limits: List[BasytecLimit] | None = None,
 ):
+    if not limits:
+        limits = []
     params = [BasytecParameter(I, current)]
     if voltage:
         params.append(BasytecParameter(V, voltage))
-    generator.add(
+    target.generator.add(
         BasytecStatement(operator=StepType.Discharge, parameters=params, limits=limits)
     )
 
 
 def pause(
-    limits: List[BasytecLimit] = [],
+    limits: List[BasytecLimit] | None = None,
     hours: float | None = None,
     minutes: float | None = None,
     seconds: float | None = None,
 ):
+    if not limits:
+        limits = []
     if hours or minutes or seconds:
         limits.append(time(hours, minutes, seconds))
-    generator.add(BasytecStatement(operator=StepType.Pause, limits=limits))
+    target.generator.add(BasytecStatement(operator=StepType.Pause, limits=limits))
 
 
 def time(
@@ -77,10 +83,10 @@ def limit(condition: BasytecLimit, action: BasytecAction | None = None):
 
 def limit_global(condition: BasytecLimit, action: BasytecAction | None = None):
     condition.action = None
-    generator.program.limits.append(condition)
+    target.generator.program.limits.append(condition)
     return condition
 
 
 def error(errnum: int):
-    generator.stoplabel = True
+    target.generator.stoplabel = True
     return BasytecGoto("STOP")

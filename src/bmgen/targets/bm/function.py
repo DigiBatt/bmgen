@@ -1,4 +1,4 @@
-from bmgen.targets.bm import generator
+import bmgen.targets.bm as target
 from bmgen.targets.bm.ast import *
 from bmgen.targets.bm.helper.cast import autocast
 from typing import List
@@ -8,30 +8,34 @@ from typing import List
 def charge(
     current: BMNumValue | BMMultiplication,
     voltage: BMNumValue | None = None,
-    limits: List[BMLimit] = [],
+    limits: List[BMLimit] | None = None,
 ):
+    if not limits:
+        limits = []
     if isinstance(current, BMNumValue):
         current = BMMultiplication(current, BMVariable("A"))
     values = [current]
     if voltage:
         values.append(BMMultiplication(voltage, "V"))
 
-    generator.add(BMStatement(operator="CHA", values=[current], limits=limits))
+    target.generator.add(BMStatement(operator="CHA", values=[current], limits=limits))
 
 
 @autocast()
 def discharge(
     current: BMNumValue | BMMultiplication,
     voltage: BMNumValue | None = None,
-    limits: List[BMLimit] = [],
+    limits: List[BMLimit] | None = None,
 ):
+    if not limits:
+        limits = []
     if isinstance(current, BMNumValue):
         current = BMMultiplication(current, BMVariable("A"))
     values = [current]
     if voltage:
         values.append(BMMultiplication(voltage, "V"))
 
-    generator.add(BMStatement(operator="DCH", values=[current], limits=limits))
+    target.generator.add(BMStatement(operator="DCH", values=[current], limits=limits))
 
 
 @autocast()
@@ -56,14 +60,16 @@ def time(
 
 @autocast()
 def pause(
-    limits: List[BMLimit] = [],
+    limits: List[BMLimit] | None = None,
     hours: BMNumValue | None = None,
     minutes: BMNumValue | None = None,
     seconds: BMNumValue | None = None,
 ):
+    if not limits:
+        limits = []
     if hours or minutes or seconds:
         limits.append(BMLimit(time(hours, minutes, seconds)))
-    generator.add(BMStatement(operator="PAU", limits=limits))
+    target.generator.add(BMStatement(operator="PAU", limits=limits))
 
 
 def limit(condition: BMLimitCondition, action: BMAction | None = None):
@@ -71,7 +77,7 @@ def limit(condition: BMLimitCondition, action: BMAction | None = None):
 
 
 def limit_global(condition: BMLimitCondition, action: BMAction | None = None):
-    generator.add(
+    target.generator.add(
         BMStatement(
             operator="SET", limits=[BMLimit(condition=condition, action=action)]
         )

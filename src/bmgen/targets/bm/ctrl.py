@@ -1,4 +1,4 @@
-from bmgen.targets.bm import generator
+import bmgen.targets.bm as target
 from bmgen.targets.bm.ast import *
 
 
@@ -11,7 +11,7 @@ class ctrl_for:
     def __enter__(self):
         if self.simple:
             if self.iterable.start != 0:
-                generator.add(
+                target.generator.add(
                     BMStatement(
                         operator="SET",
                         values=[
@@ -22,7 +22,7 @@ class ctrl_for:
                         ],
                     )
                 )
-            generator.add(BMStatement(operator="BEG", values=[self.var]))
+            target.generator.add(BMStatement(operator="BEG", values=[self.var]))
         else:
             raise NotImplementedError(
                 "BM loops current only work with ranges with stepsize 1 ( e.g. for i in range(10) )"
@@ -32,7 +32,7 @@ class ctrl_for:
 
     def __exit__(self, type, value, traceback):
         if self.simple:
-            generator.add(
+            target.generator.add(
                 BMStatement(
                     operator="CYC", values=[BMCycleCount(BMNumber(self.iterable.stop))]
                 )
@@ -45,7 +45,7 @@ class ctrl_for:
 class ctrl_if:
     def __init__(self, condition: BMLimitCondition, hasElse: bool = False):
         self.condition = condition
-        self.baselabel = generator.label()
+        self.baselabel = target.generator.label()
         self.hasElse = hasElse
 
     def __enter__(self):
@@ -53,7 +53,7 @@ class ctrl_if:
             notifLabel = self.baselabel + "_else"
         else:
             notifLabel = self.baselabel + "_end"
-        generator.add(
+        target.generator.add(
             BMStatement(
                 operator="PAU",
                 limits=[
@@ -67,23 +67,23 @@ class ctrl_if:
                 ],
             )
         )
-        generator.add(BMLabel(self.baselabel + "_if"))
-        generator.context.append(self)
+        target.generator.add(BMLabel(self.baselabel + "_if"))
+        target.generator.context.append(self)
 
     def __exit__(self, type, value, traceback):
-        generator.add(BMLabel(self.baselabel + "_end"))
-        generator.context.remove(self)
+        target.generator.add(BMLabel(self.baselabel + "_end"))
+        target.generator.context.remove(self)
 
 
 class ctrl_else:
     def __init__(self):
-        self.baselabel = generator.context[-1].baselabel
+        self.baselabel = target.generator.context[-1].baselabel
 
     def __enter__(self):
-        generator.add(
+        target.generator.add(
             BMStatement(operator="GOTO", values=[BMVariable(self.baselabel + "_end")])
         )
-        generator.add(BMLabel(self.baselabel + "_else"))
+        target.generator.add(BMLabel(self.baselabel + "_else"))
 
     def __exit__(self, type, value, traceback):
         pass
