@@ -39,7 +39,7 @@ function init() {
 
 function generate(program, target, format, callback) {
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", `http://localhost:5000/${target}/${format}/`);
+    xhr.open("POST", `/${target}/${format}/`);
     const formData = new FormData();
     const file = new Blob([program], { type: 'text/plain' });
     formData.append("program", file);
