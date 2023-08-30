@@ -1,0 +1,15 @@
+version: "3"
+services:
+  proxy:
+    image: nginx
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - /etc/ssl/private/RWTH_given.key:/etc/ssl/private/private.key
+      - /etc/ssl/certs/openbat.isea.rwth_aachen.de.pem:/etc/ssl/certs/openbat.isea.rwth_aachen.de.pem
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ../client:/var/www
+
+  app:
+    image: git.isea.rwth-aachen.de:5050/ess/testing/bmgen:server
