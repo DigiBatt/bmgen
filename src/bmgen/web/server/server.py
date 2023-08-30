@@ -7,7 +7,7 @@ app = Flask("bmgen", static_url_path="/test")
 CORS(app)
 
 
-@app.route("/api/<target>/<format>/", methods=["POST"])
+@app.route("/<target>/<format>/", methods=["POST"])
 def generate(target, format):
     f = request.files["program"]
     out = StringIO()

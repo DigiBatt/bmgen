@@ -23,10 +23,10 @@ function init() {
 
     require(['vs/editor/editor.main'], function () {
         editor = monaco.editor.create(document.getElementById('codearea'), {
-            value: ['from bmgen.function import *', 'charge(current=5.0)'].join('\n'),
+            value: '',
             language: 'python'
         });
-        updateCode();
+        initCode();
     });
 
     codearea = document.getElementById('codearea');
@@ -35,6 +35,19 @@ function init() {
     programNameField = document.getElementById('programName');
     codearea.addEventListener('change', updateCode);
     targetdropdown.addEventListener('change', updateCode);
+}
+
+function initCode() {
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", "example.py");
+    xhr.send()
+    xhr.onload = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            const data = xhr.response;
+            editor.setValue(data);
+            updateCode();
+        }
+    };
 }
 
 function generate(program, target, format, callback) {
