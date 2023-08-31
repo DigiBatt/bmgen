@@ -1,6 +1,8 @@
 # BM Generator 3000
 
-Test generator for battery cyclers
+Test generator for battery cyclers.
+
+Web version: https://openbat.isea.rwth-aachen.de/bmgen/
 
 ## Examples
 
