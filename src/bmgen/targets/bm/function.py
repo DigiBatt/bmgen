@@ -16,9 +16,9 @@ def charge(
         current = BMMultiplication(current, BMVariable("A"))
     values = [current]
     if voltage:
-        values.append(BMMultiplication(voltage, "V"))
+        values.append(BMMultiplication(voltage, BMVariable("V")))
 
-    target.generator.add(BMStatement(operator="CHA", values=[current], limits=limits))
+    target.generator.add(BMStatement(operator="CHA", values=values, limits=limits))
 
 
 @autocast()
@@ -33,9 +33,9 @@ def discharge(
         current = BMMultiplication(current, BMVariable("A"))
     values = [current]
     if voltage:
-        values.append(BMMultiplication(voltage, "V"))
+        values.append(BMMultiplication(voltage, BMVariable("V")))
 
-    target.generator.add(BMStatement(operator="DCH", values=[current], limits=limits))
+    target.generator.add(BMStatement(operator="DCH", values=values, limits=limits))
 
 
 @autocast()

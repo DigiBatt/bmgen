@@ -37,8 +37,8 @@ Command for this example: <code>bmgen --target bm --format table examples/simple
 <table>
 <tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>
 <tr><td>1</td><td></td><td>SET</td><td></td><td>> 4.2 V<br>< 2.5 V<br>> 5 A<br>< -5 A</td><td>ERR 1<br>ERR 1<br>ERR 1<br>ERR 1</td><td></td></tr>
-<tr><td>2</td><td></td><td>CHA</td><td>2.0 A</td><td>< 0.2 A</td><td></td><td></td></tr>
-<tr><td>3</td><td></td><td>PAU</td><td></td><td>1 h</td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td>CHA</td><td>2.0 A<br>4.2 V</td><td>< 0.2 A</td><td></td><td></td></tr>
+<tr><td>3</td><td></td><td>PAU</td><td></td><td>90 min</td><td></td><td></td></tr>
 <tr><td>4</td><td></td><td>DCH</td><td>1.5 A</td><td>< 3.0 V</td><td></td><td></td></tr>
 <tr><td>5</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
 </table>
