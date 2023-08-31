@@ -44,18 +44,27 @@ def time(
     minutes: BMNumValue | None = None,
     seconds: BMNumValue | None = None,
 ) -> BMLimitCondition:
-    if hours:
-        if minutes or seconds:
-            raise NotImplementedError("BM time limit can only have one unit")
-        return BMLimitTime(value=hours, unit="h")
-    if minutes:
-        if hours or seconds:
-            raise NotImplementedError("BM time limit can only have one unit")
-        return BMLimitTime(value=hours, unit="min")
     if seconds:
-        if hours or minutes:
-            raise NotImplementedError("BM time limit can only have one unit")
-        return BMLimitTime(value=hours, unit="s")
+        if hours:
+            if isinstance(hours, BMNumber) and isinstance(seconds, BMNumber):
+                seconds.value += hours.value * 3600
+            else:
+                raise NotImplementedError("BM time limit can only have one unit")
+        if minutes:
+            if isinstance(minutes, BMNumber) and isinstance(seconds, BMNumber):
+                seconds.value += minutes.value * 60
+            else:
+                raise NotImplementedError("BM time limit can only have one unit")
+        return BMLimitTime(value=seconds, unit="s")
+    if minutes:
+        if hours:
+            if isinstance(hours, BMNumber) and isinstance(minutes, BMNumber):
+                minutes.value += hours.value * 60
+            else:
+                raise NotImplementedError("BM time limit can only have one unit")
+        return BMLimitTime(value=minutes, unit="min")
+    if hours:
+        return BMLimitTime(value=hours, unit="h")
 
 
 @autocast()

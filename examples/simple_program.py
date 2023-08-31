@@ -10,5 +10,5 @@ limit(I < -5, error(1))
 
 # specify test steps
 charge(current=2.0, voltage=4.2, limits=[I < 0.2])
-pause(hours=1)
+pause(hours=1, minutes=30)
 discharge(current=1.5, limits=[V < 3.0])

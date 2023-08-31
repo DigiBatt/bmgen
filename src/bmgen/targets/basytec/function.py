@@ -56,21 +56,21 @@ def time(
     minutes: float | None = None,
     seconds: float | None = None,
 ) -> BasytecLimit:
-    if hours:
-        if minutes or seconds:
-            raise NotImplementedError("Basytec time limit can only have one unit")
-        value = hours
-        unit = BasytecUnit("h")
-    if minutes:
-        if hours or seconds:
-            raise NotImplementedError("Basytec time limit can only have one unit")
-        value = minutes
-        unit = BasytecUnit("min")
     if seconds:
-        if hours or minutes:
-            raise NotImplementedError("Basytec time limit can only have one unit")
         value = seconds
         unit = BasytecUnit("s")
+        if hours:
+            value += hours * 3600
+        if minutes:
+            value += minutes * 60
+    elif minutes:
+        value = minutes
+        unit = BasytecUnit("min")
+        if hours:
+            value += hours * 60
+    elif hours:
+        value = hours
+        unit = BasytecUnit("h")
     return BasytecLimit(
         channel=t, operator=">", value=BasytecValue(value=value, unit=unit)
     )
