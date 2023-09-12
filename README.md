@@ -4,6 +4,8 @@ Test generator for battery cyclers.
 
 Web version: https://openbat.isea.rwth-aachen.de/bmgen/
 
+![Screenshot](images/screenshot.png)
+
 ## Examples
 
 This is a [simple example](examples/simple_program.py) that shows the basic structure of a program:
@@ -86,7 +88,11 @@ Command for this example: <code>bmgen --target basytec --format table examples/s
 
 ## Usage
 
-The program is used as a command line tool. The only required argument is the filename of the Python program to be translated. A dash ( - ) can be used to read from standard input.
+The easiest way to get started is using the [web version](https://openbat.isea.rwth-aachen.de/bmgen/) in the browser.
+
+The program can also be used as a command line tool.
+The only required argument is the filename of the Python program to be translated.
+A dash ( - ) can be used to read from standard input.
 
 The following options are supported:
 
@@ -113,3 +119,20 @@ Basytec:
 ### -o, --out
 
 Name of the output file. If this option is not provided, the output is written to the terminal.
+
+## Feature completeness
+
+|                                                   | Battery Manager | Neware | BasyTec |
+| ------------------------------------------------- | --------------- | ------ | ------- |
+| charge/discharge/pause                            | ✔️              | ✔️    | ✔️      |
+| limits                                            | ✔️              | ✔️    | ✔️      |
+| variables in the generated program                | ✔️              | ❌    | ➖      |
+| battery parameters                                | ✔️              | ❌    | ➖      |
+| if / else statements                              | ✔️              | ➖    | ➖      |
+| loops with fixed cycle count                      | ✔️              | ➖    | ➖      |
+| loops with arbitrary conditions                   | ➖              | ❌    | ➖      |
+| references to duration/Ah count of previous steps | ➖              | ❌    | ➖      |
+
+✔️ implemented
+➖ planned
+❌ not supported by the target
