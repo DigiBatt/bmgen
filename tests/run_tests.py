@@ -48,7 +48,7 @@ def main(generate, testdir):
                             print("skipped (no reference file)")
                 except Exception as e:
                     success = False
-                    raise e
+                    print(e)
     exit(0 if success else 1)
 
 
