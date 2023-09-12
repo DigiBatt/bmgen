@@ -10,6 +10,7 @@ from bmgen.targets.neware.constants import (
 import xml.etree.ElementTree as ee
 from typing import List, Dict
 from datetime import datetime
+import bmgen
 
 
 @dataclass
@@ -171,6 +172,10 @@ class NewareProgram:
         header = self._header()
         preface = self._preface()
         root = ee.Element("root")
+        if bmgen.options["no-timestamps"]:
+            timestamp = "0"
+        else:
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         conf = ee.SubElement(
             root,
             "config",
@@ -178,7 +183,7 @@ class NewareProgram:
                 "version": "16",
                 "type": "Step File",
                 "client_version": "BTS Client 8.0.0.484(2021.08.25)(R3)",
-                "date": datetime.now().strftime("%Y%m%d%H%M%S"),
+                "date": timestamp,
                 "Guid": "0045b3d2-59aa-4cb0-9cb8-6a7d7895c0a3",
             },
         )

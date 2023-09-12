@@ -1,0 +1,5 @@
+	1		SET		> 4.2 V\r\n< 2.5 V\r\n> 5 A\r\n< -5 A	ERR 1\r\nERR 1\r\nERR 1\r\nERR 1	
+	2		CHA	2.0 A\r\n4.2 V	< 0.2 A		
+	3		PAU		90 min		
+	4		DCH	1.5 A	< 3.0 V		
+	5		STO				

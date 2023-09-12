@@ -13,6 +13,14 @@ cache:
   paths:
     - .cache/pip
 
+programtest:
+  stage: test
+  image: python:3.10
+  script:
+    - pip install -r requirements.txt
+    - pip install -e .
+    - python ./tests/run_tests.py
+
 package:
   stage: package
   image: python:3.10

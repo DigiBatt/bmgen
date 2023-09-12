@@ -15,18 +15,19 @@ from importlib import import_module
 @click.option("-f", "--format")
 @click.option("-i", "--intermediate")
 @click.option("-o", "--out")
-def main(filename, target, format, intermediate, out):
-    generate(filename, target, format, intermediate, out)
+@click.option("--no-timestamps", is_flag=True, default=False)
+def main(filename, target, format, intermediate, out, no_timestamps):
+    generate(filename, target, format, intermediate, out, no_timestamps)
 
 
-def generate(file, target, format, intermediate, out):
-    filename = None
+def generate(file, target, format, intermediate, out, no_timestamps):
+    bmgen.options = {"no-timestamps": no_timestamps}
+
     if file == "-":
         program = sys.stdin.read()
     elif isinstance(file, str):
         with open(file, "r") as f:
             program = f.read()
-        filename = file
     else:
         program = file.read()
 

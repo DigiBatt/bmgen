@@ -1,0 +1,13 @@
+	1		SET	CRate = 0.5\r\nEOCCurrent = 0.05\r\nPauseLen_IV = 123454321\r\nPauseLen_Val = 0\r\nPauseLen_0 = 1\r\nPauseLen_1 = 1.5\r\nPauseLen_2 = 2\r\nPauseLen_Val = 5			
+	2		PAU		> 1 arrSET		
+	3		BEG	i			
+	4		CHA	CRate ACn1\r\n4.2 V	< EOCCurrent A\r\n5 h	\r\n	
+	5		PAU		> i arrGET		
+	6		PAU		PauseLen_Val h		
+	7		PAU		< 2 i\r\n1 sec	GOTO bmgen_1_if\r\nGOTO bmgen_1_else	
+	8	bmgen_1_if	DCH	CRate ACn1	<= 2.5 V		
+	9		GOTO	bmgen_1_end			
+	10	bmgen_1_else	DCH	CRate ACn1	<= 2.0 V		
+	11	bmgen_1_end	ADD	CRate\r\n0.2			
+	12		CYC	3 *			
+	13		STO				
