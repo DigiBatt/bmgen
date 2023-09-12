@@ -122,16 +122,19 @@ Name of the output file. If this option is not provided, the output is written t
 
 ## Feature completeness
 
-|                                                   | Battery Manager | Neware | BasyTec |
-| ------------------------------------------------- | --------------- | ------ | ------- |
-| charge/discharge/pause                            | ✔️              | ✔️    | ✔️      |
-| limits                                            | ✔️              | ✔️    | ✔️      |
-| variables in the generated program                | ✔️              | ❌    | ➖      |
-| battery parameters                                | ✔️              | ❌    | ➖      |
-| if / else statements                              | ✔️              | ➖    | ➖      |
-| loops with fixed cycle count                      | ✔️              | ➖    | ➖      |
-| loops with arbitrary conditions                   | ➖              | ❌    | ➖      |
-| references to duration/Ah count of previous steps | ➖              | ❌    | ➖      |
+|                                                   | Battery Manager            | Neware | BasyTec |
+| ------------------------------------------------- | -------------------------- | ------ | ------- |
+| charge/discharge/pause                            | ✔️                         | ✔️    | ✔️      |
+| limits                                            | ✔️                         | ✔️    | ✔️      |
+| variables in the generated program                | ✔️                         | ❌    | ➖      |
+| battery parameters                                | ✔️                         | ❌    | ➖      |
+| if / else statements                              | ✔️                         | ➖    | ➖      |
+| loops with fixed cycle count                      | ✔️                         | ➖    | ➖      |
+| loops with arbitrary conditions                   | ➖                         | ❌    | ➖      |
+| references to duration/Ah count of previous steps | ➖                         | ❌    | ➖      |
+| calculations in the generated program             | ➖ (+= and -= implemented) | ❌    | ➖      |
+| array constants                                   | ✔️                         | ➖    | ➖      |
+| mutable arrays                                    | ✔️                         | ❌    | ❌      |
 
 ✔️ implemented
 ➖ planned
