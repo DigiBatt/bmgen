@@ -2,6 +2,7 @@ stages:
   - test
   - package
   - docker
+  - deploy
 
 variables:
   PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
@@ -35,7 +36,9 @@ package:
       - dist/
 
 docker:
-  stage: docker
+  stage: package
+  needs:
+    - package
   image: docker:20.10
   rules:
     - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
@@ -45,3 +48,21 @@ docker:
     - cp dist/bmgen-*-py3-none-any.whl src/bmgen/web/server
     - docker build src/bmgen/web/server --cache-from "$CI_REGISTRY_IMAGE:server" --tag "$CI_REGISTRY_IMAGE:server"
     - docker push "$CI_REGISTRY_IMAGE:server"
+
+deploy:
+  stage: deploy
+  image: alpine:3.18.3
+  rules:
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+  before_script:
+    - apk add openssh-client
+    - eval $(ssh-agent -s)
+    - echo "$SSH_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - echo "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+    - chmod 700 ~/.ssh
+  script:
+    - ssh bmgen@openbat.isea.rwth-aachen.de "if [ -d "~/bmgen" ]; then rm -r ~/bmgen; fi"
+    - scp -r ./* bmgen@openbat.isea.rwth-aachen.de:~/bmgen
+    - ssh bmgen@openbat.isea.rwth-aachen.de "docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY && docker pull git.isea.rwth-aachen.de:5050/ess/testing/bmgen:server"
+    - ssh bmgen@openbat.isea.rwth-aachen.de "cd ~/bmgen/src/bmgen/web && (docker-compose down ; docker-compose up -d)"
