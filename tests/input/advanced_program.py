@@ -10,19 +10,19 @@ PauseLen[1] = 5
 
 for i in range(3):
     charge(
-        current=CRate * battery.nominalCapacity,
+        current=CRate * battery.oneC,
         voltage=4.2,
         limits=[I < EOCCurrent, time(hours=5)],
     )
     pause(hours=PauseLen[i])
     if i < 2:
         discharge(
-            CRate * battery.nominalCapacity,
+            CRate * battery.oneC,
             limits=[V <= 2.5],
         )
     else:
         discharge(
-            CRate * battery.nominalCapacity,
+            CRate * battery.oneC,
             limits=[V <= 2.0],
         )
     CRate += 0.2

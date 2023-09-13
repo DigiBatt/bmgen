@@ -7,6 +7,8 @@ from bmgen.transformer import Transformer
 import click
 import bmgen
 from importlib import import_module
+from bmgen.battery import PredefindedBattery
+import json
 
 
 @click.command()
@@ -16,11 +18,16 @@ from importlib import import_module
 @click.option("-i", "--intermediate")
 @click.option("-o", "--out")
 @click.option("--no-timestamps", is_flag=True, default=False)
-def main(filename, target, format, intermediate, out, no_timestamps):
-    generate(filename, target, format, intermediate, out, no_timestamps)
+@click.option("--battery")
+def main(
+    filename, target, format, intermediate, out, no_timestamps=False, battery=None
+):
+    generate(filename, target, format, intermediate, out, no_timestamps, battery)
 
 
-def generate(file, target, format, intermediate, out, no_timestamps):
+def generate(
+    file, target, format, intermediate, out, no_timestamps=False, battery=None
+):
     bmgen.options = {"no-timestamps": no_timestamps}
 
     if file == "-":
@@ -55,6 +62,17 @@ def generate(file, target, format, intermediate, out, no_timestamps):
         f"{format.capitalize()}Generator",
     )
     target_module.generator = FormatGenerator()
+    if battery:
+        if isinstance(battery, dict):
+            target_battery = PredefindedBattery(**battery)
+        else:
+            with open(battery, "r") as f:
+                target_battery = PredefindedBattery(**json.load(f))
+    else:
+        target_battery = getattr(
+            import_module(f"bmgen.targets.{target}.battery"), "battery"
+        )
+    target_module.battery = target_battery
     exec(compile(newtree, filename="<ast>", mode="exec"))
     output(out, target_module.generator.generate())
 

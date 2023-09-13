@@ -9,7 +9,7 @@ limit(V < 2.5, error(1))
 limit(I > 5, error(1))
 limit(I < -5, error(1))
 
-ChgCurrent = battery.nominalCapacity
+ChgCurrent = battery.oneC
 DchCurrent = 1.5
 
 # specify test steps

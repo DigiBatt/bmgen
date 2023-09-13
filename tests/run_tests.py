@@ -2,10 +2,10 @@
 
 import click
 import os
-from bmgen import bmgen
 import difflib
 import io
 import sys
+from bmgen import bmgen
 
 
 @click.command()
@@ -48,7 +48,7 @@ def main(generate, testdir):
                             print("skipped (no reference file)")
                 except Exception as e:
                     success = False
-                    print(e)
+                    raise e
     exit(0 if success else 1)
 
 

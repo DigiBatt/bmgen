@@ -1,1 +1,3 @@
-raise NotImplementedError("Battery parameters are not available for Neware devices")
+from bmgen.battery import CyclerBattery
+
+battery = CyclerBattery()
