@@ -64,5 +64,6 @@ deploy:
   script:
     - ssh bmgen@openbat.isea.rwth-aachen.de "if [ -d "~/bmgen" ]; then rm -r ~/bmgen; fi"
     - scp -r ./* bmgen@openbat.isea.rwth-aachen.de:~/bmgen
+    - ssh bmgen@openbat.isea.rwth-aachen.de "cd ~/bmgen/src/bmgen/web/client && npm install"
     - ssh bmgen@openbat.isea.rwth-aachen.de "docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY && docker pull git.isea.rwth-aachen.de:5050/ess/testing/bmgen:server"
     - ssh bmgen@openbat.isea.rwth-aachen.de "cd ~/bmgen/src/bmgen/web && (docker-compose down ; docker-compose up -d)"
