@@ -19,11 +19,15 @@ import json
 @click.option("-o", "--out")
 @click.option("--no-timestamps", is_flag=True, default=False)
 @click.option("--battery")
-def main(filename, target, format, intermediate, out, no_timestamps, battery):
+def main(
+    filename, target, format, intermediate, out, no_timestamps=False, battery=None
+):
     generate(filename, target, format, intermediate, out, no_timestamps, battery)
 
 
-def generate(file, target, format, intermediate, out, no_timestamps, battery):
+def generate(
+    file, target, format, intermediate, out, no_timestamps=False, battery=None
+):
     bmgen.options = {"no-timestamps": no_timestamps}
 
     if file == "-":

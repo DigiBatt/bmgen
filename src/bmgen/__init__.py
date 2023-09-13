@@ -1,6 +1,6 @@
 from bmgen.function import *
 from bmgen.channel import *
-import bmgen.battery
+from bmgen.battery import Battery
 
-battery = bmgen.battery.Battery()
+battery = Battery()
 options = {}
