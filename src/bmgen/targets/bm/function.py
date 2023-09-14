@@ -2,6 +2,7 @@ import bmgen.targets.bm as target
 from bmgen.targets.bm.ast import *
 from bmgen.targets.bm.helper.cast import autocast
 from typing import List
+from bmgen.targets.bm.battery import battery
 
 
 @autocast()
@@ -12,7 +13,10 @@ def charge(
 ):
     if not limits:
         limits = []
-    if isinstance(current, BMNumValue):
+    if not (
+        isinstance(current, BMMultiplication)
+        and current.variable.name == battery.oneC.name
+    ):
         current = BMMultiplication(current, BMVariable("A"))
     values = [current]
     if voltage:
@@ -29,7 +33,10 @@ def discharge(
 ):
     if not limits:
         limits = []
-    if isinstance(current, BMNumValue):
+    if not (
+        isinstance(current, BMMultiplication)
+        and current.variable.name == battery.oneC.name
+    ):
         current = BMMultiplication(current, BMVariable("A"))
     values = [current]
     if voltage:
