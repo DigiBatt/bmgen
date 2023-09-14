@@ -5,6 +5,7 @@ from typing import List
 from bmgen.targets.bm.battery import battery
 import bmgen.targets.bm.channel as channel
 from bmgen.targets.bm.time import time as _time
+from bmgen.targets.bm.stepinfo import BMStepInfo
 
 
 @cast.autocast()
@@ -12,7 +13,7 @@ def charge(
     current: BMNumValue | BMMultiplication,
     voltage: BMNumValue | None = None,
     limits: List[BMLimit] | None = None,
-):
+) -> BMStepInfo:
     if not limits:
         limits = []
     if not (
@@ -24,7 +25,9 @@ def charge(
     if voltage:
         values.append(BMMultiplication(voltage, BMVariable("V")))
 
-    target.generator.add(BMStatement(operator="CHA", values=values, limits=limits))
+    return target.generator.add(
+        BMStatement(operator="CHA", values=values, limits=limits)
+    )
 
 
 @cast.autocast()
@@ -32,7 +35,7 @@ def discharge(
     current: BMNumValue | BMMultiplication,
     voltage: BMNumValue | None = None,
     limits: List[BMLimit] | None = None,
-):
+) -> BMStepInfo:
     if not limits:
         limits = []
     if not (
@@ -44,7 +47,9 @@ def discharge(
     if voltage:
         values.append(BMMultiplication(voltage, BMVariable("V")))
 
-    target.generator.add(BMStatement(operator="DCH", values=values, limits=limits))
+    return target.generator.add(
+        BMStatement(operator="DCH", values=values, limits=limits)
+    )
 
 
 @cast.autocast()
@@ -53,12 +58,12 @@ def pause(
     hours: BMNumValue | None = None,
     minutes: BMNumValue | None = None,
     seconds: BMNumValue | None = None,
-):
+) -> BMStepInfo:
     if not limits:
         limits = []
     if hours or minutes or seconds:
         limits.append(time(hours, minutes, seconds).toLimit())
-    target.generator.add(BMStatement(operator="PAU", limits=limits))
+    return target.generator.add(BMStatement(operator="PAU", limits=limits))
 
 
 def limit(condition: BMLimitCondition, action: BMAction | None = None):

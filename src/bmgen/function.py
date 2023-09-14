@@ -1,12 +1,17 @@
 from typing import List
 from dataclasses import dataclass
+from bmgen.stepinfo import StepInfo
 
 
-def charge(current: float, voltage: float | None = None, limits: List[bool] = []):
+def charge(
+    current: float, voltage: float | None = None, limits: List[bool] = []
+) -> StepInfo:
     pass
 
 
-def discharge(current: float, voltage: float | None = None, limits: List[bool] = []):
+def discharge(
+    current: float, voltage: float | None = None, limits: List[bool] = []
+) -> StepInfo:
     pass
 
 
@@ -15,7 +20,7 @@ def pause(
     hours: float | None = None,
     minutes: float | None = None,
     seconds: float | None = None,
-):
+) -> StepInfo:
     pass
 
 

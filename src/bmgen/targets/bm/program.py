@@ -11,6 +11,7 @@ from bmgen.targets.bm.ast import (
 import bmgen.targets.bm as target
 from bmgen.targets.bm.helper.cast import autocast
 from typing import List
+from bmgen.targets.bm.stepinfo import BMStepInfo
 
 
 @autocast("value")
@@ -42,6 +43,8 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
                 )
             )
             var.arraynum = arraynum
+        elif isinstance(value, BMStatement):
+            return BMStepInfo(value, name)
         else:
             target.generator.add(
                 BMStatement(

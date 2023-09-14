@@ -50,6 +50,7 @@ class BMGenerator(BaseGenerator):
 
     def add(self, line):
         self.program.lines.append(line)
+        return line
 
     def label(self):
         self.labelcount += 1
