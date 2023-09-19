@@ -115,6 +115,18 @@ class time:
         return NewareLimit(LimitType.Time, self.toNumber())
 
 
+def seconds(value: float) -> time:
+    return time(0, 0, value)
+
+
+def minutes(value: float) -> time:
+    return time(0, value, 0)
+
+
+def hours(value: float) -> time:
+    return time(value, 0, 0)
+
+
 def _limits_to_args(limits: List[NewareLimit], limitArgs: Dict[LimitType, str]):
     args = {}
     protections = []

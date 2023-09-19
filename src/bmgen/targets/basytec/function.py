@@ -76,6 +76,18 @@ class time:
         return BasytecLimit(channel=t, operator=">", value=self.toValue())
 
 
+def seconds(value: float) -> time:
+    return time(None, None, value)
+
+
+def minutes(value: float) -> time:
+    return time(None, value, None)
+
+
+def hours(value: float) -> time:
+    return time(value, None, None)
+
+
 def limit(condition: BasytecLimit, action: BasytecAction | None = None):
     condition.action = action
     return condition

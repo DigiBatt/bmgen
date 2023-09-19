@@ -82,6 +82,22 @@ def time(
     return _time(hours, minutes, seconds)
 
 
+@cast.autocast()
+def seconds(value: BMNumValue) -> _time:
+    return _time(None, None, value)
+
+
+@cast.autocast()
+def minutes(value: BMNumValue) -> _time:
+    pass
+    return _time(None, value, None)
+
+
+@cast.autocast()
+def hours(value: BMNumValue) -> _time:
+    return _time(value, None, None)
+
+
 def error(errnum: int):
     return BMError(errnum)
 

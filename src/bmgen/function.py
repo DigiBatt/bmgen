@@ -34,6 +34,18 @@ class time:
     seconds: float | None = None
 
 
+def seconds(value: float) -> time:
+    pass
+
+
+def minutes(value: float) -> time:
+    pass
+
+
+def hours(value: float) -> time:
+    pass
+
+
 def register(
     time: time | None = None,
     voltage: float | None = None,
