@@ -3,6 +3,7 @@ from bmgen.targets.bm.ast import *
 import bmgen.targets.bm.helper.cast as cast
 from typing import List
 from bmgen.targets.bm.battery import battery
+import bmgen.targets.bm.channel as channel
 from bmgen.targets.bm.time import time as _time
 
 
@@ -83,3 +84,23 @@ def time(
 
 def error(errnum: int):
     return BMError(errnum)
+
+
+def register(
+    time: _time | None = None,
+    voltage: float | None = None,
+    current: float | None = None,
+    format: List | None = None,
+):
+    regs = []
+    if format:
+        for f in format:
+            regs.append(BMRegFormat(f))
+    if time:
+        t = time.toBMTime()
+        regs.append(BMRegCondition(value=t.value, channel=BMVariable(t.unit)))
+    if voltage:
+        regs.append(BMRegCondition(value=BMNumber(voltage), channel=channel.V))
+    if current:
+        regs.append(BMRegCondition(value=BMNumber(current), channel=channel.I))
+    target.generator.add(BMStatement(operator="SET", registrations=regs))

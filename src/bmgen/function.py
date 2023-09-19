@@ -32,3 +32,12 @@ class time:
     hours: float | None = None
     minutes: float | None = None
     seconds: float | None = None
+
+
+def register(
+    time: time | None = None,
+    voltage: float | None = None,
+    current: float | None = None,
+    format: List | None = None,
+):
+    pass

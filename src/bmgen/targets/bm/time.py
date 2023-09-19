@@ -10,6 +10,9 @@ class time:
     seconds: typing.Union["ast.BMNumValue", None] = None
 
     def toLimit(self) -> "ast.BMLimit":
+        return ast.BMLimit(ast.BMLimitTime(self.toBMTime()))
+
+    def toBMTime(self) -> "ast.BMTime":
         if self.seconds:
             if self.hours:
                 if isinstance(self.hours, ast.BMNumber) and isinstance(
@@ -25,7 +28,7 @@ class time:
                     self.seconds.value += self.minutes.value * 60
                 else:
                     raise NotImplementedError("BM time limit can only have one unit")
-            return ast.BMLimit(ast.BMLimitTime(value=self.seconds, unit="s"))
+            return ast.BMTime(value=self.seconds, unit="s")
         if self.minutes:
             if self.hours:
                 if isinstance(self.hours, ast.BMNumber) and isinstance(
@@ -34,6 +37,6 @@ class time:
                     self.minutes.value += self.hours.value * 60
                 else:
                     raise NotImplementedError("BM time limit can only have one unit")
-            return ast.BMLimit(ast.BMLimitTime(value=self.minutes, unit="min"))
+            return ast.BMTime(value=self.minutes, unit="min")
         if self.hours:
-            return ast.BMLimit(ast.BMLimitTime(value=self.hours, unit="h"))
+            return ast.BMTime(value=self.hours, unit="h")

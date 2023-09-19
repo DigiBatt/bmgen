@@ -204,12 +204,20 @@ class BMLimitAnd(BMLimitCondition):
 
 
 @dataclass
-class BMLimitTime(BMLimitCondition):
+class BMTime:
     value: BMNumValue
     unit: str
 
     def toText(self):
         return self.value.toText() + " " + self.unit
+
+
+@dataclass
+class BMLimitTime(BMLimitCondition):
+    time: BMTime
+
+    def toText(self):
+        return self.time.toText()
 
 
 @dataclass
@@ -242,12 +250,25 @@ class BMLimit(BMNode):
         return (condition, action)
 
 
-@dataclass
 class BMRegistration(BMNode):
-    numvalue: BMNumValue
+    pass
+
+
+@dataclass
+class BMRegCondition(BMRegistration):
+    value: BMNumber
+    channel: BMVariable
 
     def toText(self):
-        return self.numvalue.toText()
+        return self.value.toText() + " " + self.channel.toText()
+
+
+@dataclass
+class BMRegFormat(BMRegistration):
+    name: str
+
+    def toText(self):
+        return self.name
 
 
 class BMLine(BMNode):

@@ -84,6 +84,7 @@ class BasytecStatement:
     operator: StepType
     parameters: List[BasytecParameter] = field(default_factory=list)
     limits: List[BasytecLimit] = field(default_factory=list)
+    registrations: List[BasytecParameter] = field(default_factory=list)
     label: str | None = None
 
     def toText(self, linenumber: int):
@@ -103,7 +104,8 @@ class BasytecStatement:
             action = ""
         text += f"5 {linenumber} {limit}\n"
         text += f"6 {linenumber} {action}\n"
-        text += f"7 {linenumber}\n"
+        reg = Newline.join([r.toText() for r in self.registrations])
+        text += f"7 {linenumber} {reg}\n"
         text += f"8 {linenumber}\n"
         return text
 
@@ -122,7 +124,8 @@ class BasytecStatement:
         action = "<br>".join([a if a else "" for a in action])
         table += f"<td>{limit}</td>"
         table += f"<td>{action}</td>"
-        table += f"<td></td>"
+        reg = "<br>".join([r.toText() for r in self.registrations])
+        table += f"<td>{reg}</td>"
         table += f"<td></td></tr>"
         return table
 

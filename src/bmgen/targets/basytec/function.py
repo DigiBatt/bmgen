@@ -54,7 +54,7 @@ class time:
     minutes: float | None = None
     seconds: float | None = None
 
-    def toLimit(self) -> BasytecLimit:
+    def toValue(self) -> BasytecValue:
         if self.seconds:
             value = self.seconds
             unit = BasytecUnit("s")
@@ -70,9 +70,10 @@ class time:
         elif self.hours:
             value = self.hours
             unit = BasytecUnit("h")
-        return BasytecLimit(
-            channel=t, operator=">", value=BasytecValue(value=value, unit=unit)
-        )
+        return BasytecValue(value=value, unit=unit)
+
+    def toLimit(self) -> BasytecLimit:
+        return BasytecLimit(channel=t, operator=">", value=self.toValue())
 
 
 def limit(condition: BasytecLimit, action: BasytecAction | None = None):
@@ -89,3 +90,20 @@ def limit_global(condition: BasytecLimit, action: BasytecAction | None = None):
 def error(errnum: int):
     target.generator.stoplabel = True
     return BasytecGoto("STOP")
+
+
+@autocast(current="A", voltage="V")
+def register(
+    time: time | None = None,
+    voltage: BasytecValue | None = None,
+    current: BasytecValue | None = None,
+    format: List | None = None,
+):
+    regs = []
+    if time:
+        regs.append(BasytecParameter(channel=t, value=time.toValue()))
+    if voltage:
+        regs.append(BasytecParameter(channel=V, value=voltage))
+    if current:
+        regs.append(BasytecParameter(channel=I, value=current))
+    target.generator.set_registration(regs)
