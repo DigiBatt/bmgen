@@ -1,6 +1,6 @@
 import bmgen.targets.neware as target
 from bmgen.targets.neware.ast import *
-from bmgen.targets.neware.constants import StepType, LimitType, NewareAction
+from bmgen.targets.neware.constants import StepType, LimitType, NewareAction, RecordType
 from bmgen.targets.neware.helper.cast import limitcast
 from typing import List
 
@@ -108,10 +108,11 @@ class time:
     minutes: float = 0
     seconds: float = 0
 
+    def toNumber(self) -> float:
+        return self.seconds + (self.minutes + self.hours * 60) * 60
+
     def toLimit(self) -> NewareLimit:
-        return NewareLimit(
-            LimitType.Time, self.seconds + (self.minutes + self.hours * 60) * 60
-        )
+        return NewareLimit(LimitType.Time, self.toNumber())
 
 
 def _limits_to_args(limits: List[NewareLimit], limitArgs: Dict[LimitType, str]):
@@ -136,3 +137,19 @@ def limit_global(condition: NewareLimit, action: NewareAction = NewareAction.Nex
 
 def error(errnum: int):
     return NewareAction.Protected
+
+
+def register(
+    time: time | None = None,
+    voltage: float | None = None,
+    current: float | None = None,
+    format: List | None = None,
+):
+    record = {}
+    if time:
+        record[RecordType.Time] = time.toNumber()
+    if voltage:
+        record[RecordType.Voltage] = voltage
+    if current:
+        record[RecordType.Current] = current
+    target.generator.program.record = record
