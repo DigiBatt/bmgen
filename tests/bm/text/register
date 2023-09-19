@@ -1,0 +1,5 @@
+	1		SET				eba_fantasy_reg\r\n10 s\r\n0.1 V\r\n3.5 A
+	2		CHA	2.0 A\r\n4.2 V	< 0.2 A		
+	3		PAU		90 min		
+	4		DCH	1.5 A	< 3.0 V		
+	5		STO				
