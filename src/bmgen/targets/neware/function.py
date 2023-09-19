@@ -1,6 +1,7 @@
 import bmgen.targets.neware as target
 from bmgen.targets.neware.ast import *
 from bmgen.targets.neware.constants import StepType, LimitType, NewareAction
+from bmgen.targets.neware.helper.cast import limitcast
 from typing import List
 
 
@@ -9,8 +10,7 @@ def charge(
     voltage: float | None = None,
     limits: List[NewareLimit] | None = None,
 ):
-    if not limits:
-        limits = []
+    limits = limitcast(limits)
     if voltage:
         args, protections = _limits_to_args(
             limits,
@@ -52,8 +52,7 @@ def discharge(
     voltage: float | None = None,
     limits: List[NewareLimit] | None = None,
 ):
-    if not limits:
-        limits = []
+    limits = limitcast(limits)
     if voltage:
         args, protections = _limits_to_args(
             limits,
@@ -96,20 +95,23 @@ def pause(
     minutes: float = 0,
     seconds: float = 0,
 ):
-    if not limits:
-        limits = []
+    limits = limitcast(limits)
     if hours or minutes or seconds:
-        limits.append(time(hours, minutes, seconds))
+        limits.append(time(hours, minutes, seconds).toLimit())
     args, protections = _limits_to_args(limits, {LimitType.Time: "steptime"})
     target.generator.add(NewareStatement(operator=StepType.Rest, **args))
 
 
-def time(
-    hours: float = 0,
-    minutes: float = 0,
-    seconds: float = 0,
-) -> NewareLimit:
-    return NewareLimit(LimitType.Time, seconds + (minutes + hours * 60) * 60)
+@dataclass
+class time:
+    hours: float = 0
+    minutes: float = 0
+    seconds: float = 0
+
+    def toLimit(self) -> NewareLimit:
+        return NewareLimit(
+            LimitType.Time, self.seconds + (self.minutes + self.hours * 60) * 60
+        )
 
 
 def _limits_to_args(limits: List[NewareLimit], limitArgs: Dict[LimitType, str]):

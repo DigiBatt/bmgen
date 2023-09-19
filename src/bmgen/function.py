@@ -1,4 +1,5 @@
 from typing import List
+from dataclasses import dataclass
 
 
 def charge(current: float, voltage: float | None = None, limits: List[bool] = []):
@@ -18,17 +19,16 @@ def pause(
     pass
 
 
-def time(
-    hours: float | None = None,
-    minutes: float | None = None,
-    seconds: float | None = None,
-) -> bool:
-    pass
-
-
 def limit(condition: bool, action=None) -> bool:
     pass
 
 
 def error(errnum: int):
     pass
+
+
+@dataclass
+class time:
+    hours: float | None = None
+    minutes: float | None = None
+    seconds: float | None = None

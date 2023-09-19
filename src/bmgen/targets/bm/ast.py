@@ -1,7 +1,7 @@
 from typing import List
 from dataclasses import dataclass, field
 from bmgen.targets.bm.helper.compare import compare
-from bmgen.targets.bm.helper.cast import autocast
+import bmgen.targets.bm.helper.cast as cast
 import bmgen.targets.bm as bm
 
 
@@ -30,16 +30,16 @@ class BMVariable(BMNumValue):
     def toText(self):
         return self.name
 
-    @autocast("other")
+    @cast.autocast("other")
     def __compare__(self, other: BMNumValue, operator: str):
         return BMLimitCompare(lhs=self, rhs=other, operator=operator)
 
-    @autocast()
+    @cast.autocast()
     def __iadd__(self, other: BMNumValue):
         bm.generator.add(BMStatement(operator="ADD", values=[self, other]))
         return self
 
-    @autocast()
+    @cast.autocast()
     def __getitem__(self, key: BMNumValue):
         if self.arraynum == None:
             raise NotImplementedError("Scalar variable cannot be accessed as an array")
@@ -64,7 +64,7 @@ class BMVariable(BMNumValue):
         )
         return BMVariable(self.name + "_Val")
 
-    @autocast()
+    @cast.autocast()
     def __setitem__(self, key: BMNumValue, value: BMNumValue):
         if self.arraynum == None:
             raise NotImplementedError("Scalar variable cannot be accessed as an array")

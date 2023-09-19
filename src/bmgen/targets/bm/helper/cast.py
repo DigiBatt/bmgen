@@ -2,6 +2,7 @@ import bmgen.targets.bm.ast as ast
 from typing import List
 import inspect
 from functools import wraps
+from bmgen.targets.bm.time import time
 
 
 def cast_literal(x):
@@ -13,6 +14,8 @@ def cast_literal(x):
         return ast.BMLimit(x)
     elif isinstance(x, list):
         return [cast_literal(y) for y in x]
+    elif isinstance(x, time):
+        return x.toLimit()
     else:
         return x
 

@@ -1,16 +1,16 @@
-from bmgen.targets.bm.ast import BMVariable
+import bmgen.targets.bm.ast as ast
 from bmgen.battery import CyclerBattery
 
 battery = CyclerBattery(
-    nominalCapacity=BMVariable("CNom"),
-    maxVoltage=BMVariable("UMax"),
-    minVoltage=BMVariable("UNom"),
-    eocVoltage=BMVariable("UGas"),
-    eodVoltage=BMVariable("CutOff"),
-    contChargeCurrent=BMVariable("ChargeF"),
-    contDischargeCurrent=BMVariable("ICrank"),
-    nominalCurrent=BMVariable("INom"),
-    internalResistance=BMVariable("Rin"),
-    energyDensity=BMVariable("EDensity"),
-    oneC=BMVariable("ACn1"),
+    nominalCapacity=ast.BMVariable("CNom"),
+    maxVoltage=ast.BMVariable("UMax"),
+    minVoltage=ast.BMVariable("UNom"),
+    eocVoltage=ast.BMVariable("UGas"),
+    eodVoltage=ast.BMVariable("CutOff"),
+    contChargeCurrent=ast.BMVariable("ChargeF"),
+    contDischargeCurrent=ast.BMVariable("ICrank"),
+    nominalCurrent=ast.BMVariable("INom"),
+    internalResistance=ast.BMVariable("Rin"),
+    energyDensity=ast.BMVariable("EDensity"),
+    oneC=ast.BMVariable("ACn1"),
 )

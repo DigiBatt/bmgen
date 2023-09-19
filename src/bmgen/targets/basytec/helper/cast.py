@@ -2,6 +2,7 @@ import bmgen.targets.basytec.ast as ast
 from typing import Dict
 import inspect
 from functools import wraps
+import bmgen.targets.basytec.function as function
 
 
 def autocast(**units: Dict[str, str]):
@@ -28,3 +29,15 @@ def autocast(**units: Dict[str, str]):
         return g
 
     return decorator
+
+
+def limitcast(limits):
+    if not limits:
+        return []
+    return [__cast(l) for l in limits]
+
+
+def __cast(l):
+    if isinstance(l, function.time):
+        return l.toLimit()
+    return l

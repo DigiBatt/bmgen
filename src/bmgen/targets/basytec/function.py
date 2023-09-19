@@ -1,7 +1,7 @@
 import bmgen.targets.basytec as target
 from bmgen.targets.basytec.ast import *
 from bmgen.targets.basytec.constants import StepType
-from bmgen.targets.basytec.helper.cast import autocast
+from bmgen.targets.basytec.helper.cast import autocast, limitcast
 from bmgen.targets.basytec.channel import I, V, t
 from typing import List
 
@@ -12,8 +12,7 @@ def charge(
     voltage: BasytecValue | None = None,
     limits: List[BasytecLimit] | None = None,
 ):
-    if not limits:
-        limits = []
+    limits = limitcast(limits)
     params = [BasytecParameter(I, current)]
     if voltage:
         params.append(BasytecParameter(V, voltage))
@@ -28,8 +27,7 @@ def discharge(
     voltage: BasytecValue | None = None,
     limits: List[BasytecLimit] | None = None,
 ):
-    if not limits:
-        limits = []
+    limits = limitcast(limits)
     params = [BasytecParameter(I, current)]
     if voltage:
         params.append(BasytecParameter(V, voltage))
@@ -44,36 +42,37 @@ def pause(
     minutes: float | None = None,
     seconds: float | None = None,
 ):
-    if not limits:
-        limits = []
+    limits = limitcast(limits)
     if hours or minutes or seconds:
-        limits.append(time(hours, minutes, seconds))
+        limits.append(time(hours, minutes, seconds).toLimit())
     target.generator.add(BasytecStatement(operator=StepType.Pause, limits=limits))
 
 
-def time(
-    hours: float | None = None,
-    minutes: float | None = None,
-    seconds: float | None = None,
-) -> BasytecLimit:
-    if seconds:
-        value = seconds
-        unit = BasytecUnit("s")
-        if hours:
-            value += hours * 3600
-        if minutes:
-            value += minutes * 60
-    elif minutes:
-        value = minutes
-        unit = BasytecUnit("min")
-        if hours:
-            value += hours * 60
-    elif hours:
-        value = hours
-        unit = BasytecUnit("h")
-    return BasytecLimit(
-        channel=t, operator=">", value=BasytecValue(value=value, unit=unit)
-    )
+@dataclass
+class time:
+    hours: float | None = None
+    minutes: float | None = None
+    seconds: float | None = None
+
+    def toLimit(self) -> BasytecLimit:
+        if self.seconds:
+            value = self.seconds
+            unit = BasytecUnit("s")
+            if self.hours:
+                value += self.hours * 3600
+            if self.minutes:
+                value += self.minutes * 60
+        elif self.minutes:
+            value = self.minutes
+            unit = BasytecUnit("min")
+            if self.hours:
+                value += self.hours * 60
+        elif self.hours:
+            value = self.hours
+            unit = BasytecUnit("h")
+        return BasytecLimit(
+            channel=t, operator=">", value=BasytecValue(value=value, unit=unit)
+        )
 
 
 def limit(condition: BasytecLimit, action: BasytecAction | None = None):
