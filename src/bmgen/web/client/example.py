@@ -2,6 +2,10 @@
 from bmgen.function import *
 from bmgen.channel import *
 
+# set data recording interval
+# registration format is only applied to BM programs
+register(time=seconds(1), format=["my_custom_reg"])
+
 # set safety limits
 limit(V > 4.2, error(1))
 limit(V < 2.5, error(1))
