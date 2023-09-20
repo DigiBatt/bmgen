@@ -1,6 +1,6 @@
 stages:
   - test
-  - package
+  - build
   - docker
   - deploy
 
@@ -23,7 +23,7 @@ programtest:
     - python ./tests/run_tests.py
 
 package:
-  stage: package
+  stage: build
   image: python:3.10
   rules:
     - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
@@ -35,11 +35,9 @@ package:
     paths:
       - dist/
 
-build-frontend:
-  stage: package
-  needs:
-    - package
-  image: docker:20.10
+build-frontend-npm:
+  stage: build
+  image: node:20.7
   rules:
     - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
   before_script:
@@ -47,13 +45,23 @@ build-frontend:
   script:
     - cd src/bmgen/web/client
     - npm install --global --prefix public/node_modules/
-    - docker build . --cache-from "$CI_REGISTRY_IMAGE:frontend" --tag "$CI_REGISTRY_IMAGE:frontend"
+  artifacts:
+    paths:
+      - src/bmgen/web/client/public
+
+build-frontend-docker:
+  stage: docker
+  image: docker:20.10
+  rules:
+    - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build src/bmgen/web/client --cache-from "$CI_REGISTRY_IMAGE:frontend" --tag "$CI_REGISTRY_IMAGE:frontend"
     - docker push "$CI_REGISTRY_IMAGE:frontend"
 
 build-backend:
-  stage: package
-  needs:
-    - package
+  stage: docker
   image: docker:20.10
   rules:
     - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
