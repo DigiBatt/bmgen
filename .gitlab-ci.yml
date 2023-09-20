@@ -22,7 +22,7 @@ programtest:
     - pip install -e .
     - python ./tests/run_tests.py
 
-package:
+build-backend:
   stage: build
   image: python:3.10
   rules:
@@ -35,13 +35,11 @@ package:
     paths:
       - dist/
 
-build-frontend-npm:
+build-frontend:
   stage: build
   image: node:20.7
   rules:
     - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
     - cd src/bmgen/web/client
     - npm install --global --prefix public/node_modules/
@@ -49,7 +47,7 @@ build-frontend-npm:
     paths:
       - src/bmgen/web/client/public
 
-build-frontend-docker:
+docker-frontend:
   stage: docker
   image: docker:20.10
   rules:
@@ -60,7 +58,7 @@ build-frontend-docker:
     - docker build src/bmgen/web/client --cache-from "$CI_REGISTRY_IMAGE:frontend" --tag "$CI_REGISTRY_IMAGE:frontend"
     - docker push "$CI_REGISTRY_IMAGE:frontend"
 
-build-backend:
+docker-backend:
   stage: docker
   image: docker:20.10
   rules:
