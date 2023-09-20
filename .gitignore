@@ -9,4 +9,4 @@ __pycache__
 /out
 /programs
 /build
-/src/bmgen/web/client/node_modules
+/src/bmgen/web/client/public/node_modules

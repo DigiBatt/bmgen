@@ -6,7 +6,7 @@ from io import StringIO
 app = Flask(
     "bmgen",
     static_url_path="/",
-    static_folder="web/client",
+    static_folder="web/client/public",
 )
 CORS(app)
 

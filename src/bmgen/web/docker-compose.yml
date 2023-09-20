@@ -1,6 +1,9 @@
 version: "3"
 services:
-  app:
+  frontend:
     ports:
-      - "24642:8000"
-    image: git.isea.rwth-aachen.de:5050/ess/testing/bmgen:server
+      - "24642:80"
+    image: git.isea.rwth-aachen.de:5050/ess/testing/bmgen:frontend
+
+  backend:
+    image: git.isea.rwth-aachen.de:5050/ess/testing/bmgen:backend
