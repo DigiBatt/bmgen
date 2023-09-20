@@ -3,11 +3,15 @@ from flask_cors import CORS
 from bmgen import bmgen
 from io import StringIO
 
-app = Flask("bmgen", static_url_path="/test")
+app = Flask(
+    "bmgen",
+    static_url_path="/",
+    static_folder="web/client",
+)
 CORS(app)
 
 
-@app.route("/<target>/<format>/", methods=["POST"])
+@app.route("/api/<target>/<format>/", methods=["POST"])
 def generate(target, format):
     f = request.files["program"]
     out = StringIO()
