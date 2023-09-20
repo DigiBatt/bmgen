@@ -42,7 +42,8 @@ build-frontend:
     - if: "$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH"
   script:
     - cd src/bmgen/web/client
-    - npm install --global --prefix public/node_modules/
+    - npm install
+    - mv node_modules public
   artifacts:
     paths:
       - src/bmgen/web/client/public
