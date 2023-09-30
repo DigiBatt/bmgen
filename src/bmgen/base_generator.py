@@ -9,3 +9,7 @@ class BaseGenerator(ABC):
     @abstractmethod
     def generate(self):
         raise NotImplementedError()
+
+    @abstractmethod
+    def ast(self):
+        raise NotImplementedError()

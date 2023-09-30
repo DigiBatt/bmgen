@@ -1,6 +1,7 @@
 from bmgen.targets.basytec.constants import StepType, Newline
 from dataclasses import dataclass, field
 from typing import List
+from abc import ABC
 
 
 @dataclass
@@ -17,14 +18,14 @@ class BasytecChannel:
         if isinstance(other, BasytecValue):
             value = other
         else:
-            value = BasytecValue(other, self.unit)
+            value = BasytecValueLiteral(other, self.unit)
         return BasytecLimit(self, "<", value)
 
     def __gt__(self, other):
         if isinstance(other, BasytecValue):
             value = other
         else:
-            value = BasytecValue(other, self.unit)
+            value = BasytecValueLiteral(other, self.unit)
         return BasytecLimit(self, ">", value)
 
 
@@ -47,8 +48,12 @@ class BasytecGoto(BasytecAction):
         return f"Goto {self.target}"
 
 
+class BasytecValue(ABC):
+    pass
+
+
 @dataclass
-class BasytecValue:
+class BasytecValueLiteral(BasytecValue):
     value: float
     unit: BasytecUnit
 
@@ -57,10 +62,18 @@ class BasytecValue:
 
 
 @dataclass
+class BasytecVariable(BasytecValue):
+    name: str
+
+    def toText(self):
+        return f"{self.name}"
+
+
+@dataclass
 class BasytecLimit:
     channel: BasytecChannel
     operator: str
-    value: BasytecValue
+    value: BasytecValueLiteral
     action: BasytecAction | None = None
 
     def toText(self):
@@ -70,13 +83,26 @@ class BasytecLimit:
         )
 
 
+class BasytecParameter(ABC):
+    pass
+
+
 @dataclass
-class BasytecParameter:
+class BasytecSetValue(BasytecParameter):
     channel: BasytecChannel
-    value: BasytecValue
+    value: BasytecValueLiteral
 
     def toText(self):
         return f"{self.channel.name}={self.value.toText()}"
+
+
+@dataclass
+class BasytecCalculation(BasytecParameter):
+    variable: BasytecVariable
+    calculation: str
+
+    def toText(self):
+        return f"{self.variable.name}={self.calculation}"
 
 
 @dataclass
@@ -84,7 +110,7 @@ class BasytecStatement:
     operator: StepType
     parameters: List[BasytecParameter] = field(default_factory=list)
     limits: List[BasytecLimit] = field(default_factory=list)
-    registrations: List[BasytecParameter] = field(default_factory=list)
+    registrations: List[BasytecSetValue] = field(default_factory=list)
     label: str | None = None
 
     def toText(self, linenumber: int):

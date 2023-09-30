@@ -74,7 +74,10 @@ def generate(
         )
     target_module.battery = target_battery
     exec(compile(newtree, filename="<ast>", mode="exec"))
-    output(out, target_module.generator.generate())
+    if intermediate == "targetast":
+        output(out, target_module.generator.ast())
+    else:
+        output(out, target_module.generator.generate())
 
 
 def output(target, text):

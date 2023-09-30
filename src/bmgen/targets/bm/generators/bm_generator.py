@@ -59,3 +59,7 @@ class BMGenerator(BaseGenerator):
     def array(self):
         self.arraycount += 1
         return self.arraycount - 1
+
+    def ast(self):
+        self.finish()
+        return str(self.program)

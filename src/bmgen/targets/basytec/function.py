@@ -8,30 +8,30 @@ from typing import List
 
 @autocast(current="A", voltage="V")
 def charge(
-    current: BasytecValue,
-    voltage: BasytecValue | None = None,
+    current: BasytecValueLiteral,
+    voltage: BasytecValueLiteral | None = None,
     limits: List[BasytecLimit] | None = None,
 ):
     limits = limitcast(limits)
-    params = [BasytecParameter(I, current)]
+    params = [BasytecSetValue(I, current)]
     if voltage:
-        params.append(BasytecParameter(V, voltage))
-    target.generator.add(
+        params.append(BasytecSetValue(V, voltage))
+    return target.generator.add(
         BasytecStatement(operator=StepType.Charge, parameters=params, limits=limits)
     )
 
 
 @autocast(current="A", voltage="V")
 def discharge(
-    current: BasytecValue,
-    voltage: BasytecValue | None = None,
+    current: BasytecValueLiteral,
+    voltage: BasytecValueLiteral | None = None,
     limits: List[BasytecLimit] | None = None,
 ):
     limits = limitcast(limits)
-    params = [BasytecParameter(I, current)]
+    params = [BasytecSetValue(I, current)]
     if voltage:
-        params.append(BasytecParameter(V, voltage))
-    target.generator.add(
+        params.append(BasytecSetValue(V, voltage))
+    return target.generator.add(
         BasytecStatement(operator=StepType.Discharge, parameters=params, limits=limits)
     )
 
@@ -45,7 +45,9 @@ def pause(
     limits = limitcast(limits)
     if hours or minutes or seconds:
         limits.append(time(hours, minutes, seconds).toLimit())
-    target.generator.add(BasytecStatement(operator=StepType.Pause, limits=limits))
+    return target.generator.add(
+        BasytecStatement(operator=StepType.Pause, limits=limits)
+    )
 
 
 @dataclass
@@ -54,7 +56,7 @@ class time:
     minutes: float | None = None
     seconds: float | None = None
 
-    def toValue(self) -> BasytecValue:
+    def toValue(self) -> BasytecValueLiteral:
         if self.seconds:
             value = self.seconds
             unit = BasytecUnit("s")
@@ -70,7 +72,7 @@ class time:
         elif self.hours:
             value = self.hours
             unit = BasytecUnit("h")
-        return BasytecValue(value=value, unit=unit)
+        return BasytecValueLiteral(value=value, unit=unit)
 
     def toLimit(self) -> BasytecLimit:
         return BasytecLimit(channel=t, operator=">", value=self.toValue())
@@ -107,15 +109,15 @@ def error(errnum: int):
 @autocast(current="A", voltage="V")
 def register(
     time: time | None = None,
-    voltage: BasytecValue | None = None,
-    current: BasytecValue | None = None,
+    voltage: BasytecValueLiteral | None = None,
+    current: BasytecValueLiteral | None = None,
     format: List | None = None,
 ):
     regs = []
     if time:
-        regs.append(BasytecParameter(channel=t, value=time.toValue()))
+        regs.append(BasytecSetValue(channel=t, value=time.toValue()))
     if voltage:
-        regs.append(BasytecParameter(channel=V, value=voltage))
+        regs.append(BasytecSetValue(channel=V, value=voltage))
     if current:
-        regs.append(BasytecParameter(channel=I, value=current))
+        regs.append(BasytecSetValue(channel=I, value=current))
     target.generator.set_registration(regs)

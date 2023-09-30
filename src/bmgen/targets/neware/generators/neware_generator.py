@@ -12,3 +12,7 @@ class NewareGenerator(BaseGenerator):
 
     def add(self, line):
         self.program.lines.append(line)
+
+    def ast(self):
+        self.finish()
+        return str(self.program)

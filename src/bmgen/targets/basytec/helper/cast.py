@@ -13,17 +13,23 @@ def autocast(**units: Dict[str, str]):
             newargs = []
             for a, p in zip(args, params):
                 if p in units:
-                    newargs.append(
-                        ast.BasytecValue(value=a, unit=ast.BasytecUnit(units[p]))
-                    )
+                    if isinstance(a, ast.BasytecValue):
+                        newargs.append(a)
+                    else:
+                        newargs.append(
+                            ast.BasytecValueLiteral(
+                                value=a, unit=ast.BasytecUnit(units[p])
+                            )
+                        )
                 else:
                     newargs.append(a)
             args = newargs
             for k, v in kwargs.items():
                 if k in units:
-                    kwargs[k] = ast.BasytecValue(
-                        value=v, unit=ast.BasytecUnit(units[k])
-                    )
+                    if not isinstance(v, ast.BasytecValue):
+                        kwargs[k] = ast.BasytecValueLiteral(
+                            value=v, unit=ast.BasytecUnit(units[k])
+                        )
             return f(*args, **kwargs)
 
         return g
