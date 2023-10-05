@@ -1,16 +1,5 @@
 from dataclasses import dataclass, field
-from bmgen.targets.neware.constants import (
-    StepType,
-    Factor,
-    LimitType,
-    StepColors,
-    RecordType,
-    NewareAction,
-    NewareOtherType,
-    NewareComparator,
-    NewareGlobalVariable,
-    NewareGotoTarget,
-)
+import bmgen.targets.neware.constants as constants
 import xml.etree.ElementTree as ee
 from typing import List, Dict
 from datetime import datetime
@@ -19,9 +8,9 @@ import bmgen
 
 @dataclass
 class NewareLimit:
-    type: LimitType
+    type: constants.LimitType
     value: float
-    action: NewareAction = NewareAction.NextStep
+    action: constants.NewareAction = constants.NewareAction.NextStep
 
 
 @dataclass
@@ -31,11 +20,11 @@ class NewareExpressionString:
 
 @dataclass
 class NewareOther:
-    type: NewareOtherType
+    type: constants.NewareOtherType
     userVariableId: int
-    globalVariable: NewareGlobalVariable | int
-    comparator: NewareComparator = NewareComparator.Nothing
-    goto: NewareGotoTarget = NewareGotoTarget.Nothing
+    globalVariable: constants.NewareGlobalVariable | int
+    comparator: constants.NewareComparator = constants.NewareComparator.Nothing
+    goto: constants.NewareGotoTarget = constants.NewareGotoTarget.Nothing
     expressionName: str | None = None
     expression: NewareExpressionString | None = None
 
@@ -51,7 +40,7 @@ class NewareOther:
             "GLobleType": "1",
             "Aux": "0",
         }
-        if isinstance(self.globalVariable, NewareGlobalVariable):
+        if isinstance(self.globalVariable, constants.NewareGlobalVariable):
             attr["GlobalVar"] = str(self.globalVariable.value)
         else:
             attr["GlobalVar"] = str(self.globalVariable)
@@ -61,11 +50,19 @@ class NewareOther:
             attr["Expression"] = self.expression.expression
         return ee.SubElement(parent, f"Cnd{number}", attr)
 
+    def toText(self):
+        raise NotImplementedError()
+
 
 @dataclass
 class NewareSet(NewareOther):
-    def __init__(self, userVariableId: int, globalVariable: NewareGlobalVariable):
-        super().__init__(NewareOtherType.Set, userVariableId, globalVariable)
+    def __init__(
+        self, userVariableId: int, globalVariable: constants.NewareGlobalVariable
+    ):
+        super().__init__(constants.NewareOtherType.Set, userVariableId, globalVariable)
+
+    def toText(self):
+        return f"SET User{self.userVariableId - constants.FirstUserVariableId + 1} = {self.globalVariable.name}"
 
 
 @dataclass
@@ -76,21 +73,26 @@ class NewareExpression(NewareOther):
         globalVariable: int,
         expressionName: str,
         expression: NewareExpressionString,
-        comparator: NewareComparator,
+        comparator: constants.NewareComparator,
+        goto: constants.NewareGotoTarget,
     ):
         super().__init__(
-            NewareOtherType.Expression,
+            constants.NewareOtherType.Expression,
             userVariableId,
             globalVariable,
             expressionName=expressionName,
             expression=expression,
             comparator=comparator,
+            goto=goto,
         )
+
+    def toText(self):
+        return f"IF {self.expression.expression} {constants.NewareComparatorNames[self.comparator]} 0 GOTO {constants.NewareGotoNames[self.goto]}"
 
 
 @dataclass
 class NewareStatement:
-    operator: StepType
+    operator: constants.StepType
     steptime: float | None = None
     voltage: float | None = None
     current: float | None = None
@@ -107,17 +109,21 @@ class NewareStatement:
         limit = ee.SubElement(step, "Limit")
         limitMain = ee.SubElement(limit, "Main")
         if self.steptime != None:
-            _addLimit(limitMain, "Time", self.steptime, Factor.Time)
+            _addLimit(limitMain, "Time", self.steptime, constants.Factor.Time)
         if self.voltage != None:
-            _addLimit(limitMain, "Volt", self.voltage, Factor.Voltage)
+            _addLimit(limitMain, "Volt", self.voltage, constants.Factor.Voltage)
         if self.current != None:
-            _addLimit(limitMain, "Curr", self.current, Factor.Current)
+            _addLimit(limitMain, "Curr", self.current, constants.Factor.Current)
         if self.capacity != None:
-            _addLimit(limitMain, "Cap", self.capacity, Factor.Capacity)
+            _addLimit(limitMain, "Cap", self.capacity, constants.Factor.Capacity)
         if self.cutoffVoltage != None:
-            _addLimit(limitMain, "Stop_Volt", self.cutoffVoltage, Factor.Voltage)
+            _addLimit(
+                limitMain, "Stop_Volt", self.cutoffVoltage, constants.Factor.Voltage
+            )
         if self.cutoffCurrent != None:
-            _addLimit(limitMain, "Stop_Curr", self.cutoffCurrent, Factor.Current)
+            _addLimit(
+                limitMain, "Stop_Curr", self.cutoffCurrent, constants.Factor.Current
+            )
 
         if self.others:
             limitOther = ee.SubElement(
@@ -149,8 +155,8 @@ class NewareStatement:
         return str(value)
 
     def toTable(self, linenumber):
-        if self.operator in StepColors:
-            color = StepColors[self.operator]
+        if self.operator in constants.StepColors:
+            color = constants.StepColors[self.operator]
         else:
             color = "#000000"
         stepname = str(self.operator).split(".")[1].replace("_", " ")
@@ -160,14 +166,15 @@ class NewareStatement:
         cutoffVoltage = self._str(self.cutoffVoltage)
         cutoffCurrent = self._str(self.cutoffCurrent)
         capacity = self._str(self.capacity)
-        return f'<tr style="color: {color}"><td>{linenumber}</td><td>{stepname}</td><td>{steptime}</td><td>{voltage}</td><td>{current}</td><td>{cutoffVoltage}</td><td>{cutoffCurrent}</td><td>{capacity}</td><td></td></tr>\n'
+        others = "<br>".join([o.toText() for o in self.others])
+        return f'<tr style="color: {color}"><td>{linenumber}</td><td>{stepname}</td><td>{steptime}</td><td>{voltage}</td><td>{current}</td><td>{cutoffVoltage}</td><td>{cutoffCurrent}</td><td>{capacity}</td><td>{others}</td></tr>\n'
 
 
 @dataclass
 class NewareProgram:
     lines: List[NewareStatement] = field(default_factory=list)
-    protections: Dict[LimitType, float] = field(default_factory=dict)
-    record: Dict[RecordType, float] = field(default_factory=dict)
+    protections: Dict[constants.LimitType, float] = field(default_factory=dict)
+    record: Dict[constants.RecordType, float] = field(default_factory=dict)
 
     def _header(self):
         header = ee.Element("Head_Info")
@@ -190,53 +197,68 @@ class NewareProgram:
 
         # voltage
         if (
-            LimitType.VoltageLower in self.protections
-            or LimitType.VoltageUpper in self.protections
+            constants.LimitType.VoltageLower in self.protections
+            or constants.LimitType.VoltageUpper in self.protections
         ):
             volt = ee.SubElement(main, "Volt")
-            if LimitType.VoltageLower in self.protections:
-                value = self.protections[LimitType.VoltageLower]
-                _addLimit(volt, "Lower", value, Factor.Voltage)
-            if LimitType.VoltageUpper in self.protections:
-                value = self.protections[LimitType.VoltageUpper]
-                _addLimit(volt, "Upper", value, Factor.Voltage)
+            if constants.LimitType.VoltageLower in self.protections:
+                value = self.protections[constants.LimitType.VoltageLower]
+                _addLimit(volt, "Lower", value, constants.Factor.Voltage)
+            if constants.LimitType.VoltageUpper in self.protections:
+                value = self.protections[constants.LimitType.VoltageUpper]
+                _addLimit(volt, "Upper", value, constants.Factor.Voltage)
 
         # current
         if (
-            LimitType.CurrentLower in self.protections
-            or LimitType.CurrentUpper in self.protections
+            constants.LimitType.CurrentLower in self.protections
+            or constants.LimitType.CurrentUpper in self.protections
         ):
             curr = ee.SubElement(main, "Curr")
-            if LimitType.CurrentLower in self.protections:
-                value = self.protections[LimitType.CurrentLower]
-                _addLimit(curr, "Lower", value, Factor.Current)
-            if LimitType.CurrentUpper in self.protections:
-                value = self.protections[LimitType.CurrentUpper]
-                _addLimit(curr, "Upper", value, Factor.Current)
+            if constants.LimitType.CurrentLower in self.protections:
+                value = self.protections[constants.LimitType.CurrentLower]
+                _addLimit(curr, "Lower", value, constants.Factor.Current)
+            if constants.LimitType.CurrentUpper in self.protections:
+                value = self.protections[constants.LimitType.CurrentUpper]
+                _addLimit(curr, "Upper", value, constants.Factor.Current)
 
         # capacity
-        if LimitType.CapacityUpper in self.protections:
+        if constants.LimitType.CapacityUpper in self.protections:
             cap = ee.SubElement(main, "Cap")
-            value = self.protections[LimitType.CapacityUpper]
-            _addLimit(cap, "Upper", value, Factor.Capacity)
+            value = self.protections[constants.LimitType.CapacityUpper]
+            _addLimit(cap, "Upper", value, constants.Factor.Capacity)
 
         # delay
-        if LimitType.Time in self.protections:
-            value = self.protections[LimitType.Time]
-            _addLimit(main, "Delay", value, Factor.Time)
+        if constants.LimitType.Time in self.protections:
+            value = self.protections[constants.LimitType.Time]
+            _addLimit(main, "Delay", value, constants.Factor.Time)
 
         # record settings
         if not self.record:
-            self.record[RecordType.Time] = 1
+            self.record[constants.RecordType.Time] = 1
 
         record = ee.SubElement(whole, "Record")
         mainr = ee.SubElement(record, "Main")
-        if RecordType.Time in self.record:
-            _addLimit(mainr, "Time", self.record[RecordType.Time], Factor.Time)
-        if RecordType.Voltage in self.record:
-            _addLimit(mainr, "Volt", self.record[RecordType.Voltage], Factor.Voltage)
-        if RecordType.Current in self.record:
-            _addLimit(mainr, "Curr", self.record[RecordType.Current], Factor.Current)
+        if constants.RecordType.Time in self.record:
+            _addLimit(
+                mainr,
+                "Time",
+                self.record[constants.RecordType.Time],
+                constants.Factor.Time,
+            )
+        if constants.RecordType.Voltage in self.record:
+            _addLimit(
+                mainr,
+                "Volt",
+                self.record[constants.RecordType.Voltage],
+                constants.Factor.Voltage,
+            )
+        if constants.RecordType.Current in self.record:
+            _addLimit(
+                mainr,
+                "Curr",
+                self.record[constants.RecordType.Current],
+                constants.Factor.Current,
+            )
 
         return whole
 

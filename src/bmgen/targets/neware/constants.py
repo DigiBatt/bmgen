@@ -107,5 +107,16 @@ class NewareGotoTarget(Enum):
     Next = 65526
 
 
+NewareComparatorNames = {
+    NewareComparator.Greater: ">",
+    NewareComparator.Nothing: "",
+    NewareComparator.Less: "<",
+}
+
+NewareGotoNames = {
+    NewareGotoTarget.Nothing: "",
+    NewareGotoTarget.Next: "next line",
+}
+
 FirstUserVariableId = 71
 ExpressionVariableId = 2147483647

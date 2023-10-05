@@ -7,6 +7,7 @@ from bmgen.targets.neware.constants import (
     LimitType,
     NewareComparator,
     ExpressionVariableId,
+    NewareGotoTarget,
 )
 
 
@@ -35,6 +36,7 @@ class NewareStepCharge:
                 "expr1",
                 NewareExpressionString("Ah - " + other.expression),
                 NewareComparator.Less,
+                NewareGotoTarget.Next,
             )
         else:
             return NewareExpression(
@@ -43,6 +45,7 @@ class NewareStepCharge:
                 "expr1",
                 NewareExpressionString("Ah - " + str(other)),
                 NewareComparator.Less,
+                NewareGotoTarget.Next,
             )
 
     def __gt__(self, other: float | NewareExpressionString):
@@ -53,6 +56,7 @@ class NewareStepCharge:
                 "expr1",
                 NewareExpressionString("Ah - " + other.expression),
                 NewareComparator.Greater,
+                NewareGotoTarget.Next,
             )
         else:
             return NewareExpression(
@@ -61,6 +65,7 @@ class NewareStepCharge:
                 "expr1",
                 NewareExpressionString("Ah - " + str(other)),
                 NewareComparator.Greater,
+                NewareGotoTarget.Next,
             )
 
 
