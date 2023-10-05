@@ -254,7 +254,7 @@ class NewareProgram:
             {
                 "version": "17",
                 "type": "Step File",
-                "client_": "BTS Client 8.0.0.484(2021.08.25)(R3)",
+                "client_version": "BTS Client 8.0.0.484(2021.08.25)(R3)",
                 "date": timestamp,
                 "Guid": "0045b3d2-59aa-4cb0-9cb8-6a7d7895c0a3",
             },
