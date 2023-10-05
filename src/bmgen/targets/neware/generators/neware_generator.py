@@ -1,14 +1,15 @@
 from bmgen.base_generator import BaseGenerator
 from bmgen.targets.neware.ast import NewareProgram, NewareStatement
-from bmgen.targets.neware.constants import StepType
+import bmgen.targets.neware.constants as constants
 
 
 class NewareGenerator(BaseGenerator):
     def __init__(self):
         self.program = NewareProgram()
+        self.userVarId = constants.FirstUserVariableId
 
     def finish(self):
-        self.add(NewareStatement(StepType.End))
+        self.add(NewareStatement(constants.StepType.End))
 
     def add(self, line):
         self.program.lines.append(line)
@@ -17,3 +18,7 @@ class NewareGenerator(BaseGenerator):
     def ast(self):
         self.finish()
         return str(self.program)
+
+    def userVar(self):
+        self.userVarId += 1
+        return self.userVarId - 1

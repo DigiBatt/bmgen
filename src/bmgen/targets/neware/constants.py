@@ -108,3 +108,4 @@ class NewareGotoTarget(Enum):
 
 
 FirstUserVariableId = 71
+ExpressionVariableId = 2147483647

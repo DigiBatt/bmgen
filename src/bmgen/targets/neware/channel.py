@@ -3,7 +3,11 @@ from bmgen.targets.neware.ast import (
     NewareExpression,
     NewareExpressionString,
 )
-from bmgen.targets.neware.constants import LimitType, NewareComparator
+from bmgen.targets.neware.constants import (
+    LimitType,
+    NewareComparator,
+    ExpressionVariableId,
+)
 
 
 class NewareCurrent:
@@ -26,16 +30,16 @@ class NewareStepCharge:
     def __lt__(self, other: float | NewareExpressionString):
         if isinstance(other, NewareExpressionString):
             return NewareExpression(
-                2147483647,
-                2147483647,
+                ExpressionVariableId,
+                ExpressionVariableId,
                 "expr1",
                 NewareExpressionString("Ah - " + other.expression),
                 NewareComparator.Less,
             )
         else:
             return NewareExpression(
-                2147483647,
-                2147483647,
+                ExpressionVariableId,
+                ExpressionVariableId,
                 "expr1",
                 NewareExpressionString("Ah - " + str(other)),
                 NewareComparator.Less,
@@ -44,16 +48,16 @@ class NewareStepCharge:
     def __gt__(self, other: float | NewareExpressionString):
         if isinstance(other, NewareExpressionString):
             return NewareExpression(
-                2147483647,
-                2147483647,
+                ExpressionVariableId,
+                ExpressionVariableId,
                 "expr1",
                 NewareExpressionString("Ah - " + other.expression),
                 NewareComparator.Greater,
             )
         else:
             return NewareExpression(
-                2147483647,
-                2147483647,
+                ExpressionVariableId,
+                ExpressionVariableId,
                 "expr1",
                 NewareExpressionString("Ah - " + str(other)),
                 NewareComparator.Greater,
