@@ -6,6 +6,10 @@ from bmgen.targets.neware.constants import (
     StepColors,
     RecordType,
     NewareAction,
+    NewareOtherType,
+    NewareComparator,
+    NewareGlobalVariable,
+    NewareGotoTarget,
 )
 import xml.etree.ElementTree as ee
 from typing import List, Dict
@@ -21,6 +25,70 @@ class NewareLimit:
 
 
 @dataclass
+class NewareExpressionString:
+    expression: str
+
+
+@dataclass
+class NewareOther:
+    type: NewareOtherType
+    userVariableId: int
+    globalVariable: NewareGlobalVariable | int
+    comparator: NewareComparator = NewareComparator.Nothing
+    goto: NewareGotoTarget = NewareGotoTarget.Nothing
+    expressionName: str | None = None
+    expression: NewareExpressionString | None = None
+
+    def toXML(self, parent, number):
+        attr = {
+            "type": str(self.type.value),
+            "Function": "0",
+            "CmpType": str(self.comparator.value),
+            "Jump_Line": str(self.goto.value),
+            "Value": "0",
+            "TimeGoto": "0",
+            "GlobleUserID": str(self.userVariableId),
+            "GLobleType": "1",
+            "Aux": "0",
+        }
+        if isinstance(self.globalVariable, NewareGlobalVariable):
+            attr["GlobalVar"] = str(self.globalVariable.value)
+        else:
+            attr["GlobalVar"] = str(self.globalVariable)
+        if self.expressionName:
+            attr["ExpressionName"] = self.expressionName
+        if self.expression:
+            attr["Expression"] = self.expression.expression
+        return ee.SubElement(parent, f"Cnd{number}", attr)
+
+
+@dataclass
+class NewareSet(NewareOther):
+    def __init__(self, userVariableId: int, globalVariable: NewareGlobalVariable):
+        super().__init__(NewareOtherType.Set, userVariableId, globalVariable)
+
+
+@dataclass
+class NewareExpression(NewareOther):
+    def __init__(
+        self,
+        userVariableId: int,
+        globalVariable: int,
+        expressionName: str,
+        expression: NewareExpressionString,
+        comparator: NewareComparator,
+    ):
+        super().__init__(
+            NewareOtherType.Expression,
+            userVariableId,
+            globalVariable,
+            expressionName=expressionName,
+            expression=expression,
+            comparator=comparator,
+        )
+
+
+@dataclass
 class NewareStatement:
     operator: StepType
     steptime: float | None = None
@@ -29,7 +97,7 @@ class NewareStatement:
     cutoffVoltage: float | None = None
     cutoffCurrent: float | None = None
     capacity: float | None = None
-    others: str | None = None
+    others: List[NewareOther] = field(default_factory=list)
 
     def toXML(self, linenumber: int):
         step = ee.Element(
@@ -52,7 +120,11 @@ class NewareStatement:
             _addLimit(limitMain, "Stop_Curr", self.cutoffCurrent, Factor.Current)
 
         if self.others:
-            raise NotImplementedError("Other Neware limits not yet implemented")
+            limitOther = ee.SubElement(
+                limit, "Other", {"CndCount": str(len(self.others))}
+            )
+            for n, o in enumerate(self.others, 1):
+                o.toXML(limitOther, n)
 
         advamced = ee.SubElement(step, "AdvancedPrt")
         advancedCV = ee.SubElement(advamced, "CV_Chg")
@@ -180,9 +252,9 @@ class NewareProgram:
             root,
             "config",
             {
-                "version": "16",
+                "version": "17",
                 "type": "Step File",
-                "client_version": "BTS Client 8.0.0.484(2021.08.25)(R3)",
+                "client_": "BTS Client 8.0.0.484(2021.08.25)(R3)",
                 "date": timestamp,
                 "Guid": "0045b3d2-59aa-4cb0-9cb8-6a7d7895c0a3",
             },

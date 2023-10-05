@@ -72,3 +72,39 @@ class NewareAction(Enum):
     Protected = 2
     Stop = 3
     NextStep = 4
+
+
+class NewareOtherType(Enum):
+    Expression = 22
+    Set = 23
+
+
+class NewareComparator(Enum):
+    Greater = 3
+    Nothing = 4
+    Less = 5
+
+
+class NewareGlobalVariable(Enum):
+    Voltage = 1
+    VolMax = 2
+    VolMin = 3
+    Current = 4
+    CurrMax = 5
+    CurrMin = 6
+    StepTime = 7
+    TestTime = 8
+    Ah = 9
+    ChargeAh = 10
+    DischargeAh = 11
+    Wh = 12
+    ChargeWh = 13
+    DischargeWh = 14
+
+
+class NewareGotoTarget(Enum):
+    Nothing = 0
+    Next = 65526
+
+
+FirstUserVariableId = 71

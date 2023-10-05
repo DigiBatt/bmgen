@@ -8,7 +8,7 @@ from typing import List
 def charge(
     current: float,
     voltage: float | None = None,
-    limits: List[NewareLimit] | None = None,
+    limits: List[NewareLimit | NewareExpression] | None = None,
 ):
     limits = limitcast(limits)
     if voltage:
@@ -24,7 +24,7 @@ def charge(
             raise NotImplementedError(
                 "CCCV charge step must have a current cutoff condition"
             )
-        target.generator.add(
+        return target.generator.add(
             NewareStatement(
                 operator=StepType.CCCV_Chg, current=current, voltage=voltage, **args
             )
@@ -42,7 +42,7 @@ def charge(
             raise NotImplementedError(
                 "CC charge step must have a voltage cutoff condition"
             )
-        target.generator.add(
+        return target.generator.add(
             NewareStatement(operator=StepType.CC_Chg, current=current, **args)
         )
 
@@ -50,7 +50,7 @@ def charge(
 def discharge(
     current: float,
     voltage: float | None = None,
-    limits: List[NewareLimit] | None = None,
+    limits: List[NewareLimit | NewareExpression] | None = None,
 ):
     limits = limitcast(limits)
     if voltage:
@@ -66,7 +66,7 @@ def discharge(
             raise NotImplementedError(
                 "CCCV discharge step must have a current cutoff condition"
             )
-        target.generator.add(
+        return target.generator.add(
             NewareStatement(
                 operator=StepType.CCCV_DChg, current=current, voltage=voltage, **args
             )
@@ -84,13 +84,13 @@ def discharge(
             raise NotImplementedError(
                 "CC discharge step must have a voltage cutoff condition"
             )
-        target.generator.add(
+        return target.generator.add(
             NewareStatement(operator=StepType.CC_DChg, current=current, **args)
         )
 
 
 def pause(
-    limits: List[NewareLimit] | None = None,
+    limits: List[NewareLimit | NewareExpression] | None = None,
     hours: float = 0,
     minutes: float = 0,
     seconds: float = 0,
@@ -99,7 +99,7 @@ def pause(
     if hours or minutes or seconds:
         limits.append(time(hours, minutes, seconds).toLimit())
     args, protections = _limits_to_args(limits, {LimitType.Time: "steptime"})
-    target.generator.add(NewareStatement(operator=StepType.Rest, **args))
+    return target.generator.add(NewareStatement(operator=StepType.Rest, **args))
 
 
 @dataclass
@@ -131,10 +131,15 @@ def _limits_to_args(limits: List[NewareLimit], limitArgs: Dict[LimitType, str]):
     args = {}
     protections = []
     for l in limits:
-        if l.type in limitArgs and l.action == NewareAction.NextStep:
-            args[limitArgs[l.type]] = l.value
+        if isinstance(l, NewareExpression):
+            if not "others" in args:
+                args["others"] = []
+            args["others"].append(l)
         else:
-            protections.append(l)
+            if l.type in limitArgs and l.action == NewareAction.NextStep:
+                args[limitArgs[l.type]] = l.value
+            else:
+                protections.append(l)
     return (args, protections)
 
 

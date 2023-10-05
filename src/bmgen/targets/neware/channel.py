@@ -1,5 +1,9 @@
-from bmgen.targets.neware.ast import NewareLimit
-from bmgen.targets.neware.constants import LimitType
+from bmgen.targets.neware.ast import (
+    NewareLimit,
+    NewareExpression,
+    NewareExpressionString,
+)
+from bmgen.targets.neware.constants import LimitType, NewareComparator
 
 
 class NewareCurrent:
@@ -18,5 +22,44 @@ class NewareVoltage:
         return NewareLimit(LimitType.VoltageUpper, other)
 
 
+class NewareStepCharge:
+    def __lt__(self, other: float | NewareExpressionString):
+        if isinstance(other, NewareExpressionString):
+            return NewareExpression(
+                2147483647,
+                2147483647,
+                "expr1",
+                NewareExpressionString("Ah - " + other.expression),
+                NewareComparator.Less,
+            )
+        else:
+            return NewareExpression(
+                2147483647,
+                2147483647,
+                "expr1",
+                NewareExpressionString("Ah - " + str(other)),
+                NewareComparator.Less,
+            )
+
+    def __gt__(self, other: float | NewareExpressionString):
+        if isinstance(other, NewareExpressionString):
+            return NewareExpression(
+                2147483647,
+                2147483647,
+                "expr1",
+                NewareExpressionString("Ah - " + other.expression),
+                NewareComparator.Greater,
+            )
+        else:
+            return NewareExpression(
+                2147483647,
+                2147483647,
+                "expr1",
+                NewareExpressionString("Ah - " + str(other)),
+                NewareComparator.Greater,
+            )
+
+
 I = NewareCurrent()
 V = NewareVoltage()
+StepCharge = NewareStepCharge()
