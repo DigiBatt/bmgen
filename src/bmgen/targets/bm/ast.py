@@ -96,6 +96,10 @@ class BMVariable(BMNumValue):
         )
         return valuevar
 
+    @cast.autocast()
+    def __rmul__(self, other: BMNumValue):
+        return other * self
+
 
 @dataclass
 class BMNumber(BMNumValue):
