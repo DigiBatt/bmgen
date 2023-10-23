@@ -2,11 +2,9 @@ from bmgen.targets.bm.ast import (
     BMVariable,
     BMStatement,
     BMAssignment,
-    BMLimit,
-    BMLimitCondition,
-    BMAction,
     BMNumValue,
     BMNumber,
+    BMArray,
 )
 import bmgen.targets.bm as target
 from bmgen.targets.bm.helper.cast import autocast
@@ -42,7 +40,7 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
                     ],
                 )
             )
-            var.arraynum = arraynum
+            return BMArray(name, arraynum, len(value))
         elif isinstance(value, BMStatement):
             return BMStepInfo(value, name)
         else:

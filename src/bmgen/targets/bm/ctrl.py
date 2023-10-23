@@ -7,10 +7,11 @@ class ctrl_for:
         self.var = var
         self.iterable = iterable
         self.simple = isinstance(self.iterable, range) and self.iterable.step == 1
+        self.arrayloop = isinstance(self.iterable, BMArray)
 
     def __enter__(self):
         if self.simple:
-            if self.iterable.start != 0:
+            if self.iterable.start != 1:
                 target.generator.add(
                     BMStatement(
                         operator="SET",
@@ -23,6 +24,22 @@ class ctrl_for:
                     )
                 )
             target.generator.add(BMStatement(operator="BEG", values=[self.var]))
+        elif self.arrayloop:
+            counter = BMVariable(self.var.name + "_idx")
+            target.generator.add(
+                BMStatement(
+                    operator="SET",
+                    values=[
+                        BMAssignment(
+                            variable=counter,
+                            numvalue=BMNumber(0),
+                        )
+                    ],
+                )
+            )
+            target.generator.add(BMStatement(operator="BEG", values=[counter]))
+            valuevar = self.iterable.__getitem__(counter)
+            self.var.name = valuevar.name
         else:
             raise NotImplementedError(
                 "BM loops current only work with ranges with stepsize 1 ( e.g. for i in range(10) )"
@@ -35,6 +52,13 @@ class ctrl_for:
             target.generator.add(
                 BMStatement(
                     operator="CYC", values=[BMCycleCount(BMNumber(self.iterable.stop))]
+                )
+            )
+        elif self.arrayloop:
+            target.generator.add(
+                BMStatement(
+                    operator="CYC",
+                    values=[BMCycleCount(BMNumber(self.iterable.arraysize - 1))],
                 )
             )
         else:

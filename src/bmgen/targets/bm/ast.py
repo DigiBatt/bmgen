@@ -25,7 +25,6 @@ class BMNumValue(BMNode):
 @dataclass
 class BMVariable(BMNumValue):
     name: str
-    arraynum: int | None = None
 
     def toText(self):
         return self.name
@@ -43,6 +42,16 @@ class BMVariable(BMNumValue):
     def __iadd__(self, other: BMNumValue):
         bm.generator.add(BMStatement(operator="ADD", values=[self, other]))
         return self
+
+    @cast.autocast()
+    def __rmul__(self, other: BMNumValue):
+        return other * self
+
+
+@dataclass
+class BMArray(BMVariable):
+    arraynum: int
+    arraysize: int
 
     @cast.autocast()
     def __getitem__(self, key: BMNumValue):
@@ -100,10 +109,6 @@ class BMVariable(BMNumValue):
             BMStatement(operator="PAU", limits=[BMLimit(BMVariable("arrSET") > idx)])
         )
         return valuevar
-
-    @cast.autocast()
-    def __rmul__(self, other: BMNumValue):
-        return other * self
 
 
 @dataclass
