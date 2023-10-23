@@ -32,6 +32,11 @@ class BMVariable(BMNumValue):
 
     @cast.autocast("other")
     def __compare__(self, other: BMNumValue, operator: str):
+        # special case for upper current limits to avoid restricting discharge currents. See BM manual p. 170.
+        if self.name == "A" and operator == ">" or operator == ">=":
+            return BMLimitCompare(
+                lhs=BMVariable("A_notAbs"), rhs=other, operator=operator
+            )
         return BMLimitCompare(lhs=self, rhs=other, operator=operator)
 
     @cast.autocast()
