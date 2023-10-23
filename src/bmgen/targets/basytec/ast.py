@@ -60,6 +60,9 @@ class BasytecValueLiteral(BasytecValue):
     def toText(self):
         return f"{self.value}{self.unit.name}"
 
+    def __rmul__(self, other):
+        return BasytecValueLiteral(self.value * other, self.unit)
+
 
 @dataclass
 class BasytecVariable(BasytecValue):
