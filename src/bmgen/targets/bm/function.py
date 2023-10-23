@@ -67,10 +67,14 @@ def pause(
 
 
 def limit(condition: BMLimitCondition, action: BMAction | None = None):
+    if isinstance(condition, _time):
+        condition = BMLimitTime(condition.toBMTime())
     return BMLimit(condition=condition, action=action)
 
 
 def limit_global(condition: BMLimitCondition, action: BMAction | None = None):
+    if isinstance(condition, _time):
+        condition = BMLimitTime(condition.toBMTime())
     target.generator.add(
         BMStatement(
             operator="SET", limits=[BMLimit(condition=condition, action=action)]
