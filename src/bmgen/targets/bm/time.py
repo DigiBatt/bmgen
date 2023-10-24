@@ -28,7 +28,7 @@ class time:
                     self.seconds.value += self.minutes.value * 60
                 else:
                     raise NotImplementedError("BM time limit can only have one unit")
-            return ast.BMTime(value=self.seconds, unit="s")
+            return ast.BMTime(value=self.seconds, unit="sec")
         if self.minutes:
             if self.hours:
                 if isinstance(self.hours, ast.BMNumber) and isinstance(
