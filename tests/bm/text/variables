@@ -1,4 +1,4 @@
-	1		SET		> 4.2 V\r\n< 2.5 V\r\n> 5 A\r\n< -5 A	ERR 1\r\nERR 1\r\nERR 1\r\nERR 1	
+	1		SET		> 4.2 V\r\n< 2.5 V\r\n> 5 A_notAbs\r\n< -5 A	ERR 1\r\nERR 1\r\nERR 1\r\nERR 1	
 	2		SET	ChgCurrent = 2.0\r\nDchCurrent = 1.5			
 	3		CHA	ChgCurrent A\r\n4.2 V	< 0.2 A		
 	4		PAU		90 min		
