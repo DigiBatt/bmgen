@@ -1,0 +1,7 @@
+	1		SET	test = 5			
+	2		ADD	test\r\n3			
+	3		SUB	test\r\n7			
+	4		MUL	test\r\n3			
+	5		DIV	test\r\n2			
+	6		CHA	test A	> 4.2 V		
+	7		STO				

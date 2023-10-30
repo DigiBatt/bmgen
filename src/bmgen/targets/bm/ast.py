@@ -44,6 +44,21 @@ class BMVariable(BMNumValue):
         return self
 
     @cast.autocast()
+    def __isub__(self, other: BMNumValue):
+        bm.generator.add(BMStatement(operator="SUB", values=[self, other]))
+        return self
+
+    @cast.autocast()
+    def __imul__(self, other: BMNumValue):
+        bm.generator.add(BMStatement(operator="MUL", values=[self, other]))
+        return self
+
+    @cast.autocast()
+    def __itruediv__(self, other: BMNumValue):
+        bm.generator.add(BMStatement(operator="DIV", values=[self, other]))
+        return self
+
+    @cast.autocast()
     def __rmul__(self, other: BMNumValue):
         return other * self
 
