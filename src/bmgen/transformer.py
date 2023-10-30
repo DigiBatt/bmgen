@@ -93,6 +93,7 @@ class Transformer(ast.NodeTransformer):
             node,
         )
         self.imports["ctrl"].add("ctrl_for")
+        self.imports["program"].add("variable")
         self.generic_visit(node)
         return a
 

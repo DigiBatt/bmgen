@@ -23,7 +23,12 @@ class ctrl_for:
                         ],
                     )
                 )
-            target.generator.add(BMStatement(operator="BEG", values=[self.var]))
+                label = BMLabel(target.generator.label())
+                target.generator.add(BMStatement(operator="GOTO", values=[label]))
+                target.generator.add(BMStatement(operator="BEG", values=[self.var]))
+                target.generator.add(label)
+            else:
+                target.generator.add(BMStatement(operator="BEG", values=[self.var]))
         elif self.arrayloop:
             counter = BMVariable(self.var.name + "_idx")
             target.generator.add(
@@ -37,7 +42,10 @@ class ctrl_for:
                     ],
                 )
             )
+            label = BMLabel(target.generator.label())
+            target.generator.add(BMStatement(operator="GOTO", values=[label]))
             target.generator.add(BMStatement(operator="BEG", values=[counter]))
+            target.generator.add(label)
             valuevar = self.iterable.__getitem__(counter)
             self.var.name = valuevar.name
         else:

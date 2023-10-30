@@ -121,14 +121,13 @@ class BMNumber(BMNumValue):
 
 @dataclass
 class BMValue(BMNode):
-    numvalue: BMNumValue
-
     def toText(self):
         raise NotImplementedError()
 
 
 @dataclass
 class BMMultiplication(BMValue):
+    numvalue: BMNumValue
     variable: BMVariable
 
     def toText(self):
@@ -137,12 +136,15 @@ class BMMultiplication(BMValue):
 
 @dataclass
 class BMCycleCount(BMValue):
+    numvalue: BMNumValue
+
     def toText(self):
         return self.numvalue.toText() + " *"
 
 
 @dataclass
 class BMAssignment(BMValue):
+    numvalue: BMNumValue
     variable: BMVariable
 
     def toText(self):
@@ -289,10 +291,13 @@ class BMLine(BMNode):
     pass
 
 
-# needs to be comined with the next statement before output is generated
+# needs to be combined with the next statement before output is generated
 @dataclass
-class BMLabel(BMLine):
+class BMLabel(BMValue):
     label: str
+
+    def toText(self):
+        return self.label
 
 
 @dataclass

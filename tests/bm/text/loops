@@ -1,0 +1,15 @@
+	1		SET	idx = 0			
+	2		GOTO	bmgen_1			
+	3		BEG	idx			
+	4	bmgen_1	PAU		5 sec		
+	5		CYC	5 *			
+	6		BEG	idx			
+	7		PAU		5 sec		
+	8		CYC	3 *			
+	9		SET	values_IV = 123454321\r\nvalues_Val = 0\r\nvalues_0 = 2\r\nvalues_1 = 1\r\nvalues_2 = 5\r\nv_idx = 0			
+	10		GOTO	bmgen_2			
+	11		BEG	v_idx			
+	12	bmgen_2	PAU		> v_idx arrGET		
+	13		CHA	values_Val A	30 sec		
+	14		CYC	2 *			
+	15		STO				
