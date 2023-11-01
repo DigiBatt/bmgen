@@ -13,6 +13,7 @@ def charge(
     current: BMNumValue | BMMultiplication,
     voltage: BMNumValue | None = None,
     limits: List[BMLimit] | None = None,
+    registrations: List[BMRegistration] | None = None,
 ) -> BMStepInfo:
     if not limits:
         limits = []
@@ -26,7 +27,9 @@ def charge(
         values.append(BMMultiplication(voltage, BMVariable("V")))
 
     return target.generator.add(
-        BMStatement(operator="CHA", values=values, limits=limits)
+        BMStatement(
+            operator="CHA", values=values, limits=limits, registrations=registrations
+        )
     )
 
 
@@ -35,6 +38,7 @@ def discharge(
     current: BMNumValue | BMMultiplication,
     voltage: BMNumValue | None = None,
     limits: List[BMLimit] | None = None,
+    registrations: List[BMRegistration] | None = None,
 ) -> BMStepInfo:
     if not limits:
         limits = []
@@ -48,7 +52,9 @@ def discharge(
         values.append(BMMultiplication(voltage, BMVariable("V")))
 
     return target.generator.add(
-        BMStatement(operator="DCH", values=values, limits=limits)
+        BMStatement(
+            operator="DCH", values=values, limits=limits, registrations=registrations
+        )
     )
 
 
@@ -58,12 +64,15 @@ def pause(
     hours: BMNumValue | None = None,
     minutes: BMNumValue | None = None,
     seconds: BMNumValue | None = None,
+    registrations: List[BMRegistration] | None = None,
 ) -> BMStepInfo:
     if not limits:
         limits = []
     if hours or minutes or seconds:
         limits.append(time(hours, minutes, seconds).toLimit())
-    return target.generator.add(BMStatement(operator="PAU", limits=limits))
+    return target.generator.add(
+        BMStatement(operator="PAU", limits=limits, registrations=registrations)
+    )
 
 
 def limit(condition: BMLimitCondition, action: BMAction | None = None):
@@ -111,6 +120,16 @@ def error(errnum: int):
     return BMError(errnum)
 
 
+def register_global(
+    time: _time | None = None,
+    voltage: float | None = None,
+    current: float | None = None,
+    format: List | None = None,
+):
+    regs = register(time, voltage, current, format)
+    target.generator.add(BMStatement(operator="SET", registrations=regs))
+
+
 def register(
     time: _time | None = None,
     voltage: float | None = None,
@@ -128,4 +147,4 @@ def register(
         regs.append(BMRegCondition(value=BMNumber(voltage), channel=channel.V))
     if current:
         regs.append(BMRegCondition(value=BMNumber(current), channel=channel.I))
-    target.generator.add(BMStatement(operator="SET", registrations=regs))
+    return regs

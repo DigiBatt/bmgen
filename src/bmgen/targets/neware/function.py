@@ -156,6 +156,16 @@ def error(errnum: int):
     return NewareAction.Protected
 
 
+def register_global(
+    time: time | None = None,
+    voltage: float | None = None,
+    current: float | None = None,
+    format: List | None = None,
+):
+    record = register(time, voltage, current, format)
+    target.generator.program.record = record
+
+
 def register(
     time: time | None = None,
     voltage: float | None = None,
@@ -169,4 +179,4 @@ def register(
         record[RecordType.Voltage] = voltage
     if current:
         record[RecordType.Current] = current
-    target.generator.program.record = record
+    return record

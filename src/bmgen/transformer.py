@@ -120,8 +120,12 @@ class Transformer(ast.NodeTransformer):
         return a
 
     def visit_Expr(self, node):
-        if isinstance(node.value, ast.Call) and node.value.func.id == "limit":
-            node.value.func.id = "limit_global"
-            self.imports["function"].add("limit_global")
+        if isinstance(node.value, ast.Call):
+            if node.value.func.id == "limit":
+                node.value.func.id = "limit_global"
+                self.imports["function"].add("limit_global")
+            elif node.value.func.id == "register":
+                node.value.func.id = "register_global"
+                self.imports["function"].add("register_global")
         self.generic_visit(node)
         return node

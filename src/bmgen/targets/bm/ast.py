@@ -323,6 +323,10 @@ class BMStatement(BMLine):
     registrations: List[BMRegistration] = field(default_factory=list)
     label: str | None = None
 
+    def __post_init__(self):
+        if self.registrations == None:
+            self.registrations = []
+
     def toText(self, linenumber):
         value = "\\r\\n".join([v.toText() for v in self.values])
         registration = "\\r\\n".join([r.toText() for r in self.registrations])

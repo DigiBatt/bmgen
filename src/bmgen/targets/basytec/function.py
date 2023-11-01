@@ -11,13 +11,19 @@ def charge(
     current: BasytecValueLiteral,
     voltage: BasytecValueLiteral | None = None,
     limits: List[BasytecLimit] | None = None,
+    registrations: List[BasytecSetValue] | None = None,
 ):
     limits = limitcast(limits)
     params = [BasytecSetValue(I, current)]
     if voltage:
         params.append(BasytecSetValue(V, voltage))
     return target.generator.add(
-        BasytecStatement(operator=StepType.Charge, parameters=params, limits=limits)
+        BasytecStatement(
+            operator=StepType.Charge,
+            parameters=params,
+            limits=limits,
+            registrations=registrations,
+        )
     )
 
 
@@ -26,13 +32,19 @@ def discharge(
     current: BasytecValueLiteral,
     voltage: BasytecValueLiteral | None = None,
     limits: List[BasytecLimit] | None = None,
+    registrations: List[BasytecSetValue] | None = None,
 ):
     limits = limitcast(limits)
     params = [BasytecSetValue(I, current)]
     if voltage:
         params.append(BasytecSetValue(V, voltage))
     return target.generator.add(
-        BasytecStatement(operator=StepType.Discharge, parameters=params, limits=limits)
+        BasytecStatement(
+            operator=StepType.Discharge,
+            parameters=params,
+            limits=limits,
+            registrations=registrations,
+        )
     )
 
 
@@ -41,12 +53,15 @@ def pause(
     hours: float | None = None,
     minutes: float | None = None,
     seconds: float | None = None,
+    registrations: List[BasytecSetValue] | None = None,
 ):
     limits = limitcast(limits)
     if hours or minutes or seconds:
         limits.append(time(hours, minutes, seconds).toLimit())
     return target.generator.add(
-        BasytecStatement(operator=StepType.Pause, limits=limits)
+        BasytecStatement(
+            operator=StepType.Pause, limits=limits, registrations=registrations
+        )
     )
 
 
@@ -106,6 +121,17 @@ def error(errnum: int):
     return BasytecGoto("STOP")
 
 
+def register_global(
+    time: time | None = None,
+    voltage: BasytecValueLiteral | None = None,
+    current: BasytecValueLiteral | None = None,
+    format: List | None = None,
+):
+    regs = register(time, voltage, current, format)
+    target.generator.set_registration(regs)
+    return regs
+
+
 @autocast(current="A", voltage="V")
 def register(
     time: time | None = None,
@@ -120,4 +146,4 @@ def register(
         regs.append(BasytecSetValue(channel=V, value=voltage))
     if current:
         regs.append(BasytecSetValue(channel=I, value=current))
-    target.generator.set_registration(regs)
+    return regs
