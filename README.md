@@ -134,11 +134,11 @@ Name of the output file. If this option is not provided, the output is written t
 | registrations (global)                            | ✔️                         | ✔️    | ✔️      |
 | registrations (for individual steps)              | ➖                         | ➖    | ➖      |
 | variables in the generated program                | ✔️                         | ❌    | ➖      |
-| battery parameters                                | ✔️                         | ❌    | ➖      |
+| battery parameters                                | ✔️                         | ❌    | ✔️      |
 | if / else statements                              | ✔️                         | ➖    | ➖      |
 | loops with fixed cycle count                      | ✔️                         | ➖    | ➖      |
 | loops with arbitrary conditions                   | ➖                         | ❌    | ➖      |
-| references to duration/Ah count of previous steps | ➖                         | ❌    | ➖      |
+| references to duration/Ah count of previous steps | ✔️                         | ✔️    | ✔️      |
 | calculations in the generated program             | ➖ (+= and -= implemented) | ❌    | ➖      |
 | array constants                                   | ✔️                         | ➖    | ➖      |
 | mutable arrays                                    | ✔️                         | ❌    | ❌      |
