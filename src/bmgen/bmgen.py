@@ -19,16 +19,43 @@ import json
 @click.option("-o", "--out")
 @click.option("--no-timestamps", is_flag=True, default=False)
 @click.option("--battery")
+@click.option("-c", "--config")
 def main(
-    filename, target, format, intermediate, out, no_timestamps=False, battery=None
+    filename,
+    target,
+    format,
+    intermediate,
+    out,
+    no_timestamps=False,
+    battery=None,
+    config=None,
 ):
-    generate(filename, target, format, intermediate, out, no_timestamps, battery)
+    generate(
+        filename, target, format, intermediate, out, no_timestamps, battery, config
+    )
 
 
 def generate(
-    file, target, format, intermediate, out, no_timestamps=False, battery=None
+    file,
+    target,
+    format,
+    intermediate,
+    out,
+    no_timestamps=False,
+    battery=None,
+    config=None,
 ):
-    bmgen.options = {"no-timestamps": no_timestamps}
+    bmgen.options = {}
+    if config:
+        if isinstance(config, dict):
+            bmgen.options = config
+        elif config == "-":
+            bmgen.options = json.load(sys.stdin)
+        else:
+            with open(config, "r") as f:
+                bmgen.options = json.load(f)
+    if not "no-timestamps" in bmgen.options:
+        bmgen.options["no-timestamps"] = no_timestamps
 
     if file == "-":
         program = sys.stdin.read()
@@ -68,6 +95,8 @@ def generate(
         else:
             with open(battery, "r") as f:
                 target_battery = PredefindedBattery(**json.load(f))
+    elif "battery" in bmgen.options:
+        target_battery = PredefindedBattery(**bmgen.options["battery"])
     else:
         target_battery = getattr(
             import_module(f"bmgen.targets.{target}.battery"), "battery"

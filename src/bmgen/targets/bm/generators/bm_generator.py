@@ -1,5 +1,13 @@
 from bmgen.base_generator import BaseGenerator
-from bmgen.targets.bm.ast import BMProgram, BMStatement, BMLabel
+from bmgen.targets.bm.ast import (
+    BMProgram,
+    BMStatement,
+    BMLabel,
+    BMMultiplication,
+    BMNumber,
+    BMVariable,
+)
+import bmgen
 
 
 class BMGenerator(BaseGenerator):
@@ -12,6 +20,15 @@ class BMGenerator(BaseGenerator):
     def finish(self):
         # add stop line
         self.add(BMStatement(operator="STO"))
+
+        if bmgen.options.get("bm", {}).get("safetask", False):
+            self.program.lines.insert(
+                0,
+                BMStatement(
+                    operator="TASK",
+                    values=[BMMultiplication(BMNumber(1), BMVariable("SafeTask"))],
+                ),
+            )
 
         # combine labels with next line
         for i in range(len(self.program.lines)):
