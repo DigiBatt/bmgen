@@ -7,6 +7,7 @@ limit(V > 4.2, error(1))
 limit(V < 2.5, error(1))
 limit(I > 5, error(1))
 limit(I < -5, error(1))
+limit(T > 50, error(1))
 
 # specify test steps
 charge(current=2.0, voltage=4.2, limits=[I < 0.2])
