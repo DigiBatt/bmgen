@@ -381,8 +381,7 @@ class BMProgram(BMNode):
         return program
 
     def toTable(self):
-        table = '<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; }</style></head><body>'
-        table += "<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n"
+        table = "<table>\n<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>\n"
         linenumber = 1
         for i in range(len(self.lines)):
             line = self.lines[i]
@@ -393,5 +392,5 @@ class BMProgram(BMNode):
             else:
                 table += line.toTable(linenumber)
                 linenumber += 1
-        table += "</table></body></html>"
+        table += "</table>"
         return table

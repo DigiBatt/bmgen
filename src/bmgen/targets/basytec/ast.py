@@ -178,10 +178,8 @@ class BasytecProgram:
         return text
 
     def toTable(self):
-        table = '<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; } table {float: left}</style></head><body>'
-        table += "<table>\n<tr><th></th><th>Level</th><th>Label</th><th>Command</th><th>Parameter</th><th>Termination</th><th>Action</th><th>Registration</th><th>Comment</th></tr>\n"
+        table = "<table>\n<tr><th></th><th>Level</th><th>Label</th><th>Command</th><th>Parameter</th><th>Termination</th><th>Action</th><th>Registration</th><th>Comment</th></tr>\n"
         for i, line in enumerate(self.lines, 1):
             table += line.toTable(i)
         table += "</table>"
-        table += "</body></html>"
         return table

@@ -1,7 +1,8 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask_cors import CORS
 from bmgen import bmgen
 from io import StringIO
+import json
 
 app = Flask(
     "bmgen",
@@ -14,11 +15,14 @@ CORS(app)
 @app.route("/api/<target>/<format>/", methods=["POST"])
 def generate(target, format):
     f = request.files["program"]
+    config = None
+    if "config" in request.files:
+        config = json.load(request.files["config"])
     out = StringIO()
     f.seek(0)
     try:
-        bmgen.generate(f, target, format, None, out)
+        bmgen.generate(f, target, format, None, out, config=config)
         out.seek(0)
-        return out
+        return {"program": out.read()}
     except Exception as e:
-        return (str(e), 400)
+        return {"error": str(e)}

@@ -1,4 +1,4 @@
-<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; }</style></head><body><table>
+<table>
 <tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>
 <tr><td>1</td><td></td><td>SET</td><td>test = 5</td><td></td><td></td><td></td></tr>
 <tr><td>2</td><td></td><td>ADD</td><td>test<br>3</td><td></td><td></td><td></td></tr>
@@ -7,4 +7,4 @@
 <tr><td>5</td><td></td><td>DIV</td><td>test<br>2</td><td></td><td></td><td></td></tr>
 <tr><td>6</td><td></td><td>CHA</td><td>test A</td><td>> 4.2 V</td><td></td><td></td></tr>
 <tr><td>7</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
-</table></body></html>
+</table>
