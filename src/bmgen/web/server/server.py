@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, send_file
 from flask_cors import CORS
 from bmgen import bmgen
 from io import StringIO
@@ -19,6 +19,6 @@ def generate(target, format):
     try:
         bmgen.generate(f, target, format, None, out)
         out.seek(0)
-        return out
+        return {"program": out.read()}
     except Exception as e:
-        return (str(e), 400)
+        return {"error": str(e)}

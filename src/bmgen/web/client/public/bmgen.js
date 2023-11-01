@@ -64,13 +64,23 @@ function updateCode(event) {
     const target = targetdropdown.value;
     const program = editor.getValue();
     const callback = (xhr) => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            const data = xhr.response;
-            outputarea.innerHTML = data;
-        } else if (xhr.readyState == 4 && xhr.status == 400) {
-            const data = xhr.response;
-            outputarea.innerHTML = "Error: " + data;
+        if (xhr.readyState == 4) {
+            const data = JSON.parse(xhr.response);
+            outputarea.innerHTML = ""
+            if (data.error != null) {
+                outputarea.innerHTML += '<div class="error">Error: ' + data.error + '</div>';
+            }
+            if (data.program != null) {
+                outputarea.innerHTML += data.program;
+            }
         }
+        // if (xhr.readyState == 4 && xhr.status == 200) {
+        //     const data = xhr.response;
+        //     outputarea.innerHTML = data;
+        // } else if (xhr.readyState == 4 && xhr.status == 400) {
+        //     const data = xhr.response;
+        //     outputarea.innerHTML = "Error: " + data;
+        // }
     };
     generate(program, target, "table", callback);
 }
