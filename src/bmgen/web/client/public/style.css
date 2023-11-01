@@ -24,12 +24,18 @@ td {
     height: 95%;
 }
 
-#codearea,
+#codearea {
+    margin-right: 10px;
+    height: 70%;
+    width: 49%;
+    float: left;
+}
+
 #outputarea {
     margin-right: 10px;
     height: 70%;
-    width: 45%;
-    float: left;
+    width: 49%;
+    float: right;
 }
 
 #fileupload {
@@ -51,4 +57,8 @@ input {
 
 .error {
     color: red;
+}
+
+.right {
+    float: right;
 }

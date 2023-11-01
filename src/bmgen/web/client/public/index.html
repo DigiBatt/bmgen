@@ -11,20 +11,25 @@
     <h1>BM Generator 3000</h1>
     <div id="wrapper">
         <div>
-            Program Name:
-            <input type="text" id="programName" value="example" />
-            <button onclick="saveProgram()">Save</button>
-            <button onclick="document.getElementById('fileupload').click();">Load</button>
-            <input type="file" id="fileupload" name="Load" onchange="loadProgram(this.files)" />
-        </div>
-        <div>
-            Target:
-            <select id="target">
-                <option value="bm">Battery Manager</option>
-                <option value="neware">Neware</option>
-                <option value="basytec">Basytec</option>
-            </select>
-            <button onclick="downloadProgram()">Download program</button>
+            <div>
+                Program Name:
+                <input type="text" id="programName" value="example" />
+                <button onclick="saveProgram()">Save</button>
+                <button onclick="document.getElementById('fileupload').click();">Load</button>
+                <input type="file" id="fileupload" name="Load" onchange="loadProgram(this.files)" />
+                <div class="right">
+                    <button onclick="updateCode()">Update</button>
+                </div>
+            </div>
+            <div>
+                Target:
+                <select id="target">
+                    <option value="bm">Battery Manager</option>
+                    <option value="neware">Neware</option>
+                    <option value="basytec">Basytec</option>
+                </select>
+                <button onclick="downloadProgram()">Download program</button>
+            </div>
         </div>
         <div>
             <div id="codearea"></div>
