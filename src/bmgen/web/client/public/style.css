@@ -6,18 +6,21 @@ h1 {
     text-align: center;
 }
 
-table,
-th,
-td {
+#outputarea table,
+#outputarea th,
+#outputarea td {
     border: 1px solid black;
     border-collapse: collapse;
     vertical-align: top;
     text-align: center;
+    padding: 5px;
 }
 
-th,
-td {
-    padding: 5px;
+.config table,
+.config th,
+.config td {
+    border: none;
+    text-align: left;
 }
 
 #wrapper {
@@ -51,7 +54,8 @@ input {
     padding-bottom: 2px;
 }
 
-button:hover {
+button:hover,
+.active {
     background-color: lightgray;
 }
 
@@ -65,4 +69,12 @@ button:hover {
 
 .right {
     float: right;
+}
+
+.config {
+    margin-bottom: 5px;
+}
+
+#more-config {
+    display: none;
 }

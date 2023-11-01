@@ -1,4 +1,4 @@
-<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; }</style></head><body><table>
+<table>
 <tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>
 <tr><td>1</td><td></td><td>SET</td><td>idx = 0</td><td></td><td></td><td></td></tr>
 <tr><td>2</td><td></td><td>GOTO</td><td>bmgen_1</td><td></td><td></td><td></td></tr>
@@ -15,4 +15,4 @@
 <tr><td>13</td><td></td><td>CHA</td><td>values_Val A</td><td>30 sec</td><td></td><td></td></tr>
 <tr><td>14</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
 <tr><td>15</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
-</table></body></html>
+</table>

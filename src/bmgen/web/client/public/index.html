@@ -11,7 +11,7 @@
     <h1>BM Generator 3000</h1>
     <div id="wrapper">
         <div>
-            <div>
+            <div class="config">
                 Program Name:
                 <input type="text" id="programName" value="example" />
                 <button onclick="saveProgram()">Save</button>
@@ -21,7 +21,7 @@
                     <button onclick="updateCode()">Update</button>
                 </div>
             </div>
-            <div>
+            <div class="config">
                 Target:
                 <select id="target">
                     <option value="bm">Battery Manager</option>
@@ -29,6 +29,88 @@
                     <option value="basytec">Basytec</option>
                 </select>
                 <button onclick="downloadProgram()">Download program</button>
+            </div>
+            <div class="config">
+                <button onclick="toggleConfig()" id="toggleConfig">Show additional config options</button>
+                <div id="more-config">
+                    <h2>General</h2>
+                    <h3>Battery Parameters</h3>
+                    <input type="checkbox" class="configitem bool" id="predefinedBattery">
+                    <label for="predefinedBattery">Use fixed values for battery parameters instead of variables</label>
+                    <table>
+                        <tr>
+                            <td>Capacity:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_nominalCapacity" /></td>
+                            <td>Ah</td>
+                            <td>Nominal Voltage:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_nominalVoltage" /></td>
+                            <td>V</td>
+                            <td>Minimum Charge Temperature:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_minChargeTemperature" /></td>
+                            <td>°C</td>
+                        </tr>
+                        <tr>
+                            <td>Continuous Charge Current:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_contChargeCurrent" /></td>
+                            <td>A</td>
+                            <td>Minimum Voltage:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_minVoltage" /></td>
+                            <td>V</td>
+                            <td>Maximum Charge Temperature:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_maxChargeTemperature" /></td>
+                            <td>°C</td>
+                        </tr>
+                        <tr>
+                            <td>Peak Charge Current:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_peakChargeCurrent" /></td>
+                            <td>A</td>
+                            <td>Maximum Voltage:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_maxVoltage" /></td>
+                            <td>V</td>
+                            <td>Minimum Discharge Temperature:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_minDischargeTemperature" /></td>
+                            <td>°C</td>
+                        </tr>
+                        <tr>
+                            <td>Continuous Discharge Current:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_contDischargeCurrent" /></td>
+                            <td>A</td>
+                            <td>End-Of-Discharge Voltage:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_eodVoltage" /></td>
+                            <td>V</td>
+                            <td>Maximum Discharge Temperature:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_maxDischargeTemperature" /></td>
+                            <td>°C</td>
+                        </tr>
+                        <tr>
+                            <td>Peak Discharge Current:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_peakDischargeCurrent" /></td>
+                            <td>A</td>
+                            <td>End-Of-Charge Voltage:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_eocVoltage" /></td>
+                            <td>V</td>
+                            <td>Weight:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_weight" /></td>
+                            <td>g</td>
+                        </tr>
+                        <tr>
+                            <td>Nominal Current:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_nominalCurrent" /></td>
+                            <td>A</td>
+                            <td>Internal Resistance:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_minVoltage" /></td>
+                            <td>Ohm</td>
+                            <td>Energy Density:</td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_energyDensity" /></td>
+                            <td>Wh/l</td>
+                        </tr>
+                    </table>
+                    <div id="bm-config" class="target-config">
+                        <h2>Battery Manager</h2>
+                        <input type="checkbox" class="configitem bool" id="bm_safetask">
+                        <label for="bm_safetask">Generate SafeTask for MaCy</label>
+                    </div>
+                </div>
             </div>
         </div>
         <div>

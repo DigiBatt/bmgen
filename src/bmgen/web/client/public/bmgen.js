@@ -35,6 +35,9 @@ function init() {
     programNameField = document.getElementById('programName');
     codearea.addEventListener('change', updateCode);
     targetdropdown.addEventListener('change', updateCode);
+    targetdropdown.addEventListener('change', updateConfig);
+    document.getElementById('more-config').addEventListener('change', updateCode);
+    updateConfig();
 }
 
 function initCode() {
@@ -56,6 +59,8 @@ function generate(program, target, format, callback) {
     const formData = new FormData();
     const file = new Blob([program], { type: 'text/plain' });
     formData.append("program", file);
+    const config = new Blob([JSON.stringify(getConfig())], { type: 'application/json' });;
+    formData.append("config", config);
     xhr.send(formData);
     xhr.onload = () => callback(xhr);
 }
@@ -74,13 +79,6 @@ function updateCode(event) {
                 outputarea.innerHTML += data.program;
             }
         }
-        // if (xhr.readyState == 4 && xhr.status == 200) {
-        //     const data = xhr.response;
-        //     outputarea.innerHTML = data;
-        // } else if (xhr.readyState == 4 && xhr.status == 400) {
-        //     const data = xhr.response;
-        //     outputarea.innerHTML = "Error: " + data;
-        // }
     };
     generate(program, target, "table", callback);
 }
@@ -89,7 +87,7 @@ function saveProgram() {
     const code = editor.getValue();
     var element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(code));
-    let filename = programNameField.value
+    let filename = programNameField.value;
     if (filename) {
         filename += '.py';
     } else {
@@ -119,7 +117,7 @@ function downloadProgram() {
             const data = xhr.response;
             var element = document.createElement('a');
             element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
-            let filename = programNameField.value
+            let filename = programNameField.value;
             if (filename) {
                 filename += ext;
             } else {
@@ -136,4 +134,50 @@ function downloadProgram() {
         }
     };
     generate(program, target, format, callback);
+}
+
+function toggleConfig() {
+    document.getElementById("toggleConfig").classList.toggle("active");
+    var content = document.getElementById("more-config");
+    if (content.style.display === "block") {
+        content.style.display = "none";
+    } else {
+        content.style.display = "block";
+    }
+}
+
+function updateConfig() {
+    const target = targetdropdown.value;
+    var elements = document.getElementsByClassName("target-config");
+    for (var i = 0; i < elements.length; i++) {
+        if (elements[i].id === target + "-config") {
+            elements[i].style.display = "block";
+        } else {
+            elements[i].style.display = "none";
+        }
+    }
+}
+
+function getConfig() {
+    var config = {};
+    var elements = document.getElementsByClassName("configitem");
+    for (var i = 0; i < elements.length; i++) {
+        const key = elements[i].id;
+        const parts = key.split("_");
+        let node = config;
+        for (var j = 0; j < parts.length - 1; j++) {
+            if (node[parts[j]] === undefined) {
+                node[parts[j]] = {};
+            }
+            node = node[parts[j]];
+        }
+        var value = elements[i].value;
+        if (elements[i].classList.contains("float")) {
+            value = parseFloat(value);
+        } else if (elements[i].classList.contains("bool")) {
+            value = elements[i].checked;
+        }
+        node[parts[parts.length - 1]] = value;
+    }
+    return config;
 }

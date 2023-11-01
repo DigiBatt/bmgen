@@ -1,7 +1,7 @@
-<html><head><style type="text/css">table, th, td { border: 1px solid black; border-collapse: collapse; vertical-align: top; text-align: center; } table {float: left}</style></head><body><table>
+<table>
 <tr><th>Step Index</th><th>Step Name</th><th>Step Time (hh:mm:ss.ms)</th><th>Voltage (V)</th><th>Current (A)</th><th>Cutoff voltage (V)</th><th>Cutoff current (A)</th><th>Capacity (Ah)</th><th>Others</th></tr>
 <tr style="color: #81bc06"><td>1</td><td>CCCV Chg</td><td></td><td>4.2</td><td>2.0</td><td></td><td>0.2</td><td></td><td></td></tr>
 <tr style="color: #eec908"><td>2</td><td>Rest</td><td>1:30:00.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr style="color: #f35325"><td>3</td><td>CC DChg</td><td></td><td></td><td>1.5</td><td>3.0</td><td></td><td></td><td></td></tr>
 <tr style="color: #000000"><td>4</td><td>End</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-</table></body></html>
+</table>
