@@ -43,7 +43,7 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
             return BMArray(name, arraynum, len(value))
         elif isinstance(value, BMStatement):
             return BMStepInfo(value, name)
-        else:
+        elif not (isinstance(value, BMVariable) and value.name == name):
             target.generator.add(
                 BMStatement(
                     operator="SET",

@@ -65,3 +65,7 @@ class NewareStepCharge:
 I = NewareCurrent()
 V = NewareVoltage()
 StepCharge = NewareStepCharge()
+
+
+def channel(name: str):
+    raise NotImplementedError("Custom channels not available for Neware target")
