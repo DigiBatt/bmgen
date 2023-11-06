@@ -55,7 +55,20 @@ function initCode() {
 
 function generate(program, target, format, callback) {
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", `api/${target}/${format}/`);
+    xhr.open("POST", `api/generate/${target}/${format}/`);
+    const formData = new FormData();
+    const file = new Blob([program], { type: 'text/plain' });
+    formData.append("program", file);
+    const config = new Blob([JSON.stringify(getConfig())], { type: 'application/json' });;
+    formData.append("config", config);
+    xhr.send(formData);
+    xhr.onload = () => callback(xhr);
+}
+
+function download(program, target, format, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", `api/download/${target}/${format}/`);
+    xhr.responseType = "blob";
     const formData = new FormData();
     const file = new Blob([program], { type: 'text/plain' });
     formData.append("program", file);
@@ -116,7 +129,8 @@ function downloadProgram() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             const data = xhr.response;
             var element = document.createElement('a');
-            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+            const objectUrl = URL.createObjectURL(data);
+            element.setAttribute('href', objectUrl);
             let filename = programNameField.value;
             if (filename) {
                 filename += ext;
@@ -128,12 +142,13 @@ function downloadProgram() {
             document.body.appendChild(element);
             element.click();
             document.body.removeChild(element);
+            URL.revokeObjectURL(objectUrl);
         } else if (xhr.readyState == 4 && xhr.status == 400) {
             const data = xhr.response;
             outputarea.innerHTML = "Error: " + data;
         }
     };
-    generate(program, target, format, callback);
+    download(program, target, format, callback);
 }
 
 function toggleConfig() {

@@ -9,6 +9,7 @@ import bmgen
 from importlib import import_module
 from bmgen.battery import PredefindedBattery
 import json
+import io
 
 
 @click.command()
@@ -119,6 +120,9 @@ def output(target, text):
                 with open(target, "wb") as f:
                     f.write(text)
         else:
-            target.write(text)
+            if isinstance(target, io.BytesIO) and isinstance(text, str):
+                target.write(text.encode())
+            else:
+                target.write(text)
     else:
         print(text)
