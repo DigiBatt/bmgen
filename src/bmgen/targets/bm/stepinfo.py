@@ -16,7 +16,7 @@ class BMStepInfo:
             chargeSaveStep = BMStatement(
                 "SET",
                 values=[
-                    BMAssignment(variable=self.chargeVar, numvalue=BMVariable("AhPrev"))
+                    BMAssignment(variable=self.chargeVar, numvalue=BMVariable("AhStep"))
                 ],
             )
             lines = target.generator.program.lines

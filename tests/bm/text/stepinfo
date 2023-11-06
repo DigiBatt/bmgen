@@ -1,11 +1,11 @@
 	1		SET		> 4.2 V\r\n< 2.5 V\r\n> 5 A_notAbs\r\n< -5 A	ERR 1\r\nERR 1\r\nERR 1\r\nERR 1	
 	2		CHA	2.0 A\r\n4.2 V	< 0.2 A		
-	3		SET	chargeStep_chg = AhPrev			
+	3		SET	chargeStep_chg = AhStep			
 	4		PAU		90 min		
 	5		DCH	1.5 A	< 3.0 V\r\n> chargeStep_chg AhStep	\r\n	
 	6		PAU		5 h		
 	7		CHA	3.0 A\r\n4.2 V	< 0.2 A		
-	8		SET	chargeStep_chg = AhPrev			
+	8		SET	chargeStep_chg = AhStep			
 	9		PAU		90 min		
 	10		DCH	2.0 A	< 3.0 V\r\n> chargeStep_chg AhStep	\r\n	
 	11		STO				
