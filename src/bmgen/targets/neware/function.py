@@ -9,6 +9,7 @@ def charge(
     current: float,
     voltage: float | None = None,
     limits: List[NewareLimit | NewareExpression] | None = None,
+    registrations: Dict[RecordType, float] | None = None,
 ):
     limits = limitcast(limits)
     if voltage:
@@ -26,7 +27,11 @@ def charge(
             )
         return target.generator.add(
             NewareStatement(
-                operator=StepType.CCCV_Chg, current=current, voltage=voltage, **args
+                operator=StepType.CCCV_Chg,
+                current=current,
+                voltage=voltage,
+                record=registrations,
+                **args
             )
         )
     else:
@@ -43,7 +48,9 @@ def charge(
                 "CC charge step must have a voltage cutoff condition"
             )
         return target.generator.add(
-            NewareStatement(operator=StepType.CC_Chg, current=current, **args)
+            NewareStatement(
+                operator=StepType.CC_Chg, current=current, record=registrations, **args
+            )
         )
 
 
@@ -51,6 +58,7 @@ def discharge(
     current: float,
     voltage: float | None = None,
     limits: List[NewareLimit | NewareExpression] | None = None,
+    registrations: Dict[RecordType, float] | None = None,
 ):
     limits = limitcast(limits)
     if voltage:
@@ -68,7 +76,11 @@ def discharge(
             )
         return target.generator.add(
             NewareStatement(
-                operator=StepType.CCCV_DChg, current=current, voltage=voltage, **args
+                operator=StepType.CCCV_DChg,
+                current=current,
+                voltage=voltage,
+                record=registrations,
+                **args
             )
         )
     else:
@@ -85,7 +97,9 @@ def discharge(
                 "CC discharge step must have a voltage cutoff condition"
             )
         return target.generator.add(
-            NewareStatement(operator=StepType.CC_DChg, current=current, **args)
+            NewareStatement(
+                operator=StepType.CC_DChg, current=current, record=registrations, **args
+            )
         )
 
 
@@ -94,12 +108,15 @@ def pause(
     hours: float = 0,
     minutes: float = 0,
     seconds: float = 0,
+    registrations: Dict[RecordType, float] | None = None,
 ):
     limits = limitcast(limits)
     if hours or minutes or seconds:
         limits.append(time(hours, minutes, seconds).toLimit())
     args, protections = _limits_to_args(limits, {LimitType.Time: "steptime"})
-    return target.generator.add(NewareStatement(operator=StepType.Rest, **args))
+    return target.generator.add(
+        NewareStatement(operator=StepType.Rest, record=registrations, **args)
+    )
 
 
 @dataclass
@@ -171,7 +188,7 @@ def register(
     voltage: float | None = None,
     current: float | None = None,
     format: List | None = None,
-):
+) -> Dict[RecordType, float]:
     record = {}
     if time:
         record[RecordType.Time] = time.toNumber()

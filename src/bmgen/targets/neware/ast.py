@@ -100,6 +100,7 @@ class NewareStatement:
     cutoffCurrent: float | None = None
     capacity: float | None = None
     others: List[NewareOther] = field(default_factory=list)
+    record: Dict[constants.RecordType, float] = field(default_factory=dict)
 
     def toXML(self, linenumber: int):
         step = ee.Element(
@@ -136,6 +137,31 @@ class NewareStatement:
         advancedCV = ee.SubElement(advamced, "CV_Chg")
         ee.SubElement(advancedCV, "CurrRise", {"Count": "0"})
         ee.SubElement(advamced, "Safe", {"N2GroupCount": "0"})
+
+        if self.record:
+            record = ee.SubElement(step, "Record")
+            mainr = ee.SubElement(record, "Main")
+            if constants.RecordType.Time in self.record:
+                _addLimit(
+                    mainr,
+                    "Time",
+                    self.record[constants.RecordType.Time],
+                    constants.Factor.Time,
+                )
+            if constants.RecordType.Voltage in self.record:
+                _addLimit(
+                    mainr,
+                    "Volt",
+                    self.record[constants.RecordType.Voltage],
+                    constants.Factor.Voltage,
+                )
+            if constants.RecordType.Current in self.record:
+                _addLimit(
+                    mainr,
+                    "Curr",
+                    self.record[constants.RecordType.Current],
+                    constants.Factor.Current,
+                )
 
         return step
 
