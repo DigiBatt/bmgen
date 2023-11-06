@@ -41,7 +41,7 @@ h1 {
     float: right;
 }
 
-#fileupload {
+.hidden {
     display: none;
 }
 

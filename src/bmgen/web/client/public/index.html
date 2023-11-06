@@ -16,7 +16,7 @@
                 <input type="text" id="programName" value="example" />
                 <button onclick="saveProgram()">Save</button>
                 <button onclick="document.getElementById('fileupload').click();">Load</button>
-                <input type="file" id="fileupload" name="Load" onchange="loadProgram(this.files)" />
+                <input type="file" id="fileupload" class="hidden" name="Load" onchange="loadProgram(this.files)" />
                 <div class="right">
                     <button onclick="updateCode()">Update</button>
                 </div>
@@ -32,6 +32,9 @@
             </div>
             <div class="config">
                 <button onclick="toggleConfig()" id="toggleConfig">Show additional config options</button>
+                <button onclick="saveConfig()">Save config</button>
+                <button onclick="document.getElementById('configupload').click();">Load config</button>
+                <input type="file" id="configupload" class="hidden" name="Load config" onchange="loadConfig(this.files)" />
                 <div id="more-config">
                     <h2>General</h2>
                     <h3>Battery Parameters</h3>

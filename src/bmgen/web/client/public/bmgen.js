@@ -181,3 +181,49 @@ function getConfig() {
     }
     return config;
 }
+
+function saveConfig() {
+    const data = JSON.stringify(getConfig(), null, 4);
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(data));
+    const filename = "bmgen_config.json";
+    element.setAttribute('download', filename);
+    element.style.display = 'none';
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
+}
+
+function loadConfig(files) {
+    var reader = new FileReader();
+    reader.onload = (function () {
+        return function (e) {
+            const data = JSON.parse(e.target.result);
+            setConfigValues("", data);
+            updateCode();
+        };
+    })();
+    reader.readAsText(files[0]);
+}
+
+function setConfigValues(prefix, data) {
+    for (const [key, value] of Object.entries(data)) {
+        console.log(prefix + "; " + key + "; " + value);
+        var configkey = "";
+        if (prefix === "") {
+            configkey = key;
+        } else {
+            configkey = prefix + "_" + key;
+        }
+        if (typeof value === 'object' && value !== null) {
+            setConfigValues(configkey, value);
+        } else {
+            var element = document.getElementById(configkey);
+            if (typeof value === 'boolean') {
+                element.checked = value;
+            } else {
+                element.value = value;
+            }
+        }
+    }
+}
