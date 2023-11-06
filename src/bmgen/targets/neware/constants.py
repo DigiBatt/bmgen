@@ -27,7 +27,7 @@ class StepType(Enum):
 class Factor:
     Time = 1000
     Voltage = 10000
-    Current = 100000
+    Current = 1000
     Capacity = 60 * 60 * 100000
 
 
