@@ -7,7 +7,7 @@
 <tr><td>5</td><td></td><td>BEG</td><td>i</td><td></td><td></td><td></td></tr>
 <tr><td>6</td><td>bmgen_1</td><td>CHA</td><td>CRate ACn1<br>4.2 V</td><td>< EOCCurrent A<br>5 h</td><td><br></td><td></td></tr>
 <tr><td>7</td><td></td><td>PAU</td><td></td><td>> i arrGET</td><td></td><td></td></tr>
-<tr><td>8</td><td></td><td>PAU</td><td></td><td>PauseLen_Val h</td><td></td><td></td></tr>
+<tr><td>8</td><td></td><td>PAU</td><td></td><td>PauseLen_Val mso_h</td><td></td><td></td></tr>
 <tr><td>9</td><td></td><td>PAU</td><td></td><td>< 2 i<br>1 sec</td><td>GOTO bmgen_2_if<br>GOTO bmgen_2_else</td><td></td></tr>
 <tr><td>10</td><td>bmgen_2_if</td><td>DCH</td><td>CRate ACn1</td><td><= 2.5 V</td><td></td><td></td></tr>
 <tr><td>11</td><td></td><td>GOTO</td><td>bmgen_2_end</td><td></td><td></td><td></td></tr>

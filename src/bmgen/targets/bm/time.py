@@ -13,6 +13,8 @@ class time:
         return ast.BMLimit(ast.BMLimitTime(self.toBMTime()))
 
     def toBMTime(self) -> "ast.BMTime":
+        value = None
+        unit = None
         if self.seconds:
             if self.hours:
                 if isinstance(self.hours, ast.BMNumber) and isinstance(
@@ -28,8 +30,9 @@ class time:
                     self.seconds.value += self.minutes.value * 60
                 else:
                     raise NotImplementedError("BM time limit can only have one unit")
-            return ast.BMTime(value=self.seconds, unit="sec")
-        if self.minutes:
+            value = self.seconds
+            unit = "sec"
+        elif self.minutes:
             if self.hours:
                 if isinstance(self.hours, ast.BMNumber) and isinstance(
                     self.minutes, ast.BMNumber
@@ -37,6 +40,11 @@ class time:
                     self.minutes.value += self.hours.value * 60
                 else:
                     raise NotImplementedError("BM time limit can only have one unit")
-            return ast.BMTime(value=self.minutes, unit="min")
-        if self.hours:
-            return ast.BMTime(value=self.hours, unit="h")
+            value = self.minutes
+            unit = "min"
+        elif self.hours:
+            value = self.hours
+            unit = "h"
+        if not isinstance(value, ast.BMNumber):
+            unit = "mso_" + unit
+        return ast.BMTime(value=value, unit=unit)
