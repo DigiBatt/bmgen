@@ -132,7 +132,7 @@ Name of the output file. If this option is not provided, the output is written t
 | charge/discharge/pause                            | ✔️                         | ✔️    | ✔️      |
 | limits (global and for individual steps)          | ✔️                         | ✔️    | ✔️      |
 | registrations (global)                            | ✔️                         | ✔️    | ✔️      |
-| registrations (for individual steps)              | ➖                         | ➖    | ➖      |
+| registrations (for individual steps)              | ✔️                         | ✔️    | ✔️      |
 | variables in the generated program                | ✔️                         | ❌    | ➖      |
 | battery parameters                                | ✔️                         | ❌    | ✔️      |
 | if / else statements                              | ✔️                         | ➖    | ➖      |

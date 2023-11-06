@@ -4,13 +4,19 @@ from bmgen.stepinfo import StepInfo
 
 
 def charge(
-    current: float, voltage: float | None = None, limits: List[bool] = []
+    current: float,
+    voltage: float | None = None,
+    limits: List[bool] = [],
+    registrations: List = [],
 ) -> StepInfo:
     pass
 
 
 def discharge(
-    current: float, voltage: float | None = None, limits: List[bool] = []
+    current: float,
+    voltage: float | None = None,
+    limits: List[bool] = [],
+    registrations: List = [],
 ) -> StepInfo:
     pass
 
@@ -20,6 +26,7 @@ def pause(
     hours: float | None = None,
     minutes: float | None = None,
     seconds: float | None = None,
+    registrations: List = [],
 ) -> StepInfo:
     pass
 
