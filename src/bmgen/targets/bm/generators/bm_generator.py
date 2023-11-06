@@ -43,22 +43,31 @@ class BMGenerator(BaseGenerator):
         # combine SET statements
         prev_set_value = False
         prev_set_limit = False
+        next_line = None
         for i in range(len(self.program.lines) - 1, -1, -1):
             curr_set_value = False
             curr_set_limit = False
             line = self.program.lines[i]
+            if i < len(self.program.lines) - 1:
+                next_line = self.program.lines[i + 1]
             if not line:
                 continue
             if line.operator == "SET":
                 if line.values and not line.limits:
-                    if prev_set_value:
-                        line.values += self.program.lines[i + 1].values
+                    if (
+                        prev_set_value
+                        and (len(line.values) + len(next_line.values)) <= 10
+                    ):
+                        line.values += next_line.values
                         self.program.lines[i + 1] = None
                     if not line.label:
                         curr_set_value = True
                 elif line.limits and not line.values:
-                    if prev_set_limit:
-                        line.limits += self.program.lines[i + 1].limits
+                    if (
+                        prev_set_limit
+                        and (len(line.limits) + len(next_line.limits)) <= 10
+                    ):
+                        line.limits += next_line.limits
                         self.program.lines[i + 1] = None
                     if not line.label:
                         curr_set_limit = True
