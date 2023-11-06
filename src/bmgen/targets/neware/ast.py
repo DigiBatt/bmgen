@@ -318,6 +318,8 @@ class NewareProgram:
         ee.SubElement(smbus, "SMBUS_Path", {"Values": ""})
         ee.SubElement(smbus, "SMBUS_Info", {"Num": "0", "AdjacentInterval": "0"})
 
+        ee.indent(root)
+
         return ee.tostring(root, "unicode")
 
     # def mainChannelTable(self):
