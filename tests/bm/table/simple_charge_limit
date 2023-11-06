@@ -1,0 +1,5 @@
+<table>
+<tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>
+<tr><td>1</td><td></td><td>CHA</td><td>2.0 A<br>4.2 V</td><td>1 h<br>> 2.05 AhStep<br>< 0.1 A</td><td><br><br></td><td></td></tr>
+<tr><td>2</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
+</table>

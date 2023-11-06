@@ -1,0 +1,5 @@
+<table>
+<tr><th>Step Index</th><th>Step Name</th><th>Step Time (hh:mm:ss.ms)</th><th>Voltage (V)</th><th>Current (A)</th><th>Cutoff voltage (V)</th><th>Cutoff current (A)</th><th>Capacity (Ah)</th><th>Others</th></tr>
+<tr style="color: #81bc06"><td>1</td><td>CCCV Chg</td><td>1:00:00.000</td><td>4.2</td><td>2.0</td><td></td><td>0.1</td><td>2.05</td><td></td></tr>
+<tr style="color: #000000"><td>2</td><td>End</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>

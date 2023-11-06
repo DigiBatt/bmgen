@@ -59,14 +59,7 @@ class NewareStepCharge:
                 NewareGotoTarget.Next,
             )
         else:
-            return NewareExpression(
-                ExpressionVariableId,
-                ExpressionVariableId,
-                "expr1",
-                NewareExpressionString("Ah - " + str(other)),
-                NewareComparator.Greater,
-                NewareGotoTarget.Next,
-            )
+            return NewareLimit(LimitType.CapacityUpper, other)
 
 
 I = NewareCurrent()

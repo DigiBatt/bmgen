@@ -1,0 +1,3 @@
+<table>
+<tr><th></th><th>Level</th><th>Label</th><th>Command</th><th>Parameter</th><th>Termination</th><th>Action</th><th>Registration</th><th>Comment</th></tr>
+<tr><td>1</td><td></td><td></td><td>Start</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td>Charge</td><td>I=2.0A<br>U=4.2V</td><td>t>1h<br>Ah>2.05Ah<br>I<0.1A</td><td><br><br></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td>Stop</td><td></td><td></td><td></td><td></td><td></td></tr></table>
