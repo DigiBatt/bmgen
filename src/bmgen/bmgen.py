@@ -95,7 +95,7 @@ def generate(
         else:
             with open(battery, "r") as f:
                 target_battery = PredefindedBattery(**json.load(f))
-    elif "battery" in bmgen.options:
+    elif "battery" in bmgen.options and bmgen.options.get("predefinedBattery", True):
         target_battery = PredefindedBattery(**bmgen.options["battery"])
     else:
         target_battery = getattr(
