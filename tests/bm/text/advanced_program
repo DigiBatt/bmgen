@@ -11,5 +11,5 @@
 	11		GOTO	bmgen_2_end			
 	12	bmgen_2_else	DCH	CRate ACn1	<= 2.0 V		
 	13	bmgen_2_end	ADD	CRate\r\n0.2			
-	14		CYC	3 *			
+	14		CYC	2 *			
 	15		STO				

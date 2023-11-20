@@ -59,7 +59,8 @@ class ctrl_for:
         if self.simple:
             target.generator.add(
                 BMStatement(
-                    operator="CYC", values=[BMCycleCount(BMNumber(self.iterable.stop))]
+                    operator="CYC",
+                    values=[BMCycleCount(BMNumber(self.iterable.stop - 1))],
                 )
             )
         elif self.arrayloop:

@@ -13,6 +13,6 @@
 <tr><td>11</td><td></td><td>GOTO</td><td>bmgen_2_end</td><td></td><td></td><td></td></tr>
 <tr><td>12</td><td>bmgen_2_else</td><td>DCH</td><td>CRate ACn1</td><td><= 2.0 V</td><td></td><td></td></tr>
 <tr><td>13</td><td>bmgen_2_end</td><td>ADD</td><td>CRate<br>0.2</td><td></td><td></td><td></td></tr>
-<tr><td>14</td><td></td><td>CYC</td><td>3 *</td><td></td><td></td><td></td></tr>
+<tr><td>14</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
 <tr><td>15</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
 </table>
