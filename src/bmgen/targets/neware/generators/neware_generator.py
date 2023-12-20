@@ -5,6 +5,7 @@ import bmgen.targets.neware.constants as constants
 
 class NewareGenerator(BaseGenerator):
     def __init__(self):
+        super().__init__()
         self.program = NewareProgram()
         self.userVarId = constants.FirstUserVariableId
 

@@ -6,6 +6,7 @@ from typing import List
 
 class BasytecGenerator(BaseGenerator):
     def __init__(self):
+        super().__init__()
         self.program = BasytecProgram()
         self.stoplabel = False
         self.registrations: List[BasytecSetValue] = []

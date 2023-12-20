@@ -17,6 +17,12 @@ class NewareLimit:
 class NewareExpressionString:
     expression: str
 
+    def __mul__(self, other):
+        if isinstance(other, NewareExpressionString):
+            return NewareExpressionString(self.expression + " * " + other.expression)
+        else:
+            return NewareExpressionString(self.expression + " * " + str(other))
+
 
 @dataclass
 class NewareOther:

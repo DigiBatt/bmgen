@@ -12,10 +12,10 @@ import bmgen
 
 class BMGenerator(BaseGenerator):
     def __init__(self):
+        super().__init__()
         self.program = BMProgram()
         self.labelcount = 0
         self.arraycount = 0
-        self.context = []
 
     def finish(self):
         # add stop line

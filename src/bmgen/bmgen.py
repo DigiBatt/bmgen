@@ -72,7 +72,8 @@ def generate(
         output(out, ast.dump(tree, indent=2))
         return
 
-    newtree = Transformer(target).visit(tree)
+    target_module = import_module(f"bmgen.targets.{target}")
+    newtree = target_module.Transformer(target).visit(tree)
     newtree = ast.fix_missing_locations(newtree)
     if intermediate == "flat":
         output(out, astor.to_source(newtree))
@@ -82,7 +83,6 @@ def generate(
         output(out, ast.dump(newtree, indent=2))
         return
 
-    target_module = import_module(f"bmgen.targets.{target}")
     if not format:
         format = target_module.default_format
     FormatGenerator = getattr(
