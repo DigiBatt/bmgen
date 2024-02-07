@@ -1,0 +1,16 @@
+<table>
+<tr><th>Step Index</th><th>Step Name</th><th>Step Time (hh:mm:ss.ms)</th><th>Voltage (V)</th><th>Current (A)</th><th>Cutoff voltage (V)</th><th>Cutoff current (A)</th><th>Capacity (Ah)</th><th>Others</th></tr>
+<tr style="color: #eec908"><td>1</td><td>Rest</td><td>0:00:05.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #eec908"><td>2</td><td>Rest</td><td>0:00:05.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #eec908"><td>3</td><td>Rest</td><td>0:00:05.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #eec908"><td>4</td><td>Rest</td><td>0:00:05.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #eec908"><td>5</td><td>Rest</td><td>0:00:05.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #eec908"><td>6</td><td>Rest</td><td>0:00:05.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #eec908"><td>7</td><td>Rest</td><td>0:00:05.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #81bc06"><td>8</td><td>CC Chg</td><td>0:00:30.000</td><td></td><td>2</td><td>4.2</td><td></td><td></td><td></td></tr>
+<tr style="color: #81bc06"><td>9</td><td>CC Chg</td><td>0:00:30.000</td><td></td><td>1</td><td>4.2</td><td></td><td></td><td></td></tr>
+<tr style="color: #81bc06"><td>10</td><td>CC Chg</td><td>0:00:30.000</td><td></td><td>5</td><td>4.2</td><td></td><td></td><td></td></tr>
+<tr style="color: #eec908"><td>11</td><td>Rest</td><td>0:00:30.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #eec908"><td>12</td><td>Rest</td><td>0:02:00.000</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr style="color: #000000"><td>13</td><td>End</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>

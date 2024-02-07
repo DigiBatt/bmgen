@@ -10,6 +10,8 @@
 	10		GOTO	bmgen_2			
 	11		BEG	v_idx			
 	12	bmgen_2	PAU		> v_idx arrGET		
-	13		CHA	values_Val A	30 sec		
+	13		CHA	values_Val A	30 sec\r\n> 4.2 V	\r\n	
 	14		CYC	2 *			
-	15		STO				
+	15		PAU		30 sec		
+	16		PAU		120 sec		
+	17		STO				

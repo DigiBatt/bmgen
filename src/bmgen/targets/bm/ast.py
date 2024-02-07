@@ -1,8 +1,9 @@
-from typing import List
 from dataclasses import dataclass, field
-from bmgen.targets.bm.helper.compare import compare
-import bmgen.targets.bm.helper.cast as cast
+from typing import List
+
 import bmgen.targets.bm as bm
+import bmgen.targets.bm.helper.cast as cast
+from bmgen.targets.bm.helper.compare import compare
 
 
 class BMNode:
@@ -124,6 +125,9 @@ class BMArray(BMVariable):
             BMStatement(operator="PAU", limits=[BMLimit(BMVariable("arrSET") > idx)])
         )
         return valuevar
+
+    def __len__(self):
+        return self.arraysize
 
 
 @dataclass

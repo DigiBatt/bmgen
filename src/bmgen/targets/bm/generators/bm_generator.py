@@ -1,13 +1,13 @@
+import bmgen
 from bmgen.base_generator import BaseGenerator
 from bmgen.targets.bm.ast import (
-    BMProgram,
-    BMStatement,
     BMLabel,
     BMMultiplication,
     BMNumber,
+    BMProgram,
+    BMStatement,
     BMVariable,
 )
-import bmgen
 
 
 class BMGenerator(BaseGenerator):
@@ -16,6 +16,7 @@ class BMGenerator(BaseGenerator):
         self.program = BMProgram()
         self.labelcount = 0
         self.arraycount = 0
+        self.frozen = False
 
     def finish(self):
         # add stop line
@@ -75,17 +76,26 @@ class BMGenerator(BaseGenerator):
             prev_set_limit = curr_set_limit
 
     def add(self, line):
-        self.program.lines.append(line)
+        if not self.frozen:
+            self.program.lines.append(line)
         return line
 
     def label(self):
-        self.labelcount += 1
+        if not self.frozen:
+            self.labelcount += 1
         return f"bmgen_{self.labelcount}"
 
     def array(self):
-        self.arraycount += 1
+        if not self.frozen:
+            self.arraycount += 1
         return self.arraycount - 1
 
     def ast(self):
         self.finish()
         return str(self.program)
+
+    def freeze(self):
+        self.frozen = True
+
+    def unfreeze(self):
+        self.frozen = False

@@ -82,6 +82,15 @@ class ctrl_if:
         self.hasElse = hasElse
 
     def __enter__(self):
+        target.generator.context.append(self)
+
+        if isinstance(
+            self.condition, bool
+        ):  # condition evaluated at compile time -> only run one branch of if/else
+            if not self.condition:
+                target.generator.freeze()
+            return
+
         if self.hasElse:
             notifLabel = self.baselabel + "_else"
         else:
@@ -101,9 +110,11 @@ class ctrl_if:
             )
         )
         target.generator.add(BMLabel(self.baselabel + "_if"))
-        target.generator.context.append(self)
 
     def __exit__(self, type, value, traceback):
+        if isinstance(self.condition, bool):
+            return
+
         target.generator.add(BMLabel(self.baselabel + "_end"))
         target.generator.context.remove(self)
 
@@ -113,10 +124,20 @@ class ctrl_else:
         self.baselabel = target.generator.context[-1].baselabel
 
     def __enter__(self):
+        condition = target.generator.context[-1].condition
+        if isinstance(condition, bool):
+            if condition:
+                target.generator.freeze()
+            else:
+                target.generator.unfreeze()
+            return
+
         target.generator.add(
             BMStatement(operator="GOTO", values=[BMVariable(self.baselabel + "_end")])
         )
         target.generator.add(BMLabel(self.baselabel + "_else"))
 
     def __exit__(self, type, value, traceback):
-        pass
+        condition = target.generator.context[-1].condition
+        if isinstance(condition, bool) and condition == True:
+            target.generator.unfreeze()
