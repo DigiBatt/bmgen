@@ -86,4 +86,4 @@ deploy:
   script:
     - scp ./src/bmgen/web/docker-compose.yml bmgen@openbat.isea.rwth-aachen.de:~
     - ssh bmgen@openbat.isea.rwth-aachen.de "docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY && docker pull git.isea.rwth-aachen.de:5050/ess/testing/bmgen:frontend && docker pull git.isea.rwth-aachen.de:5050/ess/testing/bmgen:backend"
-    - ssh bmgen@openbat.isea.rwth-aachen.de "docker-compose down ; docker-compose up -d"
+    - ssh bmgen@openbat.isea.rwth-aachen.de "docker compose down ; docker compose up -d"
