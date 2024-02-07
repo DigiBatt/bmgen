@@ -242,9 +242,13 @@ class BMLimitAnd(BMLimitCondition):
 class BMTime:
     value: BMNumValue
     unit: str
+    operator: str | None = None
 
     def toText(self):
-        return self.value.toText() + " " + self.unit
+        if self.operator is not None:
+            return self.operator + " " + self.value.toText() + " " + self.unit
+        else:
+            return self.value.toText() + " " + self.unit
 
 
 @dataclass

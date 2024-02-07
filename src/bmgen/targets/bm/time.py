@@ -1,6 +1,7 @@
-import bmgen.targets.bm.ast as ast
 import typing
 from dataclasses import dataclass
+
+import bmgen.targets.bm.ast as ast
 
 
 @dataclass
@@ -15,6 +16,7 @@ class time:
     def toBMTime(self) -> "ast.BMTime":
         value = None
         unit = None
+        operator = None
         if self.seconds:
             if self.hours:
                 if isinstance(self.hours, ast.BMNumber) and isinstance(
@@ -47,4 +49,5 @@ class time:
             unit = "h"
         if not isinstance(value, ast.BMNumber):
             unit = "mso_" + unit
-        return ast.BMTime(value=value, unit=unit)
+            operator = ">"
+        return ast.BMTime(value=value, unit=unit, operator=operator)

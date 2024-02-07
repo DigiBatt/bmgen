@@ -5,7 +5,7 @@
 	5		BEG	i			
 	6	bmgen_1	CHA	CRate ACn1\r\n4.2 V	< EOCCurrent A\r\n5 h	\r\n	
 	7		PAU		> i arrGET		
-	8		PAU		PauseLen_Val mso_h		
+	8		PAU		> PauseLen_Val mso_h		
 	9		PAU		< 2 i\r\n1 sec	GOTO bmgen_2_if\r\nGOTO bmgen_2_else	
 	10	bmgen_2_if	DCH	CRate ACn1	<= 2.5 V		
 	11		GOTO	bmgen_2_end			
