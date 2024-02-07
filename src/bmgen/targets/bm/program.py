@@ -1,14 +1,17 @@
-from bmgen.targets.bm.ast import (
-    BMVariable,
-    BMStatement,
-    BMAssignment,
-    BMNumValue,
-    BMNumber,
-    BMArray,
-)
-import bmgen.targets.bm as target
-from bmgen.targets.bm.helper.cast import autocast
 from typing import List
+
+import bmgen
+import bmgen.targets.bm as target
+from bmgen.targets.bm.ast import (
+    BMArray,
+    BMAssignment,
+    BMNumber,
+    BMNumValue,
+    BMStatement,
+    BMTwoValues,
+    BMVariable,
+)
+from bmgen.targets.bm.helper.cast import autocast
 from bmgen.targets.bm.stepinfo import BMStepInfo
 
 
@@ -18,28 +21,36 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
     if value:
         if isinstance(value, list):
             arraynum = target.generator.array()
-            target.generator.add(
-                BMStatement(
-                    operator="SET",
-                    values=[
-                        BMAssignment(
-                            variable=BMVariable(name + "_IV"),
-                            numvalue=BMNumber(123454321 + arraynum),
-                        ),
-                        BMAssignment(
-                            variable=BMVariable(name + "_Val"),
-                            numvalue=BMNumber(0),
-                        ),
-                        *[
+            if bmgen.options.get("bm", {}).get("oldArrays", False):
+                target.generator.add(
+                    BMStatement(
+                        operator="SET",
+                        values=[
                             BMAssignment(
-                                variable=BMVariable(name + f"_{i}"),
-                                numvalue=v,
-                            )
-                            for i, v in enumerate(value)
+                                variable=BMVariable(name + "_IV"),
+                                numvalue=BMNumber(123454321 + arraynum),
+                            ),
+                            BMAssignment(
+                                variable=BMVariable(name + "_Val"),
+                                numvalue=BMNumber(0),
+                            ),
+                            *[
+                                BMAssignment(
+                                    variable=BMVariable(name + f"_{i}"),
+                                    numvalue=v,
+                                )
+                                for i, v in enumerate(value)
+                            ],
                         ],
-                    ],
+                    )
                 )
-            )
+            else:
+                target.generator.add(
+                    BMStatement(
+                        operator="ARRINIT",
+                        values=[BMVariable(name), *value],
+                    )
+                )
             return BMArray(name, arraynum, len(value))
         elif isinstance(value, BMStatement):
             return BMStepInfo(value, name)

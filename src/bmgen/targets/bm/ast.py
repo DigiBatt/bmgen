@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
+import bmgen
 import bmgen.targets.bm as bm
 import bmgen.targets.bm.helper.cast as cast
 from bmgen.targets.bm.helper.compare import compare
@@ -14,7 +15,13 @@ class BMNode:
         return self.toText()
 
 
-class BMNumValue(BMNode):
+@dataclass
+class BMValue(BMNode):
+    def toText(self):
+        raise NotImplementedError()
+
+
+class BMNumValue(BMValue):
     def toText(self):
         raise NotImplementedError()
 
@@ -73,58 +80,78 @@ class BMArray(BMVariable):
     def __getitem__(self, key: BMNumValue):
         if self.arraynum == None:
             raise NotImplementedError("Scalar variable cannot be accessed as an array")
-        if self.arraynum > 0:
-            idx = BMVariable("bmgen_idx")
-            bm.generator.add(
-                BMStatement(
-                    operator="SET",
-                    values=[BMAssignment(numvalue=key, variable=idx)],
+        result = BMVariable(self.name + "_Val")
+        if bmgen.options.get("bm", {}).get("oldArrays", False):
+            if self.arraynum > 0:
+                idx = BMVariable("bmgen_idx")
+                bm.generator.add(
+                    BMStatement(
+                        operator="SET",
+                        values=[BMAssignment(numvalue=key, variable=idx)],
+                    )
                 )
-            )
+                bm.generator.add(
+                    BMStatement(
+                        operator="ADD",
+                        values=[idx, BMNumber(self.arraynum * 1000)],
+                    )
+                )
+            else:
+                idx = key
             bm.generator.add(
                 BMStatement(
-                    operator="ADD",
-                    values=[idx, BMNumber(self.arraynum * 1000)],
+                    operator="PAU", limits=[BMLimit(BMVariable("arrGET") > idx)]
                 )
             )
         else:
-            idx = key
-        bm.generator.add(
-            BMStatement(operator="PAU", limits=[BMLimit(BMVariable("arrGET") > idx)])
-        )
-        return BMVariable(self.name + "_Val")
+            bm.generator.add(
+                BMStatement(
+                    operator="ARRGET",
+                    values=[BMTwoValues(BMVariable(self.name), key), result],
+                )
+            )
+        return result
 
     @cast.autocast()
     def __setitem__(self, key: BMNumValue, value: BMNumValue):
         if self.arraynum == None:
             raise NotImplementedError("Scalar variable cannot be accessed as an array")
-        if self.arraynum > 0:
-            idx = BMVariable("bmgen_idx")
+        if bmgen.options.get("bm", {}).get("oldArrays", False):
+            valuevar = BMVariable(self.name + "_Val")
+            if self.arraynum > 0:
+                idx = BMVariable("bmgen_idx")
+                bm.generator.add(
+                    BMStatement(
+                        operator="SET",
+                        values=[BMAssignment(numvalue=key, variable=idx)],
+                    )
+                )
+                bm.generator.add(
+                    BMStatement(
+                        operator="ADD",
+                        values=[idx, BMNumber(self.arraynum * 1000)],
+                    )
+                )
+            else:
+                idx = key
             bm.generator.add(
                 BMStatement(
                     operator="SET",
-                    values=[BMAssignment(numvalue=key, variable=idx)],
+                    values=[BMAssignment(numvalue=value, variable=valuevar)],
                 )
             )
             bm.generator.add(
                 BMStatement(
-                    operator="ADD",
-                    values=[idx, BMNumber(self.arraynum * 1000)],
+                    operator="PAU", limits=[BMLimit(BMVariable("arrSET") > idx)]
                 )
             )
         else:
-            idx = key
-        valuevar = BMVariable(self.name + "_Val")
-        bm.generator.add(
-            BMStatement(
-                operator="SET",
-                values=[BMAssignment(numvalue=value, variable=valuevar)],
+            bm.generator.add(
+                BMStatement(
+                    operator="ARRPUT",
+                    values=[BMTwoValues(BMVariable(self.name), key), value],
+                )
             )
-        )
-        bm.generator.add(
-            BMStatement(operator="PAU", limits=[BMLimit(BMVariable("arrSET") > idx)])
-        )
-        return valuevar
 
     def __len__(self):
         return self.arraysize
@@ -139,18 +166,21 @@ class BMNumber(BMNumValue):
 
 
 @dataclass
-class BMValue(BMNode):
-    def toText(self):
-        raise NotImplementedError()
-
-
-@dataclass
 class BMMultiplication(BMValue):
     numvalue: BMNumValue
     variable: BMVariable
 
     def toText(self):
         return self.numvalue.toText() + " " + self.variable.toText()
+
+
+@dataclass
+class BMTwoValues(BMValue):
+    first: BMNumValue
+    second: BMNumValue
+
+    def toText(self):
+        return self.first.toText() + " " + self.second.toText()
 
 
 @dataclass
