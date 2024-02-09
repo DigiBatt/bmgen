@@ -19,7 +19,7 @@
         </Main>
       </Record>
     </Whole_Prt>
-    <Step_Info Num="13">
+    <Step_Info Num="15">
       <Step1 Step_ID="1" Step_Type="4">
         <Limit>
           <Main>
@@ -156,7 +156,37 @@
           <Safe N2GroupCount="0" />
         </AdvancedPrt>
       </Step10>
-      <Step11 Step_ID="11" Step_Type="4">
+      <Step11 Step_ID="11" Step_Type="2">
+        <Limit>
+          <Main>
+            <Time Is_Select="1" Value="30000" />
+            <Curr Is_Select="1" Value="5000" />
+            <Stop_Volt Is_Select="1" Value="26500" />
+          </Main>
+        </Limit>
+        <AdvancedPrt>
+          <CV_Chg>
+            <CurrRise Count="0" />
+          </CV_Chg>
+          <Safe N2GroupCount="0" />
+        </AdvancedPrt>
+      </Step11>
+      <Step12 Step_ID="12" Step_Type="2">
+        <Limit>
+          <Main>
+            <Time Is_Select="1" Value="30000" />
+            <Curr Is_Select="1" Value="5000" />
+            <Stop_Volt Is_Select="1" Value="26500" />
+          </Main>
+        </Limit>
+        <AdvancedPrt>
+          <CV_Chg>
+            <CurrRise Count="0" />
+          </CV_Chg>
+          <Safe N2GroupCount="0" />
+        </AdvancedPrt>
+      </Step12>
+      <Step13 Step_ID="13" Step_Type="4">
         <Limit>
           <Main>
             <Time Is_Select="1" Value="30000" />
@@ -168,8 +198,8 @@
           </CV_Chg>
           <Safe N2GroupCount="0" />
         </AdvancedPrt>
-      </Step11>
-      <Step12 Step_ID="12" Step_Type="4">
+      </Step13>
+      <Step14 Step_ID="14" Step_Type="4">
         <Limit>
           <Main>
             <Time Is_Select="1" Value="120000" />
@@ -181,8 +211,8 @@
           </CV_Chg>
           <Safe N2GroupCount="0" />
         </AdvancedPrt>
-      </Step12>
-      <Step13 Step_ID="13" Step_Type="6">
+      </Step14>
+      <Step15 Step_ID="15" Step_Type="6">
         <Limit>
           <Main />
         </Limit>
@@ -192,7 +222,7 @@
           </CV_Chg>
           <Safe N2GroupCount="0" />
         </AdvancedPrt>
-      </Step13>
+      </Step15>
     </Step_Info>
     <SMBUS>
       <SMBUS_Path Values="" />

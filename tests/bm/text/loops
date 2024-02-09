@@ -13,6 +13,13 @@
 	13	bmgen_2	ARRGET	values v_idx\r\nvalues_Val			
 	14		CHA	values_Val A	30 sec\r\n> 4.2 V	\r\n	
 	15		CYC	2 *			
-	16		PAU		30 sec		
-	17		PAU		120 sec		
-	18		STO				
+	16		ARRINIT	x_arr\r\n2\r\n5			
+	17		SET	x_idx = 0			
+	18		GOTO	bmgen_3			
+	19		BEG	x_idx			
+	20	bmgen_3	ARRGET	x_arr x_idx\r\nx_arr_Val			
+	21		DCH	values_Val A	30 sec\r\n< 2.65 V	\r\n	
+	22		CYC	1 *			
+	23		PAU		30 sec		
+	24		PAU		120 sec		
+	25		STO				

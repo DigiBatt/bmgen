@@ -1,11 +1,15 @@
 import bmgen.targets.bm as target
 from bmgen.targets.bm.ast import *
+from bmgen.targets.bm.program import variable
 
 
 class ctrl_for:
     def __init__(self, var: BMVariable, iterable):
+        if isinstance(iterable, list):
+            iterable = variable(var.name + "_arr", iterable)
         self.var = var
         self.iterable = iterable
+
         self.simple = isinstance(self.iterable, range) and self.iterable.step == 1
         self.arrayloop = isinstance(self.iterable, BMArray)
 
@@ -50,7 +54,7 @@ class ctrl_for:
             self.var.name = valuevar.name
         else:
             raise NotImplementedError(
-                "BM loops current only work with ranges with stepsize 1 ( e.g. for i in range(10) )"
+                "BM loops currently only work with ranges with stepsize 1 ( e.g. for i in range(10) )"
             )
             pass
         return self.var

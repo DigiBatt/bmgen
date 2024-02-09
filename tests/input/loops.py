@@ -13,6 +13,9 @@ values = [2, 1, 5]
 for v in values:
     charge(v, limits=[time(seconds=30), V > 4.2])
 
+for x in [2, 5]:
+    discharge(v, limits=[time(seconds=30), V < 2.65])
+
 if len(values) > 2:
     pause(seconds=30)
 else:
