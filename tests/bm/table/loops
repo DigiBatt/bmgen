@@ -8,13 +8,14 @@
 <tr><td>6</td><td></td><td>BEG</td><td>idx</td><td></td><td></td><td></td></tr>
 <tr><td>7</td><td></td><td>PAU</td><td></td><td>5 sec</td><td></td><td></td></tr>
 <tr><td>8</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
-<tr><td>9</td><td></td><td>SET</td><td>values_IV = 123454321<br>values_Val = 0<br>values_0 = 2<br>values_1 = 1<br>values_2 = 5<br>v_idx = 0</td><td></td><td></td><td></td></tr>
-<tr><td>10</td><td></td><td>GOTO</td><td>bmgen_2</td><td></td><td></td><td></td></tr>
-<tr><td>11</td><td></td><td>BEG</td><td>v_idx</td><td></td><td></td><td></td></tr>
-<tr><td>12</td><td>bmgen_2</td><td>PAU</td><td></td><td>> v_idx arrGET</td><td></td><td></td></tr>
-<tr><td>13</td><td></td><td>CHA</td><td>values_Val A</td><td>30 sec<br>> 4.2 V</td><td><br></td><td></td></tr>
-<tr><td>14</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
-<tr><td>15</td><td></td><td>PAU</td><td></td><td>30 sec</td><td></td><td></td></tr>
-<tr><td>16</td><td></td><td>PAU</td><td></td><td>120 sec</td><td></td><td></td></tr>
-<tr><td>17</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>9</td><td></td><td>ARRINIT</td><td>values<br>2<br>1<br>5</td><td></td><td></td><td></td></tr>
+<tr><td>10</td><td></td><td>SET</td><td>v_idx = 0</td><td></td><td></td><td></td></tr>
+<tr><td>11</td><td></td><td>GOTO</td><td>bmgen_2</td><td></td><td></td><td></td></tr>
+<tr><td>12</td><td></td><td>BEG</td><td>v_idx</td><td></td><td></td><td></td></tr>
+<tr><td>13</td><td>bmgen_2</td><td>ARRGET</td><td>values v_idx<br>values_Val</td><td></td><td></td><td></td></tr>
+<tr><td>14</td><td></td><td>CHA</td><td>values_Val A</td><td>30 sec<br>> 4.2 V</td><td><br></td><td></td></tr>
+<tr><td>15</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
+<tr><td>16</td><td></td><td>PAU</td><td></td><td>30 sec</td><td></td><td></td></tr>
+<tr><td>17</td><td></td><td>PAU</td><td></td><td>120 sec</td><td></td><td></td></tr>
+<tr><td>18</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
 </table>

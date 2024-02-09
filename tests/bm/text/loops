@@ -6,12 +6,13 @@
 	6		BEG	idx			
 	7		PAU		5 sec		
 	8		CYC	2 *			
-	9		SET	values_IV = 123454321\r\nvalues_Val = 0\r\nvalues_0 = 2\r\nvalues_1 = 1\r\nvalues_2 = 5\r\nv_idx = 0			
-	10		GOTO	bmgen_2			
-	11		BEG	v_idx			
-	12	bmgen_2	PAU		> v_idx arrGET		
-	13		CHA	values_Val A	30 sec\r\n> 4.2 V	\r\n	
-	14		CYC	2 *			
-	15		PAU		30 sec		
-	16		PAU		120 sec		
-	17		STO				
+	9		ARRINIT	values\r\n2\r\n1\r\n5			
+	10		SET	v_idx = 0			
+	11		GOTO	bmgen_2			
+	12		BEG	v_idx			
+	13	bmgen_2	ARRGET	values v_idx\r\nvalues_Val			
+	14		CHA	values_Val A	30 sec\r\n> 4.2 V	\r\n	
+	15		CYC	2 *			
+	16		PAU		30 sec		
+	17		PAU		120 sec		
+	18		STO				

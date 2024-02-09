@@ -1,15 +1,16 @@
-	1		SET	CRate = 0.5\r\nEOCCurrent = 0.05\r\nPauseLen_IV = 123454321\r\nPauseLen_Val = 0\r\nPauseLen_0 = 1\r\nPauseLen_1 = 1.5\r\nPauseLen_2 = 2\r\nPauseLen_Val = 5			
-	2		PAU		> 1 arrSET		
-	3		SET	i = 0			
-	4		GOTO	bmgen_1			
-	5		BEG	i			
-	6	bmgen_1	CHA	CRate ACn1\r\n4.2 V	< EOCCurrent A\r\n5 h	\r\n	
-	7		PAU		> i arrGET		
-	8		PAU		> PauseLen_Val mso_h		
-	9		PAU		< 2 i\r\n1 sec	GOTO bmgen_2_if\r\nGOTO bmgen_2_else	
-	10	bmgen_2_if	DCH	CRate ACn1	<= 2.5 V		
-	11		GOTO	bmgen_2_end			
-	12	bmgen_2_else	DCH	CRate ACn1	<= 2.0 V		
-	13	bmgen_2_end	ADD	CRate\r\n0.2			
-	14		CYC	2 *			
-	15		STO				
+	1		SET	CRate = 0.5\r\nEOCCurrent = 0.05			
+	2		ARRINIT	PauseLen\r\n1\r\n1.5\r\n2			
+	3		ARRPUT	PauseLen 1\r\n5			
+	4		SET	i = 0			
+	5		GOTO	bmgen_1			
+	6		BEG	i			
+	7	bmgen_1	CHA	CRate ACn1\r\n4.2 V	< EOCCurrent A\r\n5 h	\r\n	
+	8		ARRGET	PauseLen i\r\nPauseLen_Val			
+	9		PAU		> PauseLen_Val mso_h		
+	10		PAU		< 2 i\r\n1 sec	GOTO bmgen_2_if\r\nGOTO bmgen_2_else	
+	11	bmgen_2_if	DCH	CRate ACn1	<= 2.5 V		
+	12		GOTO	bmgen_2_end			
+	13	bmgen_2_else	DCH	CRate ACn1	<= 2.0 V		
+	14	bmgen_2_end	ADD	CRate\r\n0.2			
+	15		CYC	2 *			
+	16		STO				
