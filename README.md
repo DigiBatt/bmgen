@@ -137,7 +137,7 @@ Name of the output file. If this option is not provided, the output is written t
 | battery parameters                                | ✔️                         | ❌    | ✔️      |
 | if / else statements                              | ✔️                         | ➖    | ➖      |
 | if / else statements (compile time)               | ➖                         | ✔️    | ✔️      |
-| loops with fixed cycle count                      | ✔️                         | ➖    | ➖      |
+| loops with fixed cycle count                      | ✔️                         | ✔️    | ➖      |
 | loops with arbitrary conditions                   | ✔️                         | ❌    | ➖      |
 | loops (compile time)                              | ➖                         | ✔️    | ✔️      |
 | references to duration/Ah count of previous steps | ✔️                         | ✔️    | ✔️      |

@@ -74,7 +74,7 @@ class NewareAction(Enum):
     NextStep = 4
 
 
-class NewareOtherType(Enum):
+class NewareConditionType(Enum):
     Expression = 22
     Set = 23
 

@@ -1,9 +1,10 @@
-from dataclasses import dataclass, field
-import bmgen.targets.neware.constants as constants
 import xml.etree.ElementTree as ee
-from typing import List, Dict
+from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Dict, List
+
 import bmgen
+import bmgen.targets.neware.constants as constants
 
 
 @dataclass
@@ -26,7 +27,41 @@ class NewareExpressionString:
 
 @dataclass
 class NewareOther:
-    type: constants.NewareOtherType
+    name: str
+    attributes: Dict[str, str]
+
+    def toXML(self, parent, number):
+        return ee.SubElement(parent, self.name, self.attributes)
+
+    def toText(self):
+        return f"{self.name}: {', '.join([f'{key}={value}' for key, value in self.attributes.items()])}"
+
+
+class NewareStartStep(NewareOther):
+    step: int
+
+    def __init__(self, step):
+        self.step = step
+        super().__init__("Start_Step", {"Value": str(step)})
+
+    def toText(self):
+        return f"Start Step ID: {self.step}"
+
+
+class NewareCycleCount(NewareOther):
+    count: int
+
+    def __init__(self, count):
+        self.count = count
+        super().__init__("Cycle_Count", {"Value": str(count)})
+
+    def toText(self):
+        return f"Cycle Count: {self.count}"
+
+
+@dataclass
+class NewareCondition(NewareOther):
+    type: constants.NewareConditionType
     userVariableId: int
     globalVariable: constants.NewareGlobalVariable | int
     comparator: constants.NewareComparator = constants.NewareComparator.Nothing
@@ -34,45 +69,66 @@ class NewareOther:
     expressionName: str | None = None
     expression: NewareExpressionString | None = None
 
-    def toXML(self, parent, number):
+    def __init__(
+        self,
+        type: constants.NewareConditionType,
+        userVariableId: int,
+        globalVariable: constants.NewareGlobalVariable | int,
+        comparator: constants.NewareComparator = constants.NewareComparator.Nothing,
+        goto: constants.NewareGotoTarget = constants.NewareGotoTarget.Nothing,
+        expressionName: str | None = None,
+        expression: NewareExpressionString | None = None,
+    ):
+        self.type = type
+        self.userVariableId = userVariableId
+        self.globalVariable = globalVariable
+        self.comparator = comparator
+        self.goto = goto
+        self.expressionName = expressionName
+        self.expression = expression
+
         attr = {
-            "type": str(self.type.value),
+            "type": str(type.value),
             "Function": "0",
-            "CmpType": str(self.comparator.value),
-            "Jump_Line": str(self.goto.value),
+            "CmpType": str(comparator.value),
+            "Jump_Line": str(goto.value),
             "Value": "0",
             "TimeGoto": "0",
-            "GlobleUserID": str(self.userVariableId),
+            "GlobleUserID": str(userVariableId),
             "GLobleType": "1",
             "Aux": "0",
         }
-        if isinstance(self.globalVariable, constants.NewareGlobalVariable):
-            attr["GlobalVar"] = str(self.globalVariable.value)
+        if isinstance(globalVariable, constants.NewareGlobalVariable):
+            attr["GlobalVar"] = str(globalVariable.value)
         else:
-            attr["GlobalVar"] = str(self.globalVariable)
-        if self.expressionName:
-            attr["ExpressionName"] = self.expressionName
-        if self.expression:
-            attr["Expression"] = self.expression.expression
-        return ee.SubElement(parent, f"Cnd{number}", attr)
+            attr["GlobalVar"] = str(globalVariable)
+        if expressionName:
+            attr["ExpressionName"] = expressionName
+        if expression:
+            attr["Expression"] = expression.expression
+        super().__init__("Cnd", attr)
 
-    def toText(self):
-        raise NotImplementedError()
+    def toXML(self, parent, number):
+        element = NewareOther.toXML(self, parent, number)
+        element.tag = f"Cnd{number}"
+        return element
 
 
 @dataclass
-class NewareSet(NewareOther):
+class NewareSet(NewareCondition):
     def __init__(
         self, userVariableId: int, globalVariable: constants.NewareGlobalVariable
     ):
-        super().__init__(constants.NewareOtherType.Set, userVariableId, globalVariable)
+        super().__init__(
+            constants.NewareConditionType.Set, userVariableId, globalVariable
+        )
 
     def toText(self):
         return f"SET User{self.userVariableId - constants.FirstUserVariableId + 1} = {self.globalVariable.name}"
 
 
 @dataclass
-class NewareExpression(NewareOther):
+class NewareExpression(NewareCondition):
     def __init__(
         self,
         userVariableId: int,
@@ -83,7 +139,7 @@ class NewareExpression(NewareOther):
         goto: constants.NewareGotoTarget,
     ):
         super().__init__(
-            constants.NewareOtherType.Expression,
+            constants.NewareConditionType.Expression,
             userVariableId,
             globalVariable,
             expressionName=expressionName,
@@ -105,7 +161,7 @@ class NewareStatement:
     cutoffVoltage: float | None = None
     cutoffCurrent: float | None = None
     capacity: float | None = None
-    others: List[NewareOther] = field(default_factory=list)
+    others: List[NewareCondition] = field(default_factory=list)
     record: Dict[constants.RecordType, float] = field(default_factory=dict)
 
     def toXML(self, linenumber: int):

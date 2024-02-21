@@ -1,15 +1,17 @@
 #! /usr/bin/python3.10
 
 import ast
-import astor
-import sys
-from bmgen.transformer import Transformer
-import click
-import bmgen
-from importlib import import_module
-from bmgen.battery import PredefindedBattery
-import json
 import io
+import json
+import sys
+from importlib import import_module
+
+import astor
+import click
+
+import bmgen
+from bmgen.battery import PredefindedBattery
+from bmgen.transformer import Transformer
 
 
 @click.command()
@@ -103,7 +105,7 @@ def generate(
             import_module(f"bmgen.targets.{target}.battery"), "battery"
         )
     target_module.battery = target_battery
-    exec(compile(newtree, filename="<ast>", mode="exec"))
+    exec(compile(newtree, filename="<ast>", mode="exec"), {})
     if intermediate == "targetast":
         output(out, target_module.generator.ast())
     else:
