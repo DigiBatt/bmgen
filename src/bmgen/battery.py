@@ -38,6 +38,8 @@ class CyclerBattery(Battery):
 class PredefindedBattery(Battery):
     def __getattribute__(self, name: str) -> Any:
         value = super().__getattribute__(name)
+        if name == "oneC" and value is None:
+            value = super().__getattribute__("nominalCapacity")
         if value is None:
             raise Exception(
                 f"Battery parameter '{name}' not specified in the battery definition"
