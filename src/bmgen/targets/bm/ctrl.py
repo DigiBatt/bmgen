@@ -3,80 +3,72 @@ from bmgen.targets.bm.ast import *
 from bmgen.targets.bm.program import variable
 
 
-class ctrl_for:
-    def __init__(self, var: BMVariable, iterable):
-        if isinstance(iterable, list):
-            iterable = variable(var.name + "_arr", iterable)
-        self.var = var
-        self.iterable = iterable
-
-        self.simple = isinstance(self.iterable, range) and self.iterable.step == 1
-        self.arrayloop = isinstance(self.iterable, BMArray)
-
-    def __enter__(self):
-        if self.simple:
-            if self.iterable.start != 1:
-                target.generator.add(
-                    BMStatement(
-                        operator="SET",
-                        values=[
-                            BMAssignment(
-                                variable=self.var,
-                                numvalue=BMNumber(self.iterable.start),
-                            )
-                        ],
-                    )
-                )
-                label = BMLabel(target.generator.label())
-                target.generator.add(BMStatement(operator="GOTO", values=[label]))
-                target.generator.add(BMStatement(operator="BEG", values=[self.var]))
-                target.generator.add(label)
-            else:
-                target.generator.add(BMStatement(operator="BEG", values=[self.var]))
-        elif self.arrayloop:
-            counter = BMVariable(self.var.name + "_idx")
+def ctrl_for(iterable, body, var, g, l):
+    if not isinstance(var, BMVariable):
+        var = variable(var)
+    simple = isinstance(iterable, range) and iterable.step == 1
+    if not simple and isinstance(iterable, (range, list)):
+        iterable = variable(var.name + "_arr", iterable)
+    arrayloop = isinstance(iterable, BMArray)
+    code = compile(body, "<bmgen_loop>", "exec")
+    if simple:
+        if iterable.start != 1:
             target.generator.add(
                 BMStatement(
                     operator="SET",
                     values=[
                         BMAssignment(
-                            variable=counter,
-                            numvalue=BMNumber(0),
+                            variable=var,
+                            numvalue=BMNumber(iterable.start),
                         )
                     ],
                 )
             )
             label = BMLabel(target.generator.label())
             target.generator.add(BMStatement(operator="GOTO", values=[label]))
-            target.generator.add(BMStatement(operator="BEG", values=[counter]))
+            target.generator.add(BMStatement(operator="BEG", values=[var]))
             target.generator.add(label)
-            valuevar = self.iterable.__getitem__(counter)
-            self.var.name = valuevar.name
         else:
-            raise NotImplementedError(
-                "BM loops currently only work with ranges with stepsize 1 ( e.g. for i in range(10) )"
+            target.generator.add(BMStatement(operator="BEG", values=[var]))
+        l[var.name] = var
+        exec(code, g, l)
+        target.generator.add(
+            BMStatement(
+                operator="CYC",
+                values=[BMCycleCount(BMNumber(iterable.stop - 1))],
             )
-            pass
-        return self.var
-
-    def __exit__(self, type, value, traceback):
-        if self.simple:
-            target.generator.add(
-                BMStatement(
-                    operator="CYC",
-                    values=[BMCycleCount(BMNumber(self.iterable.stop - 1))],
-                )
+        )
+    elif arrayloop:
+        counter = BMVariable(var.name + "_idx")
+        target.generator.add(
+            BMStatement(
+                operator="SET",
+                values=[
+                    BMAssignment(
+                        variable=counter,
+                        numvalue=BMNumber(0),
+                    )
+                ],
             )
-        elif self.arrayloop:
-            target.generator.add(
-                BMStatement(
-                    operator="CYC",
-                    values=[BMCycleCount(BMNumber(self.iterable.arraysize - 1))],
-                )
+        )
+        label = BMLabel(target.generator.label())
+        target.generator.add(BMStatement(operator="GOTO", values=[label]))
+        target.generator.add(BMStatement(operator="BEG", values=[counter]))
+        target.generator.add(label)
+        valuevar = iterable.__getitem__(counter)
+        l[var.name] = valuevar
+        var.name = valuevar.name
+        exec(code, g, l)
+        target.generator.add(
+            BMStatement(
+                operator="CYC",
+                values=[BMCycleCount(BMNumber(iterable.arraysize - 1))],
             )
-        else:
-            # TODO: generic loop
-            pass
+        )
+    else:
+        for i in iterable:
+            l[var.name] = i
+            exec(code, g, l)
 
 
 class ctrl_if:
