@@ -21,7 +21,9 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
     if value:
         if isinstance(value, list):
             arraynum = target.generator.array()
-            if bmgen.options.get("bm", {}).get("oldArrays", False):
+            if bmgen.options.get("bm", {}).get("pythonArrays", False):
+                return value
+            elif bmgen.options.get("bm", {}).get("oldArrays", False):
                 target.generator.add(
                     BMStatement(
                         operator="SET",
