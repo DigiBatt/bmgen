@@ -26,6 +26,8 @@ class BMNumValue(BMValue):
         raise NotImplementedError()
 
     def __mul__(self, other: "BMVariable"):
+        if isinstance(other, float):
+            other = BMNumber(other)
         return BMMultiplication(numvalue=self, variable=other)
 
 
@@ -163,6 +165,56 @@ class BMNumber(BMNumValue):
 
     def toText(self):
         return str(self.value)
+
+    def __add__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return BMNumber(self.value + other.value)
+
+    def __sub__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return BMNumber(self.value - other.value)
+
+    def __mul__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return BMNumber(self.value * other.value)
+
+    def __truediv__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return BMNumber(self.value * other.value)
+
+    def __lt__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return self.value < other.value
+
+    def __gt__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return self.value > other.value
+
+    def __le__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return self.value <= other.value
+
+    def __ge__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return self.value >= other.value
+
+    def __eq__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return self.value == other.value
+
+    def __ne__(self, other):
+        if not isinstance(other, BMNumber):
+            return NotImplemented
+        return self.value != other.value
 
 
 @dataclass

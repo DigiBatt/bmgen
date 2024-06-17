@@ -5,6 +5,7 @@ import bmgen.targets.bm as target
 from bmgen.targets.bm.ast import (
     BMArray,
     BMAssignment,
+    BMLimit,
     BMNumber,
     BMNumValue,
     BMStatement,
@@ -19,7 +20,18 @@ from bmgen.targets.bm.stepinfo import BMStepInfo
 def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
     var = BMVariable(name)
     if value:
-        if isinstance(value, list):
+        if isinstance(value, BMStatement):
+            return BMStepInfo(value, name)
+        if isinstance(value, BMLimit):
+            return value
+        elif bmgen.options.get("bm", {}).get("pythonEval", False):
+            # if isinstance(value, BMNumber):
+            #     return value.value
+            # elif isinstance(value, list):
+            #     return [v.value if isinstance(v, BMNumber) else v for v in value]
+            # else:
+            return value
+        elif isinstance(value, list):
             arraynum = target.generator.array()
             if bmgen.options.get("bm", {}).get("pythonArrays", False):
                 return value
@@ -54,8 +66,6 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
                     )
                 )
             return BMArray(name, arraynum, len(value))
-        elif isinstance(value, BMStatement):
-            return BMStepInfo(value, name)
         elif not (isinstance(value, BMVariable) and value.name == name):
             target.generator.add(
                 BMStatement(
