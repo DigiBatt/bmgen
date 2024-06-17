@@ -413,6 +413,9 @@ class BMStatement(BMLine):
     registrations: List[BMRegistration] = field(default_factory=list)
     label: str | None = None
 
+    def __eq__(self, other):
+        return id(self) == id(other)
+
     def __post_init__(self):
         if self.registrations == None:
             self.registrations = []
