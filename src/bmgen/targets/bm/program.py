@@ -25,11 +25,6 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
         if isinstance(value, BMLimit):
             return value
         elif bmgen.options.get("bm", {}).get("pythonEval", False):
-            # if isinstance(value, BMNumber):
-            #     return value.value
-            # elif isinstance(value, list):
-            #     return [v.value if isinstance(v, BMNumber) else v for v in value]
-            # else:
             return value
         elif isinstance(value, list):
             arraynum = target.generator.array()

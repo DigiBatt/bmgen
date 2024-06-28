@@ -49,6 +49,28 @@ class BMVariable(BMNumValue):
         return BMLimitCompare(lhs=self, rhs=other, operator=operator)
 
     @cast.autocast()
+    def __add__(self, other: BMNumValue):
+        tempname = f"bmgen_tmp_{bm.generator.tempcount}"
+        tempvar = BMVariable(tempname)
+        bm.generator.tempcount += 1
+        bm.generator.add(
+            BMStatement(operator="SET", values=[BMAssignment(self, tempvar)])
+        )
+        tempvar += other
+        return tempvar
+
+    @cast.autocast()
+    def __sub__(self, other: BMNumValue):
+        tempname = f"bmgen_tmp_{bm.generator.tempcount}"
+        tempvar = BMVariable(tempname)
+        bm.generator.tempcount -= 1
+        bm.generator.add(
+            BMStatement(operator="SET", values=[BMAssignment(self, tempvar)])
+        )
+        tempvar += other
+        return tempvar
+
+    @cast.autocast()
     def __iadd__(self, other: BMNumValue):
         bm.generator.add(BMStatement(operator="ADD", values=[self, other]))
         return self

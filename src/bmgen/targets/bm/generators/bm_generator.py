@@ -16,6 +16,7 @@ class BMGenerator(BaseGenerator):
         self.program = BMProgram()
         self.labelcount = 0
         self.arraycount = 0
+        self.tempcount = 0
         self.frozen = False
 
     def finish(self):
