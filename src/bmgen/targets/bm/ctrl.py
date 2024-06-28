@@ -108,11 +108,12 @@ class ctrl_if:
         target.generator.add(BMLabel(self.baselabel + "_if"))
 
     def __exit__(self, type, value, traceback):
+        target.generator.context.remove(self)
         if isinstance(self.condition, bool):
+            target.generator.unfreeze()
             return
 
         target.generator.add(BMLabel(self.baselabel + "_end"))
-        target.generator.context.remove(self)
 
 
 class ctrl_else:
@@ -135,5 +136,5 @@ class ctrl_else:
 
     def __exit__(self, type, value, traceback):
         condition = target.generator.context[-1].condition
-        if isinstance(condition, bool) and condition == True:
+        if isinstance(condition, bool):
             target.generator.unfreeze()
