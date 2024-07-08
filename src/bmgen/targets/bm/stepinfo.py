@@ -1,6 +1,7 @@
 from dataclasses import dataclass
-from bmgen.targets.bm.ast import BMStatement, BMVariable, BMAssignment
+
 import bmgen.targets.bm as target
+from bmgen.targets.bm.ast import BMAssignment, BMStatement, BMVariable
 
 
 @dataclass

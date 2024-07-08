@@ -25,15 +25,17 @@ class BMNumValue(BMValue):
     def toText(self):
         raise NotImplementedError()
 
-    def __mul__(self, other: "BMVariable"):
+    def __mul__(self, other: "BMNamedValue"):
+        if not isinstance(other, (float, BMNumValue)):
+            return NotImplemented
         if isinstance(other, float):
             other = BMNumber(other)
-        return BMMultiplication(numvalue=self, variable=other)
+        return BMMultiplication(numvalue=self, channel=other)
 
 
 @compare
 @dataclass
-class BMVariable(BMNumValue):
+class BMNamedValue(BMNumValue):
     name: str
 
     def toText(self):
@@ -44,14 +46,25 @@ class BMVariable(BMNumValue):
         # special case for upper current limits to avoid restricting discharge currents. See BM manual p. 170.
         if self.name == "A" and (operator == ">" or operator == ">="):
             return BMLimitCompare(
-                lhs=BMVariable("A_notAbs"), rhs=other, operator=operator
+                lhs=BMNamedValue("A_notAbs"), rhs=other, operator=operator
             )
+        if isinstance(other, BMMultiplication) and self.name != "A":
+            tempname = f"bmgen_{bm.generator.tempcount}"
+            tempvar = BMVariable(tempname)
+            bm.generator.tempcount += 1
+            bm.generator.add(
+                BMStatement(
+                    operator="SET", values=[BMAssignment(other.channel, tempvar)]
+                )
+            )
+            tempvar *= other.numvalue
+            other = tempvar
         return BMLimitCompare(lhs=self, rhs=other, operator=operator)
 
     @cast.autocast()
     def __add__(self, other: BMNumValue):
-        tempname = f"bmgen_tmp_{bm.generator.tempcount}"
-        tempvar = BMVariable(tempname)
+        tempname = f"bmgen_{bm.generator.tempcount}"
+        tempvar = BMNamedValue(tempname)
         bm.generator.tempcount += 1
         bm.generator.add(
             BMStatement(operator="SET", values=[BMAssignment(self, tempvar)])
@@ -61,13 +74,39 @@ class BMVariable(BMNumValue):
 
     @cast.autocast()
     def __sub__(self, other: BMNumValue):
-        tempname = f"bmgen_tmp_{bm.generator.tempcount}"
-        tempvar = BMVariable(tempname)
-        bm.generator.tempcount -= 1
+        tempname = f"bmgen_{bm.generator.tempcount}"
+        tempvar = BMNamedValue(tempname)
+        bm.generator.tempcount += 1
         bm.generator.add(
             BMStatement(operator="SET", values=[BMAssignment(self, tempvar)])
         )
-        tempvar += other
+        tempvar -= other
+        return tempvar
+
+    @cast.autocast()
+    def __mul__(self, other: BMNumValue):
+        if isinstance(self, BMChannel) and isinstance(other, BMNumValue):
+            return BMMultiplication(numvalue=other, channel=self)
+        if isinstance(other, BMChannel):
+            return BMMultiplication(numvalue=self, channel=other)
+        tempname = f"bmgen_{bm.generator.tempcount}"
+        tempvar = BMVariable(tempname)
+        bm.generator.tempcount += 1
+        bm.generator.add(
+            BMStatement(operator="SET", values=[BMAssignment(self, tempvar)])
+        )
+        tempvar *= other
+        return tempvar
+
+    @cast.autocast()
+    def __truediv__(self, other: BMNumValue):
+        tempname = f"bmgen_{bm.generator.tempcount}"
+        tempvar = BMVariable(tempname)
+        bm.generator.tempcount += 1
+        bm.generator.add(
+            BMStatement(operator="SET", values=[BMAssignment(self, tempvar)])
+        )
+        tempvar /= other
         return tempvar
 
     @cast.autocast()
@@ -92,7 +131,19 @@ class BMVariable(BMNumValue):
 
     @cast.autocast()
     def __rmul__(self, other: BMNumValue):
-        return other * self
+        return self * other
+
+    @cast.autocast()
+    def __radd__(self, other: BMNumValue):
+        return self + other
+
+
+@dataclass
+class BMVariable(BMNamedValue): ...
+
+
+@dataclass
+class BMChannel(BMNamedValue): ...
 
 
 @dataclass
@@ -104,10 +155,10 @@ class BMArray(BMVariable):
     def __getitem__(self, key: BMNumValue):
         if self.arraynum == None:
             raise NotImplementedError("Scalar variable cannot be accessed as an array")
-        result = BMVariable(self.name + "_Val")
+        result = BMNamedValue(self.name + "_Val")
         if bmgen.options.get("bm", {}).get("oldArrays", False):
             if self.arraynum > 0:
-                idx = BMVariable("bmgen_idx")
+                idx = BMNamedValue("bmgen_idx")
                 bm.generator.add(
                     BMStatement(
                         operator="SET",
@@ -124,14 +175,14 @@ class BMArray(BMVariable):
                 idx = key
             bm.generator.add(
                 BMStatement(
-                    operator="PAU", limits=[BMLimit(BMVariable("arrGET") > idx)]
+                    operator="PAU", limits=[BMLimit(BMNamedValue("arrGET") > idx)]
                 )
             )
         else:
             bm.generator.add(
                 BMStatement(
                     operator="ARRGET",
-                    values=[BMTwoValues(BMVariable(self.name), key), result],
+                    values=[BMTwoValues(BMNamedValue(self.name), key), result],
                 )
             )
         return result
@@ -141,9 +192,9 @@ class BMArray(BMVariable):
         if self.arraynum == None:
             raise NotImplementedError("Scalar variable cannot be accessed as an array")
         if bmgen.options.get("bm", {}).get("oldArrays", False):
-            valuevar = BMVariable(self.name + "_Val")
+            valuevar = BMNamedValue(self.name + "_Val")
             if self.arraynum > 0:
-                idx = BMVariable("bmgen_idx")
+                idx = BMNamedValue("bmgen_idx")
                 bm.generator.add(
                     BMStatement(
                         operator="SET",
@@ -166,14 +217,14 @@ class BMArray(BMVariable):
             )
             bm.generator.add(
                 BMStatement(
-                    operator="PAU", limits=[BMLimit(BMVariable("arrSET") > idx)]
+                    operator="PAU", limits=[BMLimit(BMNamedValue("arrSET") > idx)]
                 )
             )
         else:
             bm.generator.add(
                 BMStatement(
                     operator="ARRPUT",
-                    values=[BMTwoValues(BMVariable(self.name), key), value],
+                    values=[BMTwoValues(BMNamedValue(self.name), key), value],
                 )
             )
 
@@ -184,6 +235,12 @@ class BMArray(BMVariable):
 @dataclass
 class BMNumber(BMNumValue):
     value: float
+
+    def __int__(self):
+        return int(self.value)
+
+    def __float__(self):
+        return self.value
 
     def toText(self):
         return str(self.value)
@@ -200,7 +257,7 @@ class BMNumber(BMNumValue):
 
     def __mul__(self, other):
         if not isinstance(other, BMNumber):
-            return NotImplemented
+            return BMNumValue.__mul__(self, other)
         return BMNumber(self.value * other.value)
 
     def __truediv__(self, other):
@@ -242,10 +299,10 @@ class BMNumber(BMNumValue):
 @dataclass
 class BMMultiplication(BMValue):
     numvalue: BMNumValue
-    variable: BMVariable
+    channel: BMNamedValue
 
     def toText(self):
-        return self.numvalue.toText() + " " + self.variable.toText()
+        return self.numvalue.toText() + " " + self.channel.toText()
 
 
 @dataclass
@@ -268,7 +325,7 @@ class BMCycleCount(BMValue):
 @dataclass
 class BMAssignment(BMValue):
     numvalue: BMNumValue
-    variable: BMVariable
+    variable: BMNamedValue
 
     def toText(self):
         return self.variable.toText() + " = " + self.numvalue.toText()
@@ -312,12 +369,12 @@ class BMLimitCompare(BMLimitCondition):
     operator: str
 
     def __post_init__(self):
-        if isinstance(self.lhs, BMVariable) and self.lhs.name == "A":
+        if isinstance(self.lhs, BMNamedValue) and self.lhs.name == "A":
             if (
                 isinstance(self.rhs, BMMultiplication)
-                and self.rhs.variable.name == "ACn1"
+                and self.rhs.channel.name == "ACn1"
             ):
-                self.lhs = self.rhs.variable
+                self.lhs = self.rhs.channel
                 self.rhs = self.rhs.numvalue
 
     def toText(self):
@@ -400,7 +457,7 @@ class BMRegistration(BMNode):
 @dataclass
 class BMRegCondition(BMRegistration):
     value: BMNumber
-    channel: BMVariable
+    channel: BMNamedValue
 
     def toText(self):
         return self.value.toText() + " " + self.channel.toText()

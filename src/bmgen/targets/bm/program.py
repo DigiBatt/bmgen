@@ -6,11 +6,11 @@ from bmgen.targets.bm.ast import (
     BMArray,
     BMAssignment,
     BMLimit,
+    BMNamedValue,
     BMNumber,
     BMNumValue,
     BMStatement,
     BMTwoValues,
-    BMVariable,
 )
 from bmgen.targets.bm.helper.cast import autocast
 from bmgen.targets.bm.stepinfo import BMStepInfo
@@ -18,7 +18,7 @@ from bmgen.targets.bm.stepinfo import BMStepInfo
 
 @autocast("value")
 def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
-    var = BMVariable(name)
+    var = BMNamedValue(name)
     if value:
         if isinstance(value, BMStatement):
             return BMStepInfo(value, name)
@@ -36,16 +36,16 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
                         operator="SET",
                         values=[
                             BMAssignment(
-                                variable=BMVariable(name + "_IV"),
+                                variable=BMNamedValue(name + "_IV"),
                                 numvalue=BMNumber(123454321 + arraynum),
                             ),
                             BMAssignment(
-                                variable=BMVariable(name + "_Val"),
+                                variable=BMNamedValue(name + "_Val"),
                                 numvalue=BMNumber(0),
                             ),
                             *[
                                 BMAssignment(
-                                    variable=BMVariable(name + f"_{i}"),
+                                    variable=BMNamedValue(name + f"_{i}"),
                                     numvalue=v,
                                 )
                                 for i, v in enumerate(value)
@@ -57,11 +57,11 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
                 target.generator.add(
                     BMStatement(
                         operator="ARRINIT",
-                        values=[BMVariable(name), *value],
+                        values=[BMNamedValue(name), *value],
                     )
                 )
             return BMArray(name, arraynum, len(value))
-        elif not (isinstance(value, BMVariable) and value.name == name):
+        elif not (isinstance(value, BMNamedValue) and value.name == name):
             target.generator.add(
                 BMStatement(
                     operator="SET",

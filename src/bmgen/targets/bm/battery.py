@@ -12,5 +12,5 @@ battery = CyclerBattery(
     nominalCurrent=ast.BMVariable("INom"),
     internalResistance=ast.BMVariable("Rin"),
     energyDensity=ast.BMVariable("EDensity"),
-    oneC=ast.BMVariable("ACn1"),
+    oneC=ast.BMChannel("ACn1"),
 )

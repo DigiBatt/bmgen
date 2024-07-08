@@ -1,8 +1,10 @@
+import json
+from io import BytesIO, StringIO
+
 from flask import Flask, request, send_file
 from flask_cors import CORS
+
 from bmgen import bmgen
-from io import StringIO, BytesIO
-import json
 
 app = Flask(
     "bmgen",

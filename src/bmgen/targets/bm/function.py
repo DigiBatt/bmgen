@@ -1,11 +1,12 @@
-import bmgen.targets.bm as target
-from bmgen.targets.bm.ast import *
-import bmgen.targets.bm.helper.cast as cast
 from typing import List
-from bmgen.targets.bm.battery import battery
+
+import bmgen.targets.bm as target
 import bmgen.targets.bm.channel as channel
-from bmgen.targets.bm.time import time as _time
+import bmgen.targets.bm.helper.cast as cast
+from bmgen.targets.bm.ast import *
+from bmgen.targets.bm.battery import battery
 from bmgen.targets.bm.stepinfo import BMStepInfo
+from bmgen.targets.bm.time import time as _time
 
 
 @cast.autocast()
@@ -19,7 +20,7 @@ def charge(
         limits = []
     if not (
         isinstance(current, BMMultiplication)
-        and current.variable.name == battery.oneC.name
+        and current.channel.name == battery.oneC.name
     ):
         current = BMMultiplication(current, BMVariable("A"))
     values = [current]
@@ -44,7 +45,7 @@ def discharge(
         limits = []
     if not (
         isinstance(current, BMMultiplication)
-        and current.variable.name == battery.oneC.name
+        and current.channel.name == battery.oneC.name
     ):
         current = BMMultiplication(current, BMVariable("A"))
     values = [current]

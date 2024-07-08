@@ -1,12 +1,12 @@
-from bmgen.targets.bm.ast import BMVariable
 import bmgen
+from bmgen.targets.bm.ast import BMChannel
 
-I = BMVariable("A")
-V = BMVariable("V")
-StepCharge = BMVariable("AhStep")
-T = BMVariable(bmgen.options.get("bm", {}).get("cell-temperature", "C1"))
-Tenv = BMVariable(bmgen.options.get("bm", {}).get("env-temperature", "Cenv"))
+I = BMChannel("A")
+V = BMChannel("V")
+StepCharge = BMChannel("AhStep")
+T = BMChannel(bmgen.options.get("bm", {}).get("cell-temperature", "C1"))
+Tenv = BMChannel(bmgen.options.get("bm", {}).get("env-temperature", "Cenv"))
 
 
-def channel(name: str) -> BMVariable:
-    return BMVariable(name)
+def channel(name: str) -> BMChannel:
+    return BMChannel(name)

@@ -1,7 +1,8 @@
-import bmgen.targets.bm.ast as ast
-from typing import List
 import inspect
 from functools import wraps
+from typing import List
+
+import bmgen.targets.bm.ast as ast
 from bmgen.targets.bm.time import time
 
 
