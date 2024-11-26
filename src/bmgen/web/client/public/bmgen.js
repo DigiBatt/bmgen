@@ -5,16 +5,34 @@ var programNameField = null;
 
 const generatorSettings = {
     "bm": {
-        "format": "text",
+        "target": "bm",
+        "displayFormat": "table",
+        "downloadFormat": "text",
         "filenameExtension": ".txt"
     },
     "neware": {
-        "format": "xml",
+        "target": "neware",
+        "displayFormat": "table",
+        "downloadFormat": "xml",
         "filenameExtension": ".xml"
     },
     "basytec": {
-        "format": "text",
+        "target": "basytec",
+        "displayFormat": "table",
+        "downloadFormat": "text",
         "filenameExtension": ".pln"
+    },
+    "bcl": {
+        "target": "bcl",
+        "displayFormat": "html",
+        "downloadFormat": "json",
+        "filenameExtension": ".json"
+    },
+    "jsonld": {
+        "target": "bcl",
+        "displayFormat": "jsonldhtml",
+        "downloadFormat": "jsonld",
+        "filenameExtension": ".json"
     }
 }
 
@@ -79,8 +97,9 @@ function download(program, target, format, callback) {
 }
 
 function updateCode(event) {
-    const target = targetdropdown.value;
+    const target = generatorSettings[targetdropdown.value].target;
     const program = editor.getValue();
+    const format = generatorSettings[targetdropdown.value].displayFormat;
     const callback = (xhr) => {
         if (xhr.readyState == 4) {
             const data = JSON.parse(xhr.response);
@@ -93,7 +112,7 @@ function updateCode(event) {
             }
         }
     };
-    generate(program, target, "table", callback);
+    generate(program, target, format, callback);
 }
 
 function saveProgram() {
@@ -121,10 +140,10 @@ function loadProgram(files) {
 }
 
 function downloadProgram() {
-    const target = targetdropdown.value;
+    const target = generatorSettings[targetdropdown.value].target;
     const program = editor.getValue();
-    const format = generatorSettings[target].format;
-    const ext = generatorSettings[target].filenameExtension;
+    const format = generatorSettings[targetdropdown.value].downloadFormat;
+    const ext = generatorSettings[targetdropdown.value].filenameExtension;
     const callback = (xhr) => {
         if (xhr.readyState == 4 && xhr.status == 200) {
             const data = xhr.response;
