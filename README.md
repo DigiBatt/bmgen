@@ -2,8 +2,6 @@
 
 Test generator for battery cyclers.
 
-Web version: https://openbat.isea.rwth-aachen.de/bmgen/
-
 ![Screenshot](images/screenshot.png)
 
 ## Examples
@@ -87,13 +85,17 @@ Command for this example: <code>bmgen --target basytec --format table examples/s
 
  A working installation of Python >= 3.9 and pip is required.
 
- The bmgen package can be downloaded from the Gitlab server:
-
-    pip install --index-url https://token:glpat-pNBLCU7BiNexQJA6GVNh@git.isea.rwth-aachen.de/api/v4/projects/2105/packages/pypi/simple bmgen
+ The bmgen package can be installed using pip:
+ 
+    git clone git@github.com:ebarbers/bmgen.git
+    cd bmgen
+    pip install -e .
 
 ## Usage
 
-The easiest way to get started is using the [web version](https://openbat.isea.rwth-aachen.de/bmgen/) in the browser.
+The easiest way to get started is using the web version by running the command:
+
+    bmgen-server
 
 The program can also be used as a command line tool.
 The only required argument is the filename of the Python program to be translated.
