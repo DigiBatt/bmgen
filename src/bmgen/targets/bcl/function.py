@@ -91,17 +91,19 @@ def hours(value: float) -> time:
 
 
 def limit(condition: BCLTermination, action: Any | None = None):
-    if action is not None:
-        raise Exception("Limit actions not supported for BCL")
+    # if action is not None:
+    #     raise Exception("Limit actions not supported for BCL")
     return condition
 
 
 def limit_global(condition: BCLTermination, action: Any | None = None):
-    raise Exception("Global limits not supported for BCL")
+    # raise Exception("Global limits not supported for BCL")
+    return None
 
 
 def error(errnum: int):
-    raise Exception("Errors not supported for BCL")
+    # raise Exception("Errors not supported for BCL")
+    return None
 
 
 def register_global(
