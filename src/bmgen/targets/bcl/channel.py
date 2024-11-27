@@ -1,6 +1,6 @@
-from bmgen.targets.basytec.ast import BasytecChannel, BasytecUnit
-from bmgen.targets.bcl.ast import BCLTerminationType
+import bmgen.targets.bcl.ast as ast
 
-I = BCLTerminationType("ElectricCurrent")
-V = BCLTerminationType("Voltage")
-t = BCLTerminationType("time")
+I = ast.BCLTerminationType("ElectricCurrent")
+V = ast.BCLTerminationType("Voltage")
+t = ast.BCLTerminationType("time")
+StepCharge = ast.BCLTerminationType("charge")

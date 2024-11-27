@@ -3,6 +3,7 @@ from functools import wraps
 from typing import Dict
 
 import bmgen.targets.bcl.ast as ast
+import bmgen.targets.bcl.function as function
 
 
 def autocast(**units: str):
@@ -33,3 +34,15 @@ def autocast(**units: str):
         return g
 
     return decorator
+
+
+def limitcast(limits):
+    if not limits:
+        return []
+    return [__cast(l) for l in limits]
+
+
+def __cast(l):
+    if isinstance(l, function.time):
+        return l.toLimit()
+    return l

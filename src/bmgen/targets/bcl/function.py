@@ -2,59 +2,57 @@ from dataclasses import dataclass
 from typing import Any, List
 
 import bmgen.targets.bcl as target
-from bmgen.targets.bcl.ast import (
-    BCLStep,
-    BCLStepType,
-    BCLTermination,
-    BCLUnit,
-    BCLValue,
-    BCLValueLiteral,
-)
-from bmgen.targets.bcl.channel import I, V, t
-from bmgen.targets.bcl.helper.cast import autocast
+import bmgen.targets.bcl.ast as ast
+import bmgen.targets.bcl.channel as channel
+from bmgen.targets.bcl.helper.cast import autocast, limitcast
 
 
 @autocast(current="Ampere", voltage="Volt")
 def charge(
-    current: BCLValue,
-    voltage: BCLValue | None = None,
-    limits: List[BCLTermination] | None = None,
+    current: ast.BCLValue,
+    voltage: ast.BCLValue | None = None,
+    limits: List[ast.BCLTermination] | None = None,
     registrations: Any = None,
 ):
-    if isinstance(current, BCLValueLiteral):
+    limits = limitcast(limits)
+    if isinstance(current, ast.BCLValueLiteral):
         current.value *= -1
     ccStep = target.generator.add(
-        BCLStep(BCLStepType("ElectricCurrent"), current, limits)
+        ast.BCLStep(ast.BCLStepType("ElectricCurrent"), current, limits)
     )
     if voltage is not None:
-        target.generator.add(BCLStep(BCLStepType("Voltage"), voltage, limits))
+        target.generator.add(ast.BCLStep(ast.BCLStepType("Voltage"), voltage, limits))
     return ccStep
 
 
 @autocast(current="Ampere", voltage="Volt")
 def discharge(
-    current: BCLValue,
-    voltage: BCLValue | None = None,
-    limits: List[BCLTermination] | None = None,
+    current: ast.BCLValue,
+    voltage: ast.BCLValue | None = None,
+    limits: List[ast.BCLTermination] | None = None,
     registrations: Any = None,
 ):
+    limits = limitcast(limits)
     ccStep = target.generator.add(
-        BCLStep(BCLStepType("ElectricCurrent"), current, limits)
+        ast.BCLStep(ast.BCLStepType("ElectricCurrent"), current, limits)
     )
     if voltage is not None:
-        target.generator.add(BCLStep(BCLStepType("Voltage"), voltage, limits))
+        target.generator.add(ast.BCLStep(ast.BCLStepType("Voltage"), voltage, limits))
     return ccStep
 
 
 def pause(
-    limits: List[BCLTermination] | None = None,
+    limits: List[ast.BCLTermination] | None = None,
     hours: float | None = None,
     minutes: float | None = None,
     seconds: float | None = None,
     registrations: Any = None,
 ):
+    limits = limitcast(limits)
     return target.generator.add(
-        BCLStep(BCLStepType("Rest"), time(hours, minutes, seconds).toValue(), limits)
+        ast.BCLStep(
+            ast.BCLStepType("Rest"), time(hours, minutes, seconds).toValue(), limits
+        )
     )
 
 
@@ -64,7 +62,7 @@ class time:
     minutes: float | None = None
     seconds: float | None = None
 
-    def toValue(self) -> BCLValueLiteral:
+    def toValue(self) -> ast.BCLValueLiteral:
         value = 0.0
         if self.seconds is not None:
             value = self.seconds
@@ -72,10 +70,10 @@ class time:
             value += self.minutes * 60
         if self.hours is not None:
             value += self.hours * 3600
-        return BCLValueLiteral(value=value, unit=BCLUnit("Second"))
+        return ast.BCLValueLiteral(value=value, unit=ast.BCLUnit("Second"))
 
-    def toLimit(self) -> BCLTermination:
-        return BCLTermination(t, value=self.toValue())
+    def toLimit(self) -> ast.BCLTermination:
+        return ast.BCLTermination(channel.t, value=self.toValue())
 
 
 def seconds(value: float) -> time:
@@ -90,13 +88,13 @@ def hours(value: float) -> time:
     return time(value, None, None)
 
 
-def limit(condition: BCLTermination, action: Any | None = None):
+def limit(condition: ast.BCLTermination, action: Any | None = None):
     # if action is not None:
     #     raise Exception("Limit actions not supported for BCL")
     return condition
 
 
-def limit_global(condition: BCLTermination, action: Any | None = None):
+def limit_global(condition: ast.BCLTermination, action: Any | None = None):
     # raise Exception("Global limits not supported for BCL")
     return None
 
@@ -108,8 +106,8 @@ def error(errnum: int):
 
 def register_global(
     time: time | None = None,
-    voltage: BCLValue | None = None,
-    current: BCLValue | None = None,
+    voltage: ast.BCLValue | None = None,
+    current: ast.BCLValue | None = None,
     format: List | None = None,
 ):
     pass
@@ -117,8 +115,8 @@ def register_global(
 
 def register(
     time: time | None = None,
-    voltage: BCLValue | None = None,
-    current: BCLValue | None = None,
+    voltage: ast.BCLValue | None = None,
+    current: ast.BCLValue | None = None,
     format: List | None = None,
 ):
     pass
