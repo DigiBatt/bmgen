@@ -83,13 +83,17 @@ Command for this example: <code>bmgen --target basytec --format table examples/s
 
  ## Installation
 
- A working installation of Python >= 3.10 and pip is required.
+ A working installation of Python >= 3.10 and pip is required. The web version also requires npm.
 
  The bmgen package can be installed using pip:
  
     git clone git@github.com:ebarbers/bmgen.git
     cd bmgen
     pip install -e .
+    
+To build the modules for the web version, the provided install script can be used:
+
+    ./install.sh
 
 ## Usage
 
