@@ -83,7 +83,7 @@ Command for this example: <code>bmgen --target basytec --format table examples/s
 
  ## Installation
 
- A working installation of Python >= 3.9 and pip is required.
+ A working installation of Python >= 3.10 and pip is required.
 
  The bmgen package can be installed using pip:
  
