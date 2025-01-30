@@ -55,7 +55,7 @@ class Transformer(ast.NodeTransformer):
         return node
 
     def visit_Expr(self, node):
-        if isinstance(node.value, ast.Call):
+        if isinstance(node.value, ast.Call) and hasattr(node.value.func, "id"):
             if node.value.func.id == "limit":
                 node.value.func.id = "limit_global"
                 self.imports["function"].add("limit_global")
