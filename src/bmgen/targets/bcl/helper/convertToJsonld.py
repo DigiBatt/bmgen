@@ -29,18 +29,32 @@ def convert_to_json_ld(json_data):
     parameters = json_data.get("parameters", {})
 
     def create_termination(step, termination):
+        termination_unit = termination["unit"]
+        termination_value = parameters.get(
+            step["termination"][0]["value"], step["termination"][0]["value"]
+        )
+        termination_type = None
+        if termination_unit == "CRate":
+            termination_unit = "emmo:AmperePerAmpereHour"
+        else:
+            termination_unit = "emmo:" + termination_unit
         if termination["type"] == "ElectricCurrent":
-            pass
+            termination_type = "TerminationQuantity"
         elif termination["type"] == "Voltage":
-            return create_measurement_parameter(
-                ("UpperVoltageLimit" if step["value"] < 0 else "LowerVoltageLimit"),
-                parameters.get(termination["value"], termination["value"]),
-                termination["unit"],
-            )
+            if step["value"] < 0:
+                termination_type = "UpperVoltageLimit"
+            else:
+                termination_type = "LowerVoltageLimit"
         elif termination["type"] == "time":
-            pass
+            if step["type"] == "rest":
+                termination_type = "RestingTime"
+            else:
+                termination_type = "StepTime"
         elif termination["type"] == "charge":
-            pass
+            termination_type = "StepCapacity"
+        return create_measurement_parameter(
+            termination_type, termination_value, termination_unit
+        )
 
     # Function to create a measurement parameter
     def create_measurement_parameter(type_, value, unit):
@@ -83,18 +97,10 @@ def convert_to_json_ld(json_data):
                         abs(numerical_value),
                         unit,
                     ),
-                    create_termination(
-                        (
-                            "UpperVoltageLimit"
-                            if numerical_value < 0
-                            else "LowerVoltageLimit"
-                        ),
-                        parameters.get(
-                            step["termination"][0]["value"],
-                            step["termination"][0]["value"],
-                        ),
-                        termination_unit,
-                    ),
+                    *[
+                        create_termination(step, termination)
+                        for termination in step["termination"]
+                    ],
                 ],
             }
         elif step["type"] == "Voltage":
@@ -118,14 +124,10 @@ def convert_to_json_ld(json_data):
                         numerical_value,
                         "emmo:" + step["unit"],
                     ),
-                    create_measurement_parameter(
-                        "TerminationQuantity",
-                        parameters.get(
-                            step["termination"][0]["type"],
-                            step["termination"][0]["value"],
-                        ),
-                        termination_unit,
-                    ),
+                    *[
+                        create_termination(step, termination)
+                        for termination in step["termination"]
+                    ],
                 ],
             }
         elif step["type"] == "rest":
@@ -135,9 +137,8 @@ def convert_to_json_ld(json_data):
             task = {
                 "@type": "RestingStep",
                 "hasMeasurementParameter": [
-                    create_measurement_parameter(
-                        "RestingTime", numerical_value, "emmo:" + step["unit"]
-                    )
+                    create_termination(step, termination)
+                    for termination in step["termination"]
                 ],
             }
         return task

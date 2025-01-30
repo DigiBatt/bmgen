@@ -68,8 +68,6 @@ class BCLTerminationType:
         return self.name
 
     def __compare__(self, other, operator):
-        if self.name == "charge":
-            raise Exception("BCL does not support step termination based on charge.")
         if hasattr(other, "seconds"):
             return other.toLimit()
         if not isinstance(other, BCLValue):
