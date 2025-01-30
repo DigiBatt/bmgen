@@ -361,6 +361,9 @@ class BMLimitCondition(BMNode):
     def toText(self):
         raise NotImplementedError()
 
+    def __and__(self, other):
+        return BMLimitAnd(self, other)
+
 
 @dataclass
 class BMLimitCompare(BMLimitCondition):
@@ -396,7 +399,7 @@ class BMLimitAnd(BMLimitCondition):
         return self.lhs.toText() + " &\\r\\n " + self.rhs.toText()
 
     def toTable(self):
-        return self.lhs.toText() + " &<br>" + self.rhs.toText()
+        return self.lhs.toTable() + " &<br>" + self.rhs.toTable()
 
 
 @dataclass
