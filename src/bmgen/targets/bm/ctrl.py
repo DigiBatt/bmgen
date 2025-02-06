@@ -1,13 +1,15 @@
 import bmgen.targets.bm as target
+import bmgen.targets.bm.function as function
 from bmgen.targets.bm.ast import *
+from bmgen.targets.bm.helper.cast import cast_literal
 from bmgen.targets.bm.program import variable
 
 
 def ctrl_for(iterable, body, var, g, l):
     if not isinstance(var, BMVariable):
         var = variable(var)
-    simple = isinstance(iterable, range) and iterable.step == 1
-    if not simple and isinstance(iterable, (range, list)):
+    simple = isinstance(iterable, function.BMRange) and iterable.step == 1
+    if not simple and isinstance(iterable, (function.BMRange, list)):
         iterable = variable(var.name + "_arr", iterable)
     arrayloop = isinstance(iterable, BMArray)
     code = compile(body, "<bmgen_loop>", "exec")
@@ -19,11 +21,13 @@ def ctrl_for(iterable, body, var, g, l):
                     values=[
                         BMAssignment(
                             variable=var,
-                            numvalue=BMNumber(iterable.start),
+                            numvalue=cast_literal(iterable.start),
                         )
                     ],
                 )
             )
+        cyclecount = cast_literal(iterable.stop - 1)
+        if iterable.start != 1:
             label = BMLabel(target.generator.label())
             target.generator.add(BMStatement(operator="GOTO", values=[label]))
             target.generator.add(BMStatement(operator="BEG", values=[var]))
@@ -35,7 +39,7 @@ def ctrl_for(iterable, body, var, g, l):
         target.generator.add(
             BMStatement(
                 operator="CYC",
-                values=[BMCycleCount(BMNumber(iterable.stop - 1))],
+                values=[BMCycleCount(cyclecount)],
             )
         )
     elif arrayloop:
@@ -66,6 +70,10 @@ def ctrl_for(iterable, body, var, g, l):
             )
         )
     else:
+        try:
+            iterable = iterable.to_python_range()
+        except:
+            raise Exception("Cannot process iterable in for loop")
         for i in iterable:
             l[var.name] = i
             exec(code, g, l)

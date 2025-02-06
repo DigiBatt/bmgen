@@ -149,3 +149,25 @@ def register(
     if current:
         regs.append(BMRegCondition(value=BMNumber(current), channel=channel.I))
     return regs
+
+
+_range = range
+
+
+@dataclass
+class BMRange:
+    start: BMNumValue | int
+    stop: BMNumValue | int
+    step: BMNumValue | int
+
+    def to_python_range(self) -> _range:
+        if self.start is None:
+            return _range(self.stop)
+        else:
+            return _range(self.start, self.stop, self.step)
+
+
+def range(start, stop=None, step=1):
+    if stop is None:
+        return BMRange(0, start, step)
+    return BMRange(start, stop, step)
