@@ -18,7 +18,9 @@ def charge(
 ) -> BMStepInfo:
     if not limits:
         limits = []
-    if not (
+    if isinstance(current, BMChannel) and current.name == "ACn1":
+        current = BMMultiplication(BMNumber(1), current)
+    elif not (
         isinstance(current, BMMultiplication)
         and current.channel.name == battery.oneC.name
     ):
@@ -43,7 +45,9 @@ def discharge(
 ) -> BMStepInfo:
     if not limits:
         limits = []
-    if not (
+    if isinstance(current, BMChannel) and current.name == "ACn1":
+        current = BMMultiplication(BMNumber(1), current)
+    elif not (
         isinstance(current, BMMultiplication)
         and current.channel.name == battery.oneC.name
     ):

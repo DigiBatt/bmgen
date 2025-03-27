@@ -1,0 +1,5 @@
+	1		CHA	2 ACn1	< 0.02 ACn1		
+	2		SET	bmgen_0 = CNom			
+	3		MUL	bmgen_0\r\n0.02			
+	4		DCH	1 ACn1	< bmgen_0 A		
+	5		STO				
