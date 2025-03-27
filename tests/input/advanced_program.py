@@ -1,6 +1,6 @@
-from bmgen.function import charge, discharge, pause, time
-from bmgen.channel import I, V
 from bmgen import battery
+from bmgen.channel import I, V
+from bmgen.function import charge, discharge, pause, range, time
 
 CRate = 0.5
 EOCCurrent = 0.05
