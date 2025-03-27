@@ -121,6 +121,10 @@ def error(errnum: int):
     return BMError(errnum)
 
 
+def message(errnum: int):
+    return BMMessage(errnum)
+
+
 def register_global(
     time: _time | None = None,
     voltage: float | None = None,

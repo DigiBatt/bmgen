@@ -1,5 +1,6 @@
-from typing import List
 from dataclasses import dataclass
+from typing import List
+
 from bmgen.stepinfo import StepInfo
 
 
@@ -36,6 +37,10 @@ def limit(condition: bool, action=None) -> bool:
 
 
 def error(errnum: int):
+    pass
+
+
+def message(errnum: int):
     pass
 
 

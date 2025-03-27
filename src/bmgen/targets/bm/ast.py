@@ -355,6 +355,14 @@ class BMError(BMAction):
         return "ERR " + str(self.errnum)
 
 
+@dataclass
+class BMMessage(BMAction):
+    errnum: int
+
+    def toText(self):
+        return "MSG " + str(self.errnum)
+
+
 class BMLimitCondition(BMNode):
     pass
 
