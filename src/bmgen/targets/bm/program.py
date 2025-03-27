@@ -60,6 +60,17 @@ def variable(name: str, value: BMNumValue | List[BMNumValue] | None = None):
                         values=[BMNamedValue(name), *value],
                     )
                 )
+                target.generator.add(
+                    BMStatement(
+                        operator="SET",
+                        values=[
+                            BMAssignment(
+                                variable=BMNamedValue(name + "_Val"),
+                                numvalue=BMNumber(0),
+                            )
+                        ],
+                    )
+                )
             return BMArray(name, arraynum, len(value))
         elif not (isinstance(value, BMNamedValue) and value.name == name):
             target.generator.add(

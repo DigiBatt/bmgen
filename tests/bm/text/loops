@@ -7,14 +7,14 @@
 	7		PAU		5 sec		
 	8		CYC	2 *			
 	9		ARRINIT	values\r\n2\r\n1\r\n5			
-	10		SET	v_idx = 0			
+	10		SET	values_Val = 0\r\nv_idx = 0			
 	11		GOTO	bmgen_2			
 	12		BEG	v_idx			
 	13	bmgen_2	ARRGET	values v_idx\r\nvalues_Val			
 	14		CHA	values_Val A	30 sec\r\n> 4.2 V	\r\n	
 	15		CYC	2 *			
 	16		ARRINIT	x_arr\r\n2\r\n5			
-	17		SET	x_idx = 0			
+	17		SET	x_arr_Val = 0\r\nx_idx = 0			
 	18		GOTO	bmgen_3			
 	19		BEG	x_idx			
 	20	bmgen_3	ARRGET	x_arr x_idx\r\nx_arr_Val			

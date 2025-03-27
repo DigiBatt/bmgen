@@ -1,17 +1,20 @@
 #! /bin/env python
 
-import click
-import os
 import difflib
 import io
+import os
 import sys
+
+import click
+
 from bmgen import bmgen
 
 
 @click.command()
 @click.option("--generate", is_flag=True, default=False)
+@click.option("--update", is_flag=True, default=False)
 @click.argument("testdir", type=click.Path(dir_okay=True), default="./tests")
-def main(generate, testdir):
+def main(generate, update, testdir):
     success = True
     for test in os.listdir(testdir + "/input"):
         testfile = f"{testdir}/input/{test}"
@@ -27,6 +30,11 @@ def main(generate, testdir):
                 try:
                     if generate:
                         if not os.path.exists(outfile):
+                            bmgen.generate(
+                                testfile, target, format, None, outfile, True
+                            )
+                    elif update:
+                        if os.path.exists(outfile):
                             bmgen.generate(
                                 testfile, target, format, None, outfile, True
                             )

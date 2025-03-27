@@ -2,18 +2,19 @@
 <tr><th>Step</th><th>Label</th><th>Operator</th><th>Value</th><th>Limit</th><th>Action</th><th>Registration</th></tr>
 <tr><td>1</td><td></td><td>SET</td><td>CRate = 0.5<br>EOCCurrent = 0.05</td><td></td><td></td><td></td></tr>
 <tr><td>2</td><td></td><td>ARRINIT</td><td>PauseLen<br>1<br>1.5<br>2</td><td></td><td></td><td></td></tr>
-<tr><td>3</td><td></td><td>ARRPUT</td><td>PauseLen 1<br>5</td><td></td><td></td><td></td></tr>
-<tr><td>4</td><td></td><td>SET</td><td>i = 0</td><td></td><td></td><td></td></tr>
-<tr><td>5</td><td></td><td>GOTO</td><td>bmgen_1</td><td></td><td></td><td></td></tr>
-<tr><td>6</td><td></td><td>BEG</td><td>i</td><td></td><td></td><td></td></tr>
-<tr><td>7</td><td>bmgen_1</td><td>CHA</td><td>CRate ACn1<br>4.2 V</td><td>< EOCCurrent A<br>5 h</td><td><br></td><td></td></tr>
-<tr><td>8</td><td></td><td>ARRGET</td><td>PauseLen i<br>PauseLen_Val</td><td></td><td></td><td></td></tr>
-<tr><td>9</td><td></td><td>PAU</td><td></td><td>> PauseLen_Val mso_h</td><td></td><td></td></tr>
-<tr><td>10</td><td></td><td>PAU</td><td></td><td>< 2 i<br>1 sec</td><td>GOTO bmgen_2_if<br>GOTO bmgen_2_else</td><td></td></tr>
-<tr><td>11</td><td>bmgen_2_if</td><td>DCH</td><td>CRate ACn1</td><td><= 2.5 V</td><td></td><td></td></tr>
-<tr><td>12</td><td></td><td>GOTO</td><td>bmgen_2_end</td><td></td><td></td><td></td></tr>
-<tr><td>13</td><td>bmgen_2_else</td><td>DCH</td><td>CRate ACn1</td><td><= 2.0 V</td><td></td><td></td></tr>
-<tr><td>14</td><td>bmgen_2_end</td><td>ADD</td><td>CRate<br>0.2</td><td></td><td></td><td></td></tr>
-<tr><td>15</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
-<tr><td>16</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>3</td><td></td><td>SET</td><td>PauseLen_Val = 0</td><td></td><td></td><td></td></tr>
+<tr><td>4</td><td></td><td>ARRPUT</td><td>PauseLen 1<br>5</td><td></td><td></td><td></td></tr>
+<tr><td>5</td><td></td><td>SET</td><td>i = 0</td><td></td><td></td><td></td></tr>
+<tr><td>6</td><td></td><td>GOTO</td><td>bmgen_1</td><td></td><td></td><td></td></tr>
+<tr><td>7</td><td></td><td>BEG</td><td>i</td><td></td><td></td><td></td></tr>
+<tr><td>8</td><td>bmgen_1</td><td>CHA</td><td>CRate ACn1<br>4.2 V</td><td>< EOCCurrent A<br>5 h</td><td><br></td><td></td></tr>
+<tr><td>9</td><td></td><td>ARRGET</td><td>PauseLen i<br>PauseLen_Val</td><td></td><td></td><td></td></tr>
+<tr><td>10</td><td></td><td>PAU</td><td></td><td>> PauseLen_Val mso_h</td><td></td><td></td></tr>
+<tr><td>11</td><td></td><td>PAU</td><td></td><td>< 2 i<br>1 sec</td><td>GOTO bmgen_2_if<br>GOTO bmgen_2_else</td><td></td></tr>
+<tr><td>12</td><td>bmgen_2_if</td><td>DCH</td><td>CRate ACn1</td><td><= 2.5 V</td><td></td><td></td></tr>
+<tr><td>13</td><td></td><td>GOTO</td><td>bmgen_2_end</td><td></td><td></td><td></td></tr>
+<tr><td>14</td><td>bmgen_2_else</td><td>DCH</td><td>CRate ACn1</td><td><= 2.0 V</td><td></td><td></td></tr>
+<tr><td>15</td><td>bmgen_2_end</td><td>ADD</td><td>CRate<br>0.2</td><td></td><td></td><td></td></tr>
+<tr><td>16</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
+<tr><td>17</td><td></td><td>STO</td><td></td><td></td><td></td><td></td></tr>
 </table>

@@ -9,14 +9,14 @@
 <tr><td>7</td><td></td><td>PAU</td><td></td><td>5 sec</td><td></td><td></td></tr>
 <tr><td>8</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
 <tr><td>9</td><td></td><td>ARRINIT</td><td>values<br>2<br>1<br>5</td><td></td><td></td><td></td></tr>
-<tr><td>10</td><td></td><td>SET</td><td>v_idx = 0</td><td></td><td></td><td></td></tr>
+<tr><td>10</td><td></td><td>SET</td><td>values_Val = 0<br>v_idx = 0</td><td></td><td></td><td></td></tr>
 <tr><td>11</td><td></td><td>GOTO</td><td>bmgen_2</td><td></td><td></td><td></td></tr>
 <tr><td>12</td><td></td><td>BEG</td><td>v_idx</td><td></td><td></td><td></td></tr>
 <tr><td>13</td><td>bmgen_2</td><td>ARRGET</td><td>values v_idx<br>values_Val</td><td></td><td></td><td></td></tr>
 <tr><td>14</td><td></td><td>CHA</td><td>values_Val A</td><td>30 sec<br>> 4.2 V</td><td><br></td><td></td></tr>
 <tr><td>15</td><td></td><td>CYC</td><td>2 *</td><td></td><td></td><td></td></tr>
 <tr><td>16</td><td></td><td>ARRINIT</td><td>x_arr<br>2<br>5</td><td></td><td></td><td></td></tr>
-<tr><td>17</td><td></td><td>SET</td><td>x_idx = 0</td><td></td><td></td><td></td></tr>
+<tr><td>17</td><td></td><td>SET</td><td>x_arr_Val = 0<br>x_idx = 0</td><td></td><td></td><td></td></tr>
 <tr><td>18</td><td></td><td>GOTO</td><td>bmgen_3</td><td></td><td></td><td></td></tr>
 <tr><td>19</td><td></td><td>BEG</td><td>x_idx</td><td></td><td></td><td></td></tr>
 <tr><td>20</td><td>bmgen_3</td><td>ARRGET</td><td>x_arr x_idx<br>x_arr_Val</td><td></td><td></td><td></td></tr>
