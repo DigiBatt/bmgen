@@ -11,3 +11,5 @@ __pycache__
 /build
 /src/bmgen/web/client/node_modules
 /src/bmgen/web/client/public/node_modules
+/sphinx/_build
+/sphinx/bmgen

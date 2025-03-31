@@ -87,3 +87,18 @@ deploy:
     - scp ./src/bmgen/web/docker-compose.yml bmgen@openbat.isea.rwth-aachen.de:~
     - ssh bmgen@openbat.isea.rwth-aachen.de "docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY && docker pull git.isea.rwth-aachen.de:5050/ess/testing/bmgen:frontend && docker pull git.isea.rwth-aachen.de:5050/ess/testing/bmgen:backend"
     - ssh bmgen@openbat.isea.rwth-aachen.de "docker compose down ; docker compose up -d"
+
+pages:
+  stage: deploy
+  image: python:3.10
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+  artifacts:
+    paths:
+      - public
+  script:
+    - pip install -r requirements.txt
+    - pip install .
+    - sphinx-apidoc -o ./sphinx/bmgen ./src
+    - make -C ./sphinx html
+    - cp -r ./sphinx/_build/html/ ./public
