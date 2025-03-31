@@ -13,6 +13,11 @@ class BCLUnit:
     def toDict(self):
         return self.name
 
+    def __rmul__(self, other):
+        if not isinstance(other, float):
+            return NotImplemented
+        return BCLValueLiteral(self, other)
+
 
 @dataclass
 class BCLValue(ABC):
@@ -27,6 +32,11 @@ class BCLParameter(BCLValue):
     def toDict(self):
         return self.name
 
+    def __mul__(self, other):
+        if not isinstance(other, BCLUnit):
+            return NotImplemented
+        return BCLParameter(other, self.name, self.value)
+
 
 @dataclass
 class BCLValueLiteral(BCLValue):
@@ -34,6 +44,11 @@ class BCLValueLiteral(BCLValue):
 
     def toDict(self):
         return self.value
+
+    def __mul__(self, other):
+        if not isinstance(other, BCLUnit):
+            return NotImplemented
+        return BCLValueLiteral(other, self.value)
 
 
 @dataclass
@@ -53,6 +68,8 @@ class BCLTerminationType:
         return self.name
 
     def __compare__(self, other, operator):
+        if hasattr(other, "seconds"):
+            return other.toLimit()
         if not isinstance(other, BCLValue):
             other = BCLValueLiteral(BCLUnit(TERMINATION_UNITS[self.name]), other)
         return BCLTermination(self, other)

@@ -1,6 +1,7 @@
 import json
 from io import BytesIO, StringIO
 
+import click
 from flask import Flask, request, send_file
 from flask_cors import CORS
 
@@ -44,3 +45,10 @@ def download(target, format):
         return send_file(out, mimetype="application/octet-stream")
     except Exception as e:
         return {"error": str(e)}
+
+
+@click.command("bmgen-server")
+@click.option("--host", default=None)
+@click.option("--port", type=int, default=5000)
+def run(host, port):
+    app.run(host, port)
