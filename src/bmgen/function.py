@@ -10,6 +10,19 @@ def charge(
     limits: List[bool] = [],
     registrations: List = [],
 ) -> StepInfo:
+    """Charge the battery connected to the cycler circuit.
+
+    :param current: Current setpoint in Ampere.
+    :type current: float
+    :param voltage: Voltage setpoint in Volt, defaults to None.
+    :type voltage: float | None
+    :param limits: List of limits, see the :py:func:`limit` function, defaults to [].
+    :type limits: List[bool]
+    :param registrations: List of registrations, see the :py:func:`register` function, defaults to [].
+    :type registrations: List
+    :return: :py:class:`StepInfo` object containing information about the executed step.
+    :rtype: StepInfo
+    """
     pass
 
 
@@ -19,6 +32,19 @@ def discharge(
     limits: List[bool] = [],
     registrations: List = [],
 ) -> StepInfo:
+    """Discharge the battery connected to the cycler circuit.
+
+    :param current: Current setpoint in Ampere.
+    :type current: float
+    :param voltage: Voltage setpoint in Volt, defaults to None.
+    :type voltage: float | None
+    :param limits: List of limits, see the :py:func:`limit` function, defaults to [].
+    :type limits: List[bool]
+    :param registrations: List of registrations, see the :py:func:`register` function, defaults to [].
+    :type registrations: List
+    :return: :py:class:`StepInfo` object containing information about the executed step.
+    :rtype: StepInfo
+    """
     pass
 
 
@@ -29,6 +55,25 @@ def pause(
     seconds: float | None = None,
     registrations: List = [],
 ) -> StepInfo:
+    """Pause the program until a limit is reached.
+
+    Limits can be set using the `limit` argument.
+    The arguments `hours`, `minutes`, and `seconds` are provided as a shorthand to set a time-based limit.
+    They act the same way as the the :py:func:`time` function.
+
+    :param limits: List of limits, see the :py:func:`limit` function, defaults to [].
+    :type limits: List[bool], optional
+    :param hours: Hours of the time-based limit, defaults to None.
+    :type hours: float | None, optional
+    :param minutes: Minutes of the time-based limit, defaults to None.
+    :type minutes: float | None, optional
+    :param seconds: Seconds of the time-based limit, defaults to None.
+    :type seconds: float | None, optional
+    :param registrations: List of registrations, see the :py:func:`register` function, defaults to [].
+    :type registrations: List, optional
+    :return: :py:class:`StepInfo` object containing information about the executed step.
+    :rtype: StepInfo
+    """
     pass
 
 
