@@ -2,8 +2,6 @@
 
 Test generator for battery cyclers.
 
-Web version: https://openbat.isea.rwth-aachen.de/bmgen/
-
 ![Screenshot](images/screenshot.png)
 
 ## Examples
@@ -100,11 +98,14 @@ Alternatively, the package can also be installed from its sources:
 To build the modules for the web version, the provided install script can be used:
 
     ./install.sh
+    
+The documentation is built using the script
+
+    ./build_docs.sh
 
 ## Usage
 
-The easiest way to get started is using the [web version](https://openbat.isea.rwth-aachen.de/bmgen/) in the browser.
-The web version can also be started locally by running the command:
+The easiest way to get started is using the web version by running the command:
 
     bmgen-server
 
