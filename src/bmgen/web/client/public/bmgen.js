@@ -29,9 +29,9 @@ const generatorSettings = {
         "filenameExtension": ".json"
     },
     "jsonld": {
-        "target": "bcl",
-        "displayFormat": "jsonldhtml",
-        "downloadFormat": "jsonld",
+        "target": "jsonld",
+        "displayFormat": "html",
+        "downloadFormat": "html",
         "filenameExtension": ".json"
     }
 }
