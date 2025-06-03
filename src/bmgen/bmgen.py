@@ -12,9 +12,10 @@ import click
 import bmgen
 from bmgen.battery import PredefindedBattery
 from bmgen.transformer import Transformer
+from bmgen.util.import_jsonld import import_jsonld
 
 
-@click.command()
+@click.command("bmgen")
 @click.argument("filename", required=True)
 @click.option("-t", "--target", default="bm")
 @click.option("-f", "--format")
@@ -128,3 +129,11 @@ def output(target, text):
                 target.write(text)
     else:
         print(text)
+
+
+@click.command("bmgen-import")
+@click.argument("f", required=True, type=click.File("r"))
+def import_file(f):
+    j = json.load(f)
+    program = import_jsonld(j)
+    print(program.toText())
