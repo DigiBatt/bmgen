@@ -19,6 +19,8 @@
                 <button onclick="saveProgram()">Save</button>
                 <button onclick="document.getElementById('fileupload').click();">Load</button>
                 <input type="file" id="fileupload" class="hidden" name="Load" onchange="loadProgram(this.files)" />
+                <button onclick="document.getElementById('jsonupload').click();">Import JSON-LD</button>
+                <input type="file" id="jsonupload" class="hidden" name="Import JSON-LD" onchange="importJsonLD(this.files)" />
                 <div class="right">
                     <button onclick="updateCode()">Update</button>
                 </div>

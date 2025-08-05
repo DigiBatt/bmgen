@@ -104,6 +104,9 @@ class time:
             value += self.hours * 3600
         return ast.Setpoint(cold.StepDuration, ast.NumericLiteral(value, cold.Second()))
 
+    def toCold(self):
+        return self.toValue().toCold()
+
     # def toLimit(self) -> ast.BCLTermination:
     #     return ast.BCLTermination(channel.t, value=self.toValue())
 

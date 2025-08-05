@@ -261,3 +261,29 @@ function setConfigValues(prefix, data) {
         }
     }
 }
+
+function importJsonLD(files) {
+    const callback = (xhr) => {
+        if (xhr.readyState == 4) {
+            editor.setValue(xhr.response);
+            updateCode();
+        }
+    };
+    var reader = new FileReader();
+    reader.onload = (function () {
+        return function (e) {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", `api/import/jsonld/`);
+            const formData = new FormData();
+            const file = new Blob([e.target.result], { type: 'application/json' });
+            formData.append("program", file);
+            // const config = new Blob([JSON.stringify(getConfig())], { type: 'application/json' });;
+            // formData.append("config", config);
+            xhr.send(formData);
+            xhr.onload = () => callback(xhr);
+        };
+    })();
+    reader.readAsText(files[0]);
+    document.getElementById('programName').value = files[0].name.substring(0, files[0].name.indexOf('.'));
+
+}

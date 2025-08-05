@@ -6,6 +6,7 @@ from flask import Flask, request, send_file
 from flask_cors import CORS
 
 from bmgen import bmgen
+from bmgen.util.import_jsonld import import_jsonld
 
 app = Flask(
     "bmgen",
@@ -43,6 +44,22 @@ def download(target, format):
         bmgen.generate(f, target, format, None, out, config=config)
         out.seek(0)
         return send_file(out, mimetype="application/octet-stream")
+    except Exception as e:
+        return {"error": str(e)}
+
+
+@app.route("/api/import/<format>/", methods=["POST"])
+def importProgram(format):
+    if format.lower() != "jsonld":
+        return {"error": "unknown format"}
+    f = request.files["program"]
+    j = json.load(f)
+    # config = None
+    # if "config" in request.files:
+    #     config = json.load(request.files["config"])
+    try:
+        program = import_jsonld(j)
+        return program.toText()
     except Exception as e:
         return {"error": str(e)}
 
