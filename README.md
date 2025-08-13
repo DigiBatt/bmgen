@@ -161,5 +161,5 @@ Name of the output file. If this option is not provided, the output is written t
 | mutable arrays                                    | ✔️                         | ➖    | ➖      |
 
 ✔️ implemented
-➖ planned
-❌ not supported by the target
+❌ planned
+➖ not supported by the target
