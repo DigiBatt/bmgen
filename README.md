@@ -85,13 +85,9 @@ Command for this example: <code>bmgen --target basytec --format table examples/s
 
 A working installation of Python >= 3.10 and pip is required. The web version also requires npm.
 
-The bmgen package can be downloaded from the Gitlab server:
-
-    pip install --index-url https://token:glpat-pNBLCU7BiNexQJA6GVNh@git.isea.rwth-aachen.de/api/v4/projects/2105/packages/pypi/simple bmgen
-
-Alternatively, the package can also be installed from its sources:
+The bmgen package can be installed using pip:
  
-    git clone git@git.isea.rwth-aachen.de:ESS/testing/bmgen.git
+    git clone git@github.com:DigiBatt/bmgen.git
     cd bmgen
     pip install -e .
     
