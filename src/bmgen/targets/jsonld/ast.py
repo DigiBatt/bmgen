@@ -143,12 +143,12 @@ class NumericValue:
 
 @compare
 @dataclass
-class Parameter(NumericValue):
+class Channel(NumericValue):
     quantity: typing.Type[cold.ElectrochemicalQuantity]
     unit: cold.MeasurementUnit
 
     def toCold(self):
-        return (self.quantity, self.unit.__class__.__name__)
+        return (self.quantity, self.unit.__name__)
 
     def __compare__(self, other, operator):
         if isinstance(other, (float, int)):
@@ -160,14 +160,24 @@ class Parameter(NumericValue):
             quantity = constants.UPPER_LIMITS[self.quantity]
         return Limit(quantity, other)
 
-
 @dataclass
 class NumericLiteral(NumericValue):
     value: float
     unit: cold.MeasurementUnit
 
     def toCold(self):
-        return (self.value, self.unit.__class__.__name__)
+        return (self.value, self.unit.__name__)
+
+    def __mul__(self, other: float):
+        if not isinstance(other, float):
+            return NotImplemented
+        return NumericLiteral(self.value * other, self.unit)
+
+    def __rmul__(self, other: float):
+        if not isinstance(other, float):
+            return NotImplemented
+        return NumericLiteral(self.value * other, self.unit)
+
 
 
 @dataclass
@@ -176,7 +186,7 @@ class Setpoint:
     value: NumericValue
 
     def toCold(self):
-        return self.type(*self.value.toCold())
+        return create_property(self.type, self.value)
 
 
 @dataclass
@@ -185,7 +195,7 @@ class Limit:
     value: NumericValue
 
     def toCold(self):
-        return self.type(*self.value.toCold())
+        return create_property(self.type, self.value)
 
 
 @dataclass
@@ -215,3 +225,40 @@ class Program:
             for i in range(len(tasks) - 1):
                 tasks[i].hasNext = tasks[i + 1]
         return test
+
+
+@dataclass
+class Reference:
+    id: str
+
+def create_property(type: typing.Type[cold.ElectrochemicalQuantity], value: NumericValue | Reference):
+    if issubclass(type, cold.Voltage):
+        unitName = "Volt"
+    elif issubclass(type, cold.ElectricCurrent):
+        unitName = "Ampere"
+    elif issubclass(type, cold.ElectricCharge):
+        unitName = "Coulomb"
+    elif issubclass(type, cold.ElectricResistance):
+        unitName = "Ohm"
+    elif issubclass(type, cold.EnergyDensity):
+        unitName = "NewtonPerSquareCentiMetre"
+    else:
+        # raise Exception(f"Cannot determine unit for type {type.__name__}")
+        unitName = "Volt"
+    if isinstance(value, NumericLiteral) and isinstance(value.value, Reference):
+        prop = type(0, unitName)
+        prop.identifier = value.value.id
+        prop.hasMeasurementUnit = None
+        prop.hasNumericalPart = None
+    elif isinstance(value, NumericValue):
+        if type == cold.ChargingCurrent and issubclass(value.unit, cold.CRateUnit):
+            type = cold.ChargingCRate
+        if type == cold.DischargingCurrent and issubclass(value.unit, cold.CRateUnit):
+            type = cold.DischargingCRate
+        prop = type(*value.toCold())
+    elif isinstance(value, Reference):
+        prop = type(0, unitName)
+        prop.identifier = value.id
+        prop.hasMeasurementUnit = None
+        prop.hasNumericalPart = None
+    return prop

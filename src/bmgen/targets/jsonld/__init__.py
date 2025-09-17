@@ -5,4 +5,4 @@ from bmgen.transformer import Transformer
 generator: JSONLDGenerator
 battery: Battery
 
-default_format = "html"
+default_format = "json"

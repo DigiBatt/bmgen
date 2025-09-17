@@ -31,7 +31,7 @@ const generatorSettings = {
     "jsonld": {
         "target": "jsonld",
         "displayFormat": "html",
-        "downloadFormat": "html",
+        "downloadFormat": "json",
         "filenameExtension": ".json"
     }
 }

@@ -79,7 +79,7 @@ def pause(
             cold.ConstantCurrentCharging(),
             [
                 ast.Setpoint(
-                    cold.ChargingCurrent, ast.NumericLiteral(0, cold.Ampere())
+                    cold.ChargingCurrent, ast.NumericLiteral(0, cold.Ampere)
                 ),
                 time(hours, minutes, seconds).toValue(),
             ],

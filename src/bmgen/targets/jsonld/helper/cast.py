@@ -17,14 +17,14 @@ def autocast(**units: str):
                     if isinstance(a, ast.NumericValue):
                         newargs.append(a)
                     else:
-                        newargs.append(ast.NumericLiteral(value=a, unit=units[p]()))
+                        newargs.append(ast.NumericLiteral(value=a, unit=units[p]))
                 else:
                     newargs.append(a)
             args = newargs
             for k, v in kwargs.items():
                 if k in units and v is not None:
                     if not isinstance(v, ast.NumericValue):
-                        kwargs[k] = ast.NumericLiteral(value=v, unit=units[k]())
+                        kwargs[k] = ast.NumericLiteral(value=v, unit=units[k])
             return f(*args, **kwargs)
 
         return g

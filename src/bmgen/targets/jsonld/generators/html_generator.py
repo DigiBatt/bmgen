@@ -8,6 +8,6 @@ class HtmlGenerator(JSONLDGenerator):
         self.finish()
         return (
             '<textarea style="width: 100%; height: 100%" readonly>'
-            + json.dumps(self.program.toCold().to_jsonld(), indent=2)
+            + json.dumps(super().generate().to_jsonld(), indent=2)
             + "</textarea>"
         )
