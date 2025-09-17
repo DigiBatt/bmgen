@@ -5,8 +5,10 @@ except:
     import cold.scripts.regenerate_models
     import os
 
+    oldpath = os.getcwd()
     os.chdir(os.path.join(os.path.dirname(cold.__file__), '..'))
     cold.scripts.regenerate_models.main()
+    os.chdir(oldpath)
 
 
 from bmgen.battery import Battery
