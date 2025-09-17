@@ -1,0 +1,113 @@
+{
+  "@context": "https://w3id.org/emmo/domain/battery/context",
+  "@type": [
+    "BatteryTest",
+    "IterativeWorkflow"
+  ],
+  "hasTask": {
+    "@type": "ConstantCurrentConstantVoltageCharging",
+    "hasProcessParameter": [
+      {
+        "@type": "ChargingCRate",
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 1
+        },
+        "hasMeasurementUnit": {
+          "@type": "AmperePerAmpereHour"
+        }
+      },
+      {
+        "@type": "ChargingVoltage",
+        "identifier": "battery_eoc_voltage"
+      },
+      {
+        "@type": "TerminationQuantity",
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 0.2
+        },
+        "hasMeasurementUnit": {
+          "@type": "Ampere"
+        }
+      }
+    ],
+    "hasNext": {
+      "@type": "ConstantCurrentCharging",
+      "hasProcessParameter": [
+        {
+          "@type": "ChargingCurrent",
+          "hasNumericalPart": {
+            "@type": "RealData",
+            "hasNumberValue": 0
+          },
+          "hasMeasurementUnit": {
+            "@type": "Ampere"
+          }
+        },
+        {
+          "@type": "StepDuration",
+          "hasNumericalPart": {
+            "@type": "RealData",
+            "hasNumberValue": 5400.0
+          },
+          "hasMeasurementUnit": {
+            "@type": "Second"
+          }
+        }
+      ],
+      "hasNext": {
+        "@type": "ConstantCurrentDischarging",
+        "hasProcessParameter": [
+          {
+            "@type": "DischargingCurrent",
+            "hasNumericalPart": {
+              "@type": "RealData",
+              "hasNumberValue": 1.5
+            },
+            "hasMeasurementUnit": {
+              "@type": "Ampere"
+            }
+          },
+          {
+            "@type": "LowerVoltageLimit",
+            "identifier": "battery_eod_voltage"
+          }
+        ]
+      }
+    }
+  },
+  "hasParticipant": {
+    "@type": "Battery",
+    "hasProperty": [
+      {
+        "@type": "NominalCapacity",
+        "identifier": "battery_nominal_capacity"
+      },
+      {
+        "@type": "UpperVoltageLimit",
+        "identifier": "battery_eoc_voltage"
+      },
+      {
+        "@type": "LowerVoltageLimit",
+        "identifier": "battery_eod_voltage"
+      },
+      {
+        "@type": "MaximumContinuousChargingCurrent",
+        "identifier": "battery_cont_charge_current"
+      },
+      {
+        "@type": "MaximumContinuousDischargingCurrent",
+        "identifier": "battery_cont_discharge_current"
+      },
+      {
+        "@type": "InternalResistance",
+        "identifier": "battery_internal_resistance"
+      },
+      {
+        "@type": "EnergyDensity",
+        "identifier": "battery_energy_density"
+      }
+    ]
+  }
+}

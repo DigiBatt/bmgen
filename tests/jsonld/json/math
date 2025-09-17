@@ -1,0 +1,65 @@
+{
+  "@context": "https://w3id.org/emmo/domain/battery/context",
+  "@type": [
+    "BatteryTest",
+    "IterativeWorkflow"
+  ],
+  "hasTask": {
+    "@type": "ConstantCurrentCharging",
+    "hasProcessParameter": [
+      {
+        "@type": "ChargingCurrent",
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 1.5
+        },
+        "hasMeasurementUnit": {
+          "@type": "Ampere"
+        }
+      },
+      {
+        "@type": "UpperVoltageLimit",
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 4.2
+        },
+        "hasMeasurementUnit": {
+          "@type": "Volt"
+        }
+      }
+    ]
+  },
+  "hasParticipant": {
+    "@type": "Battery",
+    "hasProperty": [
+      {
+        "@type": "NominalCapacity",
+        "identifier": "battery_nominal_capacity"
+      },
+      {
+        "@type": "UpperVoltageLimit",
+        "identifier": "battery_eoc_voltage"
+      },
+      {
+        "@type": "LowerVoltageLimit",
+        "identifier": "battery_eod_voltage"
+      },
+      {
+        "@type": "MaximumContinuousChargingCurrent",
+        "identifier": "battery_cont_charge_current"
+      },
+      {
+        "@type": "MaximumContinuousDischargingCurrent",
+        "identifier": "battery_cont_discharge_current"
+      },
+      {
+        "@type": "InternalResistance",
+        "identifier": "battery_internal_resistance"
+      },
+      {
+        "@type": "EnergyDensity",
+        "identifier": "battery_energy_density"
+      }
+    ]
+  }
+}
