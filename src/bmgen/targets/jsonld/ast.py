@@ -168,15 +168,13 @@ class NumericLiteral(NumericValue):
     def toCold(self):
         return (self.value, self.unit.__name__)
 
-    def __mul__(self, other: float):
-        if not isinstance(other, float):
+    def __mul__(self, other: float | int):
+        if not isinstance(other, (float, int)):
             return NotImplemented
         return NumericLiteral(self.value * other, self.unit)
 
     def __rmul__(self, other: float):
-        if not isinstance(other, float):
-            return NotImplemented
-        return NumericLiteral(self.value * other, self.unit)
+        return self.__mul__(other)
 
 
 

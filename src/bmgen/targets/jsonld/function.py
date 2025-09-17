@@ -102,7 +102,7 @@ class time:
             value += self.minutes * 60
         if self.hours is not None:
             value += self.hours * 3600
-        return ast.Setpoint(cold.StepDuration, ast.NumericLiteral(value, cold.Second()))
+        return ast.Setpoint(cold.StepDuration, ast.NumericLiteral(value, cold.Second))
 
     def toCold(self):
         return self.toValue().toCold()
