@@ -3,8 +3,8 @@ from bmgen.function import *
 from bmgen.channel import *
 
 # set data recording interval
-# registration format is only applied to BM programs
-register(time=seconds(1), format=["my_custom_reg"])
+# the format parameter adds additional registration values if supported
+register(time=seconds(1), format=["Ah-Charge"])
 
 # set safety limits
 limit(V > 4.2, error(1))

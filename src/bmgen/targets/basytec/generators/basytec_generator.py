@@ -10,6 +10,13 @@ class BasytecGenerator(BaseGenerator):
         self.program = BasytecProgram()
         self.stoplabel = False
         self.registrations: List[BasytecSetValue] = []
+        self.registration_format: List[str] = [
+            "Ah[Ah]",
+            "Ah-Step",
+            "t-Set[h]",
+            "t-Step[h]",
+            "Wh[Wh]",
+        ]
 
     def finish(self):
         self.program.lines.insert(
@@ -20,6 +27,7 @@ class BasytecGenerator(BaseGenerator):
         else:
             label = None
         self.program.lines.append(BasytecStatement(StepType.Stop, label=label))
+        self.program.registration_format = self.registration_format
 
     def add(self, line):
         if not line.registrations:
@@ -29,6 +37,9 @@ class BasytecGenerator(BaseGenerator):
 
     def set_registration(self, registrations: List[BasytecSetValue]):
         self.registrations = registrations
+
+    def set_registration_format(self, format: List[str]):
+        self.registration_format.extend(format)
 
     def ast(self):
         self.finish()

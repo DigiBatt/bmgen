@@ -168,9 +168,12 @@ class BasytecStatement:
 class BasytecProgram:
     lines: List[BasytecStatement] = field(default_factory=list)
     limits: List[BasytecLimit] = field(default_factory=list)
+    registration_format: List[str] = field(default_factory=list)
 
     def toText(self):
-        text = "Main\n0\n"
+        text = f"Main\n{len(self.registration_format)}\n"
+        for format in self.registration_format:
+            text += f"{format}\n"
         text += f" 9 {len(self.lines) + 1}\n"
         text += "0 0\n1 0 Level\n2 0 Label\n3 0 Command\n4 0 Parameter\n5 0 Termination\n6 0 Action\n7 0 Registration\n8 0 Comment\n"
         for i, line in enumerate(self.lines, 1):

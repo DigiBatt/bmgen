@@ -129,6 +129,8 @@ def register_global(
 ):
     regs = register(time, voltage, current, format)
     target.generator.set_registration(regs)
+    if format:
+        target.generator.set_registration_format(format)
     return regs
 
 
