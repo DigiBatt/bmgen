@@ -5,6 +5,7 @@ import bmgen
 import bmgen.targets.bm as bm
 import bmgen.targets.bm.helper.cast as cast
 from bmgen.targets.bm.helper.compare import compare
+from bmgen.targets.bm.helper.sql import string_to_sql, list_to_sql
 
 
 class BMNode:
@@ -13,6 +14,9 @@ class BMNode:
 
     def toTable(self):
         return self.toText()
+
+    def toSql(self):
+        return string_to_sql(self.toText())
 
 
 @dataclass
@@ -369,6 +373,9 @@ class BMLimitCondition(BMNode):
     def toText(self):
         raise NotImplementedError()
 
+    def toSql(self):
+        return [self.toText()]
+
     def __and__(self, other):
         return BMLimitAnd(self, other)
 
@@ -408,6 +415,16 @@ class BMLimitAnd(BMLimitCondition):
 
     def toTable(self):
         return self.lhs.toTable() + " &<br>" + self.rhs.toTable()
+
+    def toSql(self):
+        lhs = self.lhs.toSql()
+        if isinstance(lhs, str):
+            lhs = [lhs]
+        rhs = self.rhs.toSql()
+        if isinstance(rhs, str):
+            rhs = [rhs]
+        lhs[-1] += " &"
+        return [*lhs, *rhs]
 
 
 @dataclass
@@ -451,6 +468,13 @@ class BMLimit(BMNode):
             )
         else:
             return "LIMIT " + self.condition.toText()
+
+    def toSql(self):
+        action = "null" if self.action is None else self.action.toSql()
+        conditions = self.condition.toSql()
+        if isinstance(conditions, str):
+            conditions = [conditions]
+        return ([string_to_sql(s) for s in conditions], action)
 
     def toTable(self):
         condition = self.condition.toTable()
@@ -536,6 +560,28 @@ class BMStatement(BMLine):
         action = "<br>".join(action)
         return f"<tr><td>{linenumber}</td><td>{label}</td><td>{self.operator}</td><td>{value}</td><td>{limit}</td><td>{action}</td><td>{registration}</td></tr>\n"
 
+    def toSql(self, programID, stepnumber):
+        sql = ""
+        nLines = max(len(self.values), len(self.limits), len(self.registrations), 1)
+        numeration = 0
+        for iLine in range(nLines):
+            if len(self.limits) <= iLine:
+                condition, action = (["null"], "null")
+            else:
+                condition, action = list_to_sql(self.limits, iLine)
+            for iCondition, conditiontext in enumerate(condition):
+                if numeration == 0:
+                    sql += f"({programID}, {stepnumber}, {numeration}, {string_to_sql(self.label)}, {string_to_sql(self.operator)}, {list_to_sql(self.values, iLine)}, {conditiontext}, {action}, {list_to_sql(self.registrations, iLine)}, null, null)"
+                elif iCondition == 0:
+                    sql += f"({programID}, {stepnumber}, {numeration}, null, null, {list_to_sql(self.values, iLine)}, {conditiontext}, {action}, {list_to_sql(self.registrations, iLine)}, null, null)"
+                else:
+                    sql += f"({programID}, {stepnumber}, {numeration}, null, null, null, {conditiontext}, null, null, null, null)"
+                sql += ",\n"
+                numeration += 1
+            if iLine == nLines - 1:
+                sql = sql[:-2]
+        return sql
+
 
 @dataclass
 class BMComment(BMLine):
@@ -547,6 +593,9 @@ class BMComment(BMLine):
 
     def toTable(self):
         return f'<tr><td></td><td>!</td><td colspan="5" style="text-align: left;">{self.text}</td></tr>'
+
+    def toSql(self, programID, stepnumber):
+        return ""
 
 
 @dataclass
@@ -581,3 +630,34 @@ class BMProgram(BMNode):
                 linenumber += 1
         table += "</table>"
         return table
+
+    def toSql(self, programName):
+        sql = f"""DECLARE @ProgramID int;
+DECLARE @ProgramNumber int;
+DECLARE @Version int;
+SELECT TOP 1 @Version = iVersion + 1, @ProgramNumber = iProgramNo FROM tblProgramReferences WHERE csProgramName = '{programName}' ORDER BY iVersion DESC;
+IF @ProgramNumber IS NULL
+BEGIN
+	SET @Version = 1;
+	SELECT @ProgramNumber = MAX(iProgramNo) + 1 FROM tblProgramReferences;
+	IF @ProgramNumber IS NULL
+	BEGIN
+		SET @ProgramNumber = 1;
+	END
+END
+INSERT INTO tblProgramReferences (System, iProgramNo, iProgramType, dCapacity, dDuration, csProgramName, csComment, csCommentFile, tCreationTime, tModificationTime, iVersion, iDelete, iCertificated, tChangeCertificatedDate, bChecked) VALUES(8, @ProgramNumber, 0, 0, 0, '{programName}', null, null, GETDATE(), GETDATE(), @Version, 0, 0, GETDATE(), 1);
+SET @ProgramID = @@IDENTITY;
+INSERT INTO tblProgramDetail (iProgramID, iStepNo, iNumeration, csLabel, csOperator, csSetPoint, csCircuitValue, csBreakOff, csRegistration, csComment, iGoto) VALUES
+"""
+        linenumber = 1
+        for i in range(len(self.lines)):
+            line = self.lines[i]
+            if not line:
+                continue
+            if i > 0:
+                sql += ","
+            sql += "\n" + line.toSql("@ProgramID", linenumber)
+            if not isinstance(line, BMComment):
+                linenumber += 1
+        sql += ";"
+        return sql

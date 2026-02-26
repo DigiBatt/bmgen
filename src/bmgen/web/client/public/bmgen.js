@@ -44,7 +44,9 @@ function init() {
             value: '',
             language: 'python'
         });
-        initCode();
+        if (!loadState()) {
+            initCode();
+        }
     });
 
     codearea = document.getElementById('codearea');
@@ -56,29 +58,36 @@ function init() {
     targetdropdown.addEventListener('change', updateConfig);
     document.getElementById('more-config').addEventListener('change', updateCode);
     updateConfig();
+    loadExamplesList();
+    sendRequest("GET", "/api/version", (version) => document.getElementById("bmgenVersion").innerHTML = version);
+}
+
+function sendRequest(method, url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url);
+    xhr.onload = () => {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            callback(xhr.response);
+        }
+    };
+    xhr.send()
 }
 
 function initCode() {
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "example.py");
-    xhr.send()
-    xhr.onload = () => {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            const data = xhr.response;
-            editor.setValue(data);
-            updateCode();
-        }
-    };
+    sendRequest("GET", "example.py", (data) => {
+        editor.setValue(data);
+        updateCode();
+    });
 }
 
-function generate(program, target, format, callback) {
+function generate(program, target, format, config, callback) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `api/generate/${target}/${format}/`);
     const formData = new FormData();
     const file = new Blob([program], { type: 'text/plain' });
     formData.append("program", file);
-    const config = new Blob([JSON.stringify(getConfig())], { type: 'application/json' });;
-    formData.append("config", config);
+    const configfile = new Blob([JSON.stringify(config)], { type: 'application/json' });;
+    formData.append("config", configfile);
     xhr.send(formData);
     xhr.onload = () => callback(xhr);
 }
@@ -100,6 +109,7 @@ function updateCode(event) {
     const target = generatorSettings[targetdropdown.value].target;
     const program = editor.getValue();
     const format = generatorSettings[targetdropdown.value].displayFormat;
+    const config = getConfig();
     const callback = (xhr) => {
         if (xhr.readyState == 4) {
             const data = JSON.parse(xhr.response);
@@ -112,7 +122,8 @@ function updateCode(event) {
             }
         }
     };
-    generate(program, target, format, callback);
+    saveState(program, programNameField.value, targetdropdown.value, config);
+    generate(program, target, format, config, callback);
 }
 
 function saveProgram() {
@@ -242,7 +253,6 @@ function loadConfig(files) {
 
 function setConfigValues(prefix, data) {
     for (const [key, value] of Object.entries(data)) {
-        console.log(prefix + "; " + key + "; " + value);
         var configkey = "";
         if (prefix === "") {
             configkey = key;
@@ -285,5 +295,54 @@ function importJsonLD(files) {
     })();
     reader.readAsText(files[0]);
     document.getElementById('programName').value = files[0].name.substring(0, files[0].name.indexOf('.'));
+}
 
+function saveState(program, programName, target, config) {
+    localStorage.setItem("program", program);
+    localStorage.setItem("programName", programName);
+    localStorage.setItem("target", target);
+    localStorage.setItem("config", JSON.stringify(config));
+}
+
+function loadState() {
+    var hasProgram = false;
+    if ("program" in localStorage) {
+        editor.setValue(localStorage.getItem("program"));
+        hasProgram = true;
+    }
+    if ("programName" in localStorage) {
+        document.getElementById('programName').value = localStorage.getItem("programName");
+    }
+    if ("target" in localStorage) {
+        targetdropdown.value = localStorage.getItem("target");
+    }
+    if ("config" in localStorage) {
+        setConfigValues("", JSON.parse(localStorage.getItem("config")));
+    }
+    updateCode();
+    return hasProgram;
+}
+
+function loadExamplesList() {
+    const dropdown = document.getElementById("examples");
+    sendRequest("GET", "api/examples", (data) => {
+        dropdown.replaceChildren(...JSON.parse(data).map((filename) => {
+            var option = document.createElement("option");
+            option.value = filename;
+            option.innerHTML = filename;
+            return option;
+        }));
+    });
+}
+
+function loadExample() {
+    const filename = document.getElementById("examples").value;
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET", `examples/${filename}`);
+    xhr.send();
+    sendRequest("GET", `examples/${filename}`, (data) => {
+        editor.setValue(data);
+        updateCode();
+        programNameField.value = filename;
+    });
 }

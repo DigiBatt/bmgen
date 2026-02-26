@@ -1,11 +1,12 @@
 import json
+import os
 from io import BytesIO, StringIO
 
 import click
-from flask import Flask, request, send_file
+from flask import Flask, request, send_file, send_from_directory
 from flask_cors import CORS
 
-from bmgen import bmgen
+from bmgen import bmgen, get_version
 from bmgen.util.import_jsonld import import_jsonld
 
 app = Flask(
@@ -64,8 +65,24 @@ def importProgram(format):
         return {"error": str(e)}
 
 
+@app.route("/api/examples", methods=["GET"])
+def list_examples():
+    examples = os.listdir("examples")
+    examples.sort()
+    return examples
+
+
+@app.route("/api/version", methods=["GET"])
+def version():
+    return get_version()
+
+
 @click.command("bmgen-server")
 @click.option("--host", default=None)
 @click.option("--port", type=int, default=5000)
 def run(host, port):
     app.run(host, port)
+
+
+if __name__ == "__main__":
+    run()

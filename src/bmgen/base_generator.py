@@ -4,6 +4,7 @@ from abc import ABC, abstractmethod
 class BaseGenerator(ABC):
     def __init__(self):
         self.context = []
+        self.programName = None
 
     @abstractmethod
     def add(self, line):

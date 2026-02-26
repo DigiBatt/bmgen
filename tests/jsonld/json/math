@@ -4,31 +4,6 @@
     "BatteryTest",
     "IterativeWorkflow"
   ],
-  "hasTask": {
-    "@type": "ConstantCurrentCharging",
-    "hasProcessParameter": [
-      {
-        "@type": "ChargingCurrent",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 1.5
-        },
-        "hasMeasurementUnit": {
-          "@type": "Ampere"
-        }
-      },
-      {
-        "@type": "UpperVoltageLimit",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 4.2
-        },
-        "hasMeasurementUnit": {
-          "@type": "Volt"
-        }
-      }
-    ]
-  },
   "hasParticipant": {
     "@type": "Battery",
     "hasProperty": [
@@ -59,6 +34,31 @@
       {
         "@type": "EnergyDensity",
         "identifier": "battery_energy_density"
+      }
+    ]
+  },
+  "hasTask": {
+    "@type": "ConstantCurrentCharging",
+    "hasProcessParameter": [
+      {
+        "@type": "ChargingCurrent",
+        "hasMeasurementUnit": {
+          "@type": "Ampere"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 1.5
+        }
+      },
+      {
+        "@type": "UpperVoltageLimit",
+        "hasMeasurementUnit": {
+          "@type": "Volt"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 4.2
+        }
       }
     ]
   }

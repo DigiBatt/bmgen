@@ -1,5 +1,6 @@
 #! /usr/bin/python3.10
 
+import os
 import ast
 import io
 import json
@@ -106,6 +107,9 @@ def generate(
             import_module(f"bmgen.targets.{target}.battery"), "battery"
         )
     target_module.battery = target_battery
+    if isinstance(file, str):
+        programName, _ = os.path.splitext(os.path.basename(file))
+        target_module.generator.programName = programName
     exec(compile(newtree, filename="<ast>", mode="exec"), {})
     if intermediate == "targetast":
         output(out, target_module.generator.ast())

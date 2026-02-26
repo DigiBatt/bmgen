@@ -4,79 +4,6 @@
     "BatteryTest",
     "IterativeWorkflow"
   ],
-  "hasTask": {
-    "@type": "ConstantCurrentConstantVoltageCharging",
-    "hasProcessParameter": [
-      {
-        "@type": "ChargingCRate",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 1
-        },
-        "hasMeasurementUnit": {
-          "@type": "AmperePerAmpereHour"
-        }
-      },
-      {
-        "@type": "ChargingVoltage",
-        "identifier": "battery_eoc_voltage"
-      },
-      {
-        "@type": "TerminationQuantity",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 0.2
-        },
-        "hasMeasurementUnit": {
-          "@type": "Ampere"
-        }
-      }
-    ],
-    "hasNext": {
-      "@type": "ConstantCurrentCharging",
-      "hasProcessParameter": [
-        {
-          "@type": "ChargingCurrent",
-          "hasNumericalPart": {
-            "@type": "RealData",
-            "hasNumberValue": 0
-          },
-          "hasMeasurementUnit": {
-            "@type": "Ampere"
-          }
-        },
-        {
-          "@type": "StepDuration",
-          "hasNumericalPart": {
-            "@type": "RealData",
-            "hasNumberValue": 5400.0
-          },
-          "hasMeasurementUnit": {
-            "@type": "Second"
-          }
-        }
-      ],
-      "hasNext": {
-        "@type": "ConstantCurrentDischarging",
-        "hasProcessParameter": [
-          {
-            "@type": "DischargingCurrent",
-            "hasNumericalPart": {
-              "@type": "RealData",
-              "hasNumberValue": 1.5
-            },
-            "hasMeasurementUnit": {
-              "@type": "Ampere"
-            }
-          },
-          {
-            "@type": "LowerVoltageLimit",
-            "identifier": "battery_eod_voltage"
-          }
-        ]
-      }
-    }
-  },
   "hasParticipant": {
     "@type": "Battery",
     "hasProperty": [
@@ -107,6 +34,79 @@
       {
         "@type": "EnergyDensity",
         "identifier": "battery_energy_density"
+      }
+    ]
+  },
+  "hasTask": {
+    "@type": "ConstantCurrentConstantVoltageCharging",
+    "hasNext": {
+      "@type": "ConstantCurrentCharging",
+      "hasNext": {
+        "@type": "ConstantCurrentDischarging",
+        "hasProcessParameter": [
+          {
+            "@type": "DischargingCurrent",
+            "hasMeasurementUnit": {
+              "@type": "Ampere"
+            },
+            "hasNumericalPart": {
+              "@type": "RealData",
+              "hasNumberValue": 1.5
+            }
+          },
+          {
+            "@type": "LowerVoltageLimit",
+            "identifier": "battery_eod_voltage"
+          }
+        ]
+      },
+      "hasProcessParameter": [
+        {
+          "@type": "ChargingCurrent",
+          "hasMeasurementUnit": {
+            "@type": "Ampere"
+          },
+          "hasNumericalPart": {
+            "@type": "RealData",
+            "hasNumberValue": 0
+          }
+        },
+        {
+          "@type": "StepDuration",
+          "hasMeasurementUnit": {
+            "@type": "Second"
+          },
+          "hasNumericalPart": {
+            "@type": "RealData",
+            "hasNumberValue": 5400.0
+          }
+        }
+      ]
+    },
+    "hasProcessParameter": [
+      {
+        "@type": "ChargingCRate",
+        "hasMeasurementUnit": {
+          "@type": "AmperePerAmpereHour"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 1
+        }
+      },
+      {
+        "@type": "ChargingVoltage",
+        "identifier": "battery_eoc_voltage"
+      },
+      {
+        "@type": "TerminationQuantity",
+        "hasMeasurementUnit": {
+          "@type": "Ampere"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 0.2
+        }
       }
     ]
   }

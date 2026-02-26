@@ -14,13 +14,18 @@
     <div id="wrapper">
         <div>
             <div class="config">
+                Examples: <select id="examples"></select>
+                <button onclick="loadExample()">Load example</button>
+            </div>
+            <div class="config">
                 Program Name:
                 <input type="text" id="programName" value="example" />
                 <button onclick="saveProgram()">Save</button>
                 <button onclick="document.getElementById('fileupload').click();">Load</button>
                 <input type="file" id="fileupload" class="hidden" name="Load" onchange="loadProgram(this.files)" />
                 <button onclick="document.getElementById('jsonupload').click();">Import JSON-LD</button>
-                <input type="file" id="jsonupload" class="hidden" name="Import JSON-LD" onchange="importJsonLD(this.files)" />
+                <input type="file" id="jsonupload" class="hidden" name="Import JSON-LD"
+                    onchange="importJsonLD(this.files)" />
                 <div class="right">
                     <button onclick="updateCode()">Update</button>
                 </div>
@@ -40,7 +45,8 @@
                 <button onclick="toggleConfig()" id="toggleConfig">Show additional config options</button>
                 <button onclick="saveConfig()">Save config</button>
                 <button onclick="document.getElementById('configupload').click();">Load config</button>
-                <input type="file" id="configupload" class="hidden" name="Load config" onchange="loadConfig(this.files)" />
+                <input type="file" id="configupload" class="hidden" name="Load config"
+                    onchange="loadConfig(this.files)" />
                 <div id="more-config">
                     <h2>General</h2>
                     <h3>Battery Parameters</h3>
@@ -49,51 +55,60 @@
                     <table>
                         <tr>
                             <td>Capacity:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_nominalCapacity" /></td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_nominalCapacity" />
+                            </td>
                             <td>Ah</td>
                             <td>Nominal Voltage:</td>
                             <td><input type="text" size="5" class="configitem float" id="battery_nominalVoltage" /></td>
                             <td>V</td>
                             <td>Minimum Charge Temperature:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_minChargeTemperature" /></td>
+                            <td><input type="text" size="5" class="configitem float"
+                                    id="battery_minChargeTemperature" /></td>
                             <td>&deg;C</td>
                         </tr>
                         <tr>
                             <td>Continuous Charge Current:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_contChargeCurrent" /></td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_contChargeCurrent" />
+                            </td>
                             <td>A</td>
                             <td>Minimum Voltage:</td>
                             <td><input type="text" size="5" class="configitem float" id="battery_minVoltage" /></td>
                             <td>V</td>
                             <td>Maximum Charge Temperature:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_maxChargeTemperature" /></td>
+                            <td><input type="text" size="5" class="configitem float"
+                                    id="battery_maxChargeTemperature" /></td>
                             <td>&deg;C</td>
                         </tr>
                         <tr>
                             <td>Peak Charge Current:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_peakChargeCurrent" /></td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_peakChargeCurrent" />
+                            </td>
                             <td>A</td>
                             <td>Maximum Voltage:</td>
                             <td><input type="text" size="5" class="configitem float" id="battery_maxVoltage" /></td>
                             <td>V</td>
                             <td>Minimum Discharge Temperature:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_minDischargeTemperature" /></td>
+                            <td><input type="text" size="5" class="configitem float"
+                                    id="battery_minDischargeTemperature" /></td>
                             <td>&deg;C</td>
                         </tr>
                         <tr>
                             <td>Continuous Discharge Current:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_contDischargeCurrent" /></td>
+                            <td><input type="text" size="5" class="configitem float"
+                                    id="battery_contDischargeCurrent" /></td>
                             <td>A</td>
                             <td>End-Of-Discharge Voltage:</td>
                             <td><input type="text" size="5" class="configitem float" id="battery_eodVoltage" /></td>
                             <td>V</td>
                             <td>Maximum Discharge Temperature:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_maxDischargeTemperature" /></td>
+                            <td><input type="text" size="5" class="configitem float"
+                                    id="battery_maxDischargeTemperature" /></td>
                             <td>&deg;C</td>
                         </tr>
                         <tr>
                             <td>Peak Discharge Current:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_peakDischargeCurrent" /></td>
+                            <td><input type="text" size="5" class="configitem float"
+                                    id="battery_peakDischargeCurrent" /></td>
                             <td>A</td>
                             <td>End-Of-Charge Voltage:</td>
                             <td><input type="text" size="5" class="configitem float" id="battery_eocVoltage" /></td>
@@ -107,7 +122,8 @@
                             <td><input type="text" size="5" class="configitem float" id="battery_nominalCurrent" /></td>
                             <td>A</td>
                             <td>Internal Resistance:</td>
-                            <td><input type="text" size="5" class="configitem float" id="battery_internalResistance" /></td>
+                            <td><input type="text" size="5" class="configitem float" id="battery_internalResistance" />
+                            </td>
                             <td>Ohm</td>
                             <td>Energy Density:</td>
                             <td><input type="text" size="5" class="configitem float" id="battery_energyDensity" /></td>
@@ -132,6 +148,11 @@
             <div id="codearea"></div>
             <div id="outputarea"></div>
         </div>
+    </div>
+
+    <div class="footer">
+        BMGen v<span id="bmgenVersion"></span>
+        <a href="docs/index.html" target="_blank">View documentation</a>
     </div>
 </body>
 

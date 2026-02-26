@@ -244,7 +244,7 @@ class NewareStatement:
 
     def toTable(self, linenumber):
         if self.operator in constants.StepColors:
-            color = constants.StepColors[self.operator]
+            color = constants.StepColors[self.operator].value
         else:
             color = "#000000"
         stepname = str(self.operator).split(".")[1].replace("_", " ")

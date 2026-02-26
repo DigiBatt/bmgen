@@ -14,3 +14,4 @@ __pycache__
 /sphinx/_build
 /sphinx/bmgen
 /src/bmgen/web/client/public/docs/
+/src/bmgen/web/client/public/examples/

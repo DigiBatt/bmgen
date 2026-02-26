@@ -78,3 +78,13 @@ button:hover,
 #more-config {
     display: none;
 }
+
+.footer {
+    position: fixed;
+    left: 5;
+    bottom: 5;
+}
+
+a {
+    color: black;
+}

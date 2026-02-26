@@ -4,406 +4,6 @@
     "BatteryTest",
     "IterativeWorkflow"
   ],
-  "hasTask": {
-    "@type": "ConstantCurrentCharging",
-    "hasProcessParameter": [
-      {
-        "@type": "ChargingCurrent",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 0
-        },
-        "hasMeasurementUnit": {
-          "@type": "Ampere"
-        }
-      },
-      {
-        "@type": "StepDuration",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 5
-        },
-        "hasMeasurementUnit": {
-          "@type": "Second"
-        }
-      }
-    ],
-    "hasNext": {
-      "@type": "ConstantCurrentCharging",
-      "hasProcessParameter": [
-        {
-          "@type": "ChargingCurrent",
-          "hasNumericalPart": {
-            "@type": "RealData",
-            "hasNumberValue": 0
-          },
-          "hasMeasurementUnit": {
-            "@type": "Ampere"
-          }
-        },
-        {
-          "@type": "StepDuration",
-          "hasNumericalPart": {
-            "@type": "RealData",
-            "hasNumberValue": 5
-          },
-          "hasMeasurementUnit": {
-            "@type": "Second"
-          }
-        }
-      ],
-      "hasNext": {
-        "@type": "ConstantCurrentCharging",
-        "hasProcessParameter": [
-          {
-            "@type": "ChargingCurrent",
-            "hasNumericalPart": {
-              "@type": "RealData",
-              "hasNumberValue": 0
-            },
-            "hasMeasurementUnit": {
-              "@type": "Ampere"
-            }
-          },
-          {
-            "@type": "StepDuration",
-            "hasNumericalPart": {
-              "@type": "RealData",
-              "hasNumberValue": 5
-            },
-            "hasMeasurementUnit": {
-              "@type": "Second"
-            }
-          }
-        ],
-        "hasNext": {
-          "@type": "ConstantCurrentCharging",
-          "hasProcessParameter": [
-            {
-              "@type": "ChargingCurrent",
-              "hasNumericalPart": {
-                "@type": "RealData",
-                "hasNumberValue": 0
-              },
-              "hasMeasurementUnit": {
-                "@type": "Ampere"
-              }
-            },
-            {
-              "@type": "StepDuration",
-              "hasNumericalPart": {
-                "@type": "RealData",
-                "hasNumberValue": 5
-              },
-              "hasMeasurementUnit": {
-                "@type": "Second"
-              }
-            }
-          ],
-          "hasNext": {
-            "@type": "ConstantCurrentCharging",
-            "hasProcessParameter": [
-              {
-                "@type": "ChargingCurrent",
-                "hasNumericalPart": {
-                  "@type": "RealData",
-                  "hasNumberValue": 0
-                },
-                "hasMeasurementUnit": {
-                  "@type": "Ampere"
-                }
-              },
-              {
-                "@type": "StepDuration",
-                "hasNumericalPart": {
-                  "@type": "RealData",
-                  "hasNumberValue": 5
-                },
-                "hasMeasurementUnit": {
-                  "@type": "Second"
-                }
-              }
-            ],
-            "hasNext": {
-              "@type": "ConstantCurrentCharging",
-              "hasProcessParameter": [
-                {
-                  "@type": "ChargingCurrent",
-                  "hasNumericalPart": {
-                    "@type": "RealData",
-                    "hasNumberValue": 0
-                  },
-                  "hasMeasurementUnit": {
-                    "@type": "Ampere"
-                  }
-                },
-                {
-                  "@type": "StepDuration",
-                  "hasNumericalPart": {
-                    "@type": "RealData",
-                    "hasNumberValue": 5
-                  },
-                  "hasMeasurementUnit": {
-                    "@type": "Second"
-                  }
-                }
-              ],
-              "hasNext": {
-                "@type": "ConstantCurrentCharging",
-                "hasProcessParameter": [
-                  {
-                    "@type": "ChargingCurrent",
-                    "hasNumericalPart": {
-                      "@type": "RealData",
-                      "hasNumberValue": 0
-                    },
-                    "hasMeasurementUnit": {
-                      "@type": "Ampere"
-                    }
-                  },
-                  {
-                    "@type": "StepDuration",
-                    "hasNumericalPart": {
-                      "@type": "RealData",
-                      "hasNumberValue": 5
-                    },
-                    "hasMeasurementUnit": {
-                      "@type": "Second"
-                    }
-                  }
-                ],
-                "hasNext": {
-                  "@type": "ConstantCurrentCharging",
-                  "hasProcessParameter": [
-                    {
-                      "@type": "ChargingCurrent",
-                      "hasNumericalPart": {
-                        "@type": "RealData",
-                        "hasNumberValue": 2
-                      },
-                      "hasMeasurementUnit": {
-                        "@type": "Ampere"
-                      }
-                    },
-                    {
-                      "@type": "StepDuration",
-                      "hasNumericalPart": {
-                        "@type": "RealData",
-                        "hasNumberValue": 30
-                      },
-                      "hasMeasurementUnit": {
-                        "@type": "Second"
-                      }
-                    },
-                    {
-                      "@type": "UpperVoltageLimit",
-                      "hasNumericalPart": {
-                        "@type": "RealData",
-                        "hasNumberValue": 4.2
-                      },
-                      "hasMeasurementUnit": {
-                        "@type": "Volt"
-                      }
-                    }
-                  ],
-                  "hasNext": {
-                    "@type": "ConstantCurrentCharging",
-                    "hasProcessParameter": [
-                      {
-                        "@type": "ChargingCurrent",
-                        "hasNumericalPart": {
-                          "@type": "RealData",
-                          "hasNumberValue": 1
-                        },
-                        "hasMeasurementUnit": {
-                          "@type": "Ampere"
-                        }
-                      },
-                      {
-                        "@type": "StepDuration",
-                        "hasNumericalPart": {
-                          "@type": "RealData",
-                          "hasNumberValue": 30
-                        },
-                        "hasMeasurementUnit": {
-                          "@type": "Second"
-                        }
-                      },
-                      {
-                        "@type": "UpperVoltageLimit",
-                        "hasNumericalPart": {
-                          "@type": "RealData",
-                          "hasNumberValue": 4.2
-                        },
-                        "hasMeasurementUnit": {
-                          "@type": "Volt"
-                        }
-                      }
-                    ],
-                    "hasNext": {
-                      "@type": "ConstantCurrentCharging",
-                      "hasProcessParameter": [
-                        {
-                          "@type": "ChargingCurrent",
-                          "hasNumericalPart": {
-                            "@type": "RealData",
-                            "hasNumberValue": 5
-                          },
-                          "hasMeasurementUnit": {
-                            "@type": "Ampere"
-                          }
-                        },
-                        {
-                          "@type": "StepDuration",
-                          "hasNumericalPart": {
-                            "@type": "RealData",
-                            "hasNumberValue": 30
-                          },
-                          "hasMeasurementUnit": {
-                            "@type": "Second"
-                          }
-                        },
-                        {
-                          "@type": "UpperVoltageLimit",
-                          "hasNumericalPart": {
-                            "@type": "RealData",
-                            "hasNumberValue": 4.2
-                          },
-                          "hasMeasurementUnit": {
-                            "@type": "Volt"
-                          }
-                        }
-                      ],
-                      "hasNext": {
-                        "@type": "ConstantCurrentDischarging",
-                        "hasProcessParameter": [
-                          {
-                            "@type": "DischargingCurrent",
-                            "hasNumericalPart": {
-                              "@type": "RealData",
-                              "hasNumberValue": 5
-                            },
-                            "hasMeasurementUnit": {
-                              "@type": "Ampere"
-                            }
-                          },
-                          {
-                            "@type": "StepDuration",
-                            "hasNumericalPart": {
-                              "@type": "RealData",
-                              "hasNumberValue": 30
-                            },
-                            "hasMeasurementUnit": {
-                              "@type": "Second"
-                            }
-                          },
-                          {
-                            "@type": "LowerVoltageLimit",
-                            "hasNumericalPart": {
-                              "@type": "RealData",
-                              "hasNumberValue": 2.65
-                            },
-                            "hasMeasurementUnit": {
-                              "@type": "Volt"
-                            }
-                          }
-                        ],
-                        "hasNext": {
-                          "@type": "ConstantCurrentDischarging",
-                          "hasProcessParameter": [
-                            {
-                              "@type": "DischargingCurrent",
-                              "hasNumericalPart": {
-                                "@type": "RealData",
-                                "hasNumberValue": 5
-                              },
-                              "hasMeasurementUnit": {
-                                "@type": "Ampere"
-                              }
-                            },
-                            {
-                              "@type": "StepDuration",
-                              "hasNumericalPart": {
-                                "@type": "RealData",
-                                "hasNumberValue": 30
-                              },
-                              "hasMeasurementUnit": {
-                                "@type": "Second"
-                              }
-                            },
-                            {
-                              "@type": "LowerVoltageLimit",
-                              "hasNumericalPart": {
-                                "@type": "RealData",
-                                "hasNumberValue": 2.65
-                              },
-                              "hasMeasurementUnit": {
-                                "@type": "Volt"
-                              }
-                            }
-                          ],
-                          "hasNext": {
-                            "@type": "ConstantCurrentCharging",
-                            "hasProcessParameter": [
-                              {
-                                "@type": "ChargingCurrent",
-                                "hasNumericalPart": {
-                                  "@type": "RealData",
-                                  "hasNumberValue": 0
-                                },
-                                "hasMeasurementUnit": {
-                                  "@type": "Ampere"
-                                }
-                              },
-                              {
-                                "@type": "StepDuration",
-                                "hasNumericalPart": {
-                                  "@type": "RealData",
-                                  "hasNumberValue": 30
-                                },
-                                "hasMeasurementUnit": {
-                                  "@type": "Second"
-                                }
-                              }
-                            ],
-                            "hasNext": {
-                              "@type": "ConstantCurrentCharging",
-                              "hasProcessParameter": [
-                                {
-                                  "@type": "ChargingCurrent",
-                                  "hasNumericalPart": {
-                                    "@type": "RealData",
-                                    "hasNumberValue": 0
-                                  },
-                                  "hasMeasurementUnit": {
-                                    "@type": "Ampere"
-                                  }
-                                },
-                                {
-                                  "@type": "StepDuration",
-                                  "hasNumericalPart": {
-                                    "@type": "RealData",
-                                    "hasNumberValue": 120
-                                  },
-                                  "hasMeasurementUnit": {
-                                    "@type": "Second"
-                                  }
-                                }
-                              ]
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
   "hasParticipant": {
     "@type": "Battery",
     "hasProperty": [
@@ -434,6 +34,406 @@
       {
         "@type": "EnergyDensity",
         "identifier": "battery_energy_density"
+      }
+    ]
+  },
+  "hasTask": {
+    "@type": "ConstantCurrentCharging",
+    "hasNext": {
+      "@type": "ConstantCurrentCharging",
+      "hasNext": {
+        "@type": "ConstantCurrentCharging",
+        "hasNext": {
+          "@type": "ConstantCurrentCharging",
+          "hasNext": {
+            "@type": "ConstantCurrentCharging",
+            "hasNext": {
+              "@type": "ConstantCurrentCharging",
+              "hasNext": {
+                "@type": "ConstantCurrentCharging",
+                "hasNext": {
+                  "@type": "ConstantCurrentCharging",
+                  "hasNext": {
+                    "@type": "ConstantCurrentCharging",
+                    "hasNext": {
+                      "@type": "ConstantCurrentCharging",
+                      "hasNext": {
+                        "@type": "ConstantCurrentDischarging",
+                        "hasNext": {
+                          "@type": "ConstantCurrentDischarging",
+                          "hasNext": {
+                            "@type": "ConstantCurrentCharging",
+                            "hasNext": {
+                              "@type": "ConstantCurrentCharging",
+                              "hasProcessParameter": [
+                                {
+                                  "@type": "ChargingCurrent",
+                                  "hasMeasurementUnit": {
+                                    "@type": "Ampere"
+                                  },
+                                  "hasNumericalPart": {
+                                    "@type": "RealData",
+                                    "hasNumberValue": 0
+                                  }
+                                },
+                                {
+                                  "@type": "StepDuration",
+                                  "hasMeasurementUnit": {
+                                    "@type": "Second"
+                                  },
+                                  "hasNumericalPart": {
+                                    "@type": "RealData",
+                                    "hasNumberValue": 120
+                                  }
+                                }
+                              ]
+                            },
+                            "hasProcessParameter": [
+                              {
+                                "@type": "ChargingCurrent",
+                                "hasMeasurementUnit": {
+                                  "@type": "Ampere"
+                                },
+                                "hasNumericalPart": {
+                                  "@type": "RealData",
+                                  "hasNumberValue": 0
+                                }
+                              },
+                              {
+                                "@type": "StepDuration",
+                                "hasMeasurementUnit": {
+                                  "@type": "Second"
+                                },
+                                "hasNumericalPart": {
+                                  "@type": "RealData",
+                                  "hasNumberValue": 30
+                                }
+                              }
+                            ]
+                          },
+                          "hasProcessParameter": [
+                            {
+                              "@type": "DischargingCurrent",
+                              "hasMeasurementUnit": {
+                                "@type": "Ampere"
+                              },
+                              "hasNumericalPart": {
+                                "@type": "RealData",
+                                "hasNumberValue": 5
+                              }
+                            },
+                            {
+                              "@type": "StepDuration",
+                              "hasMeasurementUnit": {
+                                "@type": "Second"
+                              },
+                              "hasNumericalPart": {
+                                "@type": "RealData",
+                                "hasNumberValue": 30
+                              }
+                            },
+                            {
+                              "@type": "LowerVoltageLimit",
+                              "hasMeasurementUnit": {
+                                "@type": "Volt"
+                              },
+                              "hasNumericalPart": {
+                                "@type": "RealData",
+                                "hasNumberValue": 2.65
+                              }
+                            }
+                          ]
+                        },
+                        "hasProcessParameter": [
+                          {
+                            "@type": "DischargingCurrent",
+                            "hasMeasurementUnit": {
+                              "@type": "Ampere"
+                            },
+                            "hasNumericalPart": {
+                              "@type": "RealData",
+                              "hasNumberValue": 5
+                            }
+                          },
+                          {
+                            "@type": "StepDuration",
+                            "hasMeasurementUnit": {
+                              "@type": "Second"
+                            },
+                            "hasNumericalPart": {
+                              "@type": "RealData",
+                              "hasNumberValue": 30
+                            }
+                          },
+                          {
+                            "@type": "LowerVoltageLimit",
+                            "hasMeasurementUnit": {
+                              "@type": "Volt"
+                            },
+                            "hasNumericalPart": {
+                              "@type": "RealData",
+                              "hasNumberValue": 2.65
+                            }
+                          }
+                        ]
+                      },
+                      "hasProcessParameter": [
+                        {
+                          "@type": "ChargingCurrent",
+                          "hasMeasurementUnit": {
+                            "@type": "Ampere"
+                          },
+                          "hasNumericalPart": {
+                            "@type": "RealData",
+                            "hasNumberValue": 5
+                          }
+                        },
+                        {
+                          "@type": "StepDuration",
+                          "hasMeasurementUnit": {
+                            "@type": "Second"
+                          },
+                          "hasNumericalPart": {
+                            "@type": "RealData",
+                            "hasNumberValue": 30
+                          }
+                        },
+                        {
+                          "@type": "UpperVoltageLimit",
+                          "hasMeasurementUnit": {
+                            "@type": "Volt"
+                          },
+                          "hasNumericalPart": {
+                            "@type": "RealData",
+                            "hasNumberValue": 4.2
+                          }
+                        }
+                      ]
+                    },
+                    "hasProcessParameter": [
+                      {
+                        "@type": "ChargingCurrent",
+                        "hasMeasurementUnit": {
+                          "@type": "Ampere"
+                        },
+                        "hasNumericalPart": {
+                          "@type": "RealData",
+                          "hasNumberValue": 1
+                        }
+                      },
+                      {
+                        "@type": "StepDuration",
+                        "hasMeasurementUnit": {
+                          "@type": "Second"
+                        },
+                        "hasNumericalPart": {
+                          "@type": "RealData",
+                          "hasNumberValue": 30
+                        }
+                      },
+                      {
+                        "@type": "UpperVoltageLimit",
+                        "hasMeasurementUnit": {
+                          "@type": "Volt"
+                        },
+                        "hasNumericalPart": {
+                          "@type": "RealData",
+                          "hasNumberValue": 4.2
+                        }
+                      }
+                    ]
+                  },
+                  "hasProcessParameter": [
+                    {
+                      "@type": "ChargingCurrent",
+                      "hasMeasurementUnit": {
+                        "@type": "Ampere"
+                      },
+                      "hasNumericalPart": {
+                        "@type": "RealData",
+                        "hasNumberValue": 2
+                      }
+                    },
+                    {
+                      "@type": "StepDuration",
+                      "hasMeasurementUnit": {
+                        "@type": "Second"
+                      },
+                      "hasNumericalPart": {
+                        "@type": "RealData",
+                        "hasNumberValue": 30
+                      }
+                    },
+                    {
+                      "@type": "UpperVoltageLimit",
+                      "hasMeasurementUnit": {
+                        "@type": "Volt"
+                      },
+                      "hasNumericalPart": {
+                        "@type": "RealData",
+                        "hasNumberValue": 4.2
+                      }
+                    }
+                  ]
+                },
+                "hasProcessParameter": [
+                  {
+                    "@type": "ChargingCurrent",
+                    "hasMeasurementUnit": {
+                      "@type": "Ampere"
+                    },
+                    "hasNumericalPart": {
+                      "@type": "RealData",
+                      "hasNumberValue": 0
+                    }
+                  },
+                  {
+                    "@type": "StepDuration",
+                    "hasMeasurementUnit": {
+                      "@type": "Second"
+                    },
+                    "hasNumericalPart": {
+                      "@type": "RealData",
+                      "hasNumberValue": 5
+                    }
+                  }
+                ]
+              },
+              "hasProcessParameter": [
+                {
+                  "@type": "ChargingCurrent",
+                  "hasMeasurementUnit": {
+                    "@type": "Ampere"
+                  },
+                  "hasNumericalPart": {
+                    "@type": "RealData",
+                    "hasNumberValue": 0
+                  }
+                },
+                {
+                  "@type": "StepDuration",
+                  "hasMeasurementUnit": {
+                    "@type": "Second"
+                  },
+                  "hasNumericalPart": {
+                    "@type": "RealData",
+                    "hasNumberValue": 5
+                  }
+                }
+              ]
+            },
+            "hasProcessParameter": [
+              {
+                "@type": "ChargingCurrent",
+                "hasMeasurementUnit": {
+                  "@type": "Ampere"
+                },
+                "hasNumericalPart": {
+                  "@type": "RealData",
+                  "hasNumberValue": 0
+                }
+              },
+              {
+                "@type": "StepDuration",
+                "hasMeasurementUnit": {
+                  "@type": "Second"
+                },
+                "hasNumericalPart": {
+                  "@type": "RealData",
+                  "hasNumberValue": 5
+                }
+              }
+            ]
+          },
+          "hasProcessParameter": [
+            {
+              "@type": "ChargingCurrent",
+              "hasMeasurementUnit": {
+                "@type": "Ampere"
+              },
+              "hasNumericalPart": {
+                "@type": "RealData",
+                "hasNumberValue": 0
+              }
+            },
+            {
+              "@type": "StepDuration",
+              "hasMeasurementUnit": {
+                "@type": "Second"
+              },
+              "hasNumericalPart": {
+                "@type": "RealData",
+                "hasNumberValue": 5
+              }
+            }
+          ]
+        },
+        "hasProcessParameter": [
+          {
+            "@type": "ChargingCurrent",
+            "hasMeasurementUnit": {
+              "@type": "Ampere"
+            },
+            "hasNumericalPart": {
+              "@type": "RealData",
+              "hasNumberValue": 0
+            }
+          },
+          {
+            "@type": "StepDuration",
+            "hasMeasurementUnit": {
+              "@type": "Second"
+            },
+            "hasNumericalPart": {
+              "@type": "RealData",
+              "hasNumberValue": 5
+            }
+          }
+        ]
+      },
+      "hasProcessParameter": [
+        {
+          "@type": "ChargingCurrent",
+          "hasMeasurementUnit": {
+            "@type": "Ampere"
+          },
+          "hasNumericalPart": {
+            "@type": "RealData",
+            "hasNumberValue": 0
+          }
+        },
+        {
+          "@type": "StepDuration",
+          "hasMeasurementUnit": {
+            "@type": "Second"
+          },
+          "hasNumericalPart": {
+            "@type": "RealData",
+            "hasNumberValue": 5
+          }
+        }
+      ]
+    },
+    "hasProcessParameter": [
+      {
+        "@type": "ChargingCurrent",
+        "hasMeasurementUnit": {
+          "@type": "Ampere"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 0
+        }
+      },
+      {
+        "@type": "StepDuration",
+        "hasMeasurementUnit": {
+          "@type": "Second"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 5
+        }
       }
     ]
   }

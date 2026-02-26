@@ -4,91 +4,6 @@
     "BatteryTest",
     "IterativeWorkflow"
   ],
-  "hasTask": {
-    "@type": "ConstantCurrentConstantVoltageCharging",
-    "hasProcessParameter": [
-      {
-        "@type": "ChargingCurrent",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 2.0
-        },
-        "hasMeasurementUnit": {
-          "@type": "Ampere"
-        }
-      },
-      {
-        "@type": "ChargingVoltage",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 4.2
-        },
-        "hasMeasurementUnit": {
-          "@type": "Volt"
-        }
-      },
-      {
-        "@type": "TerminationQuantity",
-        "hasNumericalPart": {
-          "@type": "RealData",
-          "hasNumberValue": 0.2
-        },
-        "hasMeasurementUnit": {
-          "@type": "Ampere"
-        }
-      }
-    ],
-    "hasNext": {
-      "@type": "ConstantCurrentCharging",
-      "hasProcessParameter": [
-        {
-          "@type": "ChargingCurrent",
-          "hasNumericalPart": {
-            "@type": "RealData",
-            "hasNumberValue": 0
-          },
-          "hasMeasurementUnit": {
-            "@type": "Ampere"
-          }
-        },
-        {
-          "@type": "StepDuration",
-          "hasNumericalPart": {
-            "@type": "RealData",
-            "hasNumberValue": 5400.0
-          },
-          "hasMeasurementUnit": {
-            "@type": "Second"
-          }
-        }
-      ],
-      "hasNext": {
-        "@type": "ConstantCurrentDischarging",
-        "hasProcessParameter": [
-          {
-            "@type": "DischargingCurrent",
-            "hasNumericalPart": {
-              "@type": "RealData",
-              "hasNumberValue": 1.5
-            },
-            "hasMeasurementUnit": {
-              "@type": "Ampere"
-            }
-          },
-          {
-            "@type": "LowerVoltageLimit",
-            "hasNumericalPart": {
-              "@type": "RealData",
-              "hasNumberValue": 3.0
-            },
-            "hasMeasurementUnit": {
-              "@type": "Volt"
-            }
-          }
-        ]
-      }
-    }
-  },
   "hasParticipant": {
     "@type": "Battery",
     "hasProperty": [
@@ -119,6 +34,91 @@
       {
         "@type": "EnergyDensity",
         "identifier": "battery_energy_density"
+      }
+    ]
+  },
+  "hasTask": {
+    "@type": "ConstantCurrentConstantVoltageCharging",
+    "hasNext": {
+      "@type": "ConstantCurrentCharging",
+      "hasNext": {
+        "@type": "ConstantCurrentDischarging",
+        "hasProcessParameter": [
+          {
+            "@type": "DischargingCurrent",
+            "hasMeasurementUnit": {
+              "@type": "Ampere"
+            },
+            "hasNumericalPart": {
+              "@type": "RealData",
+              "hasNumberValue": 1.5
+            }
+          },
+          {
+            "@type": "LowerVoltageLimit",
+            "hasMeasurementUnit": {
+              "@type": "Volt"
+            },
+            "hasNumericalPart": {
+              "@type": "RealData",
+              "hasNumberValue": 3.0
+            }
+          }
+        ]
+      },
+      "hasProcessParameter": [
+        {
+          "@type": "ChargingCurrent",
+          "hasMeasurementUnit": {
+            "@type": "Ampere"
+          },
+          "hasNumericalPart": {
+            "@type": "RealData",
+            "hasNumberValue": 0
+          }
+        },
+        {
+          "@type": "StepDuration",
+          "hasMeasurementUnit": {
+            "@type": "Second"
+          },
+          "hasNumericalPart": {
+            "@type": "RealData",
+            "hasNumberValue": 5400.0
+          }
+        }
+      ]
+    },
+    "hasProcessParameter": [
+      {
+        "@type": "ChargingCurrent",
+        "hasMeasurementUnit": {
+          "@type": "Ampere"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 2.0
+        }
+      },
+      {
+        "@type": "ChargingVoltage",
+        "hasMeasurementUnit": {
+          "@type": "Volt"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 4.2
+        }
+      },
+      {
+        "@type": "TerminationQuantity",
+        "hasMeasurementUnit": {
+          "@type": "Ampere"
+        },
+        "hasNumericalPart": {
+          "@type": "RealData",
+          "hasNumberValue": 0.2
+        }
       }
     ]
   }
