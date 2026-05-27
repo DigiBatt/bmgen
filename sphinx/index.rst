@@ -12,6 +12,7 @@ The BM Generator is a test generator for battery cyclers. It can be used as a li
    setup
    cycling_languages
    structure
+   battery_parameters
 
 Indices and tables
 ==================
