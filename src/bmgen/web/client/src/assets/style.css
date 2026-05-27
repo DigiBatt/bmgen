@@ -29,15 +29,15 @@ h1 {
 
 #codearea {
     margin-right: 10px;
-    height: 70%;
-    width: 49%;
+    height: 70vh;
+    width: 45vw;
     float: left;
 }
 
 #outputarea {
     margin-right: 10px;
-    height: 70%;
-    width: 49%;
+    height: 70vh;
+    width: 45vw;
     float: right;
 }
 
@@ -81,10 +81,22 @@ button:hover,
 
 .footer {
     position: fixed;
-    left: 5;
-    bottom: 5;
+    left: 5px;
+    bottom: 5px;
 }
 
 a {
     color: black;
+}
+
+#docs {
+    float: right;
+}
+
+.menu {
+    margin-bottom: 20px;
+}
+
+#app {
+    margin: 1vw;
 }

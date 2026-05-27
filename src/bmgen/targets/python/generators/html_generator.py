@@ -1,13 +1,13 @@
 import json
 
-from bmgen.targets.bcl.generators.bcl_generator import BCLGenerator
+from bmgen.targets.python.generators.python_generator import PythonGenerator
 
 
-class HtmlGenerator(BCLGenerator):
+class HtmlGenerator(PythonGenerator):
     def generate(self):
         self.finish()
         return (
             '<textarea style="width: 100%; height: 100%" readonly>'
-            + json.dumps(self.program.toDict(), indent=2)
+            + self.program.toText()
             + "</textarea>"
         )

@@ -50,3 +50,17 @@ class Transformer(_Transformer):
         self.imports["program"].add("variable")
         self.generic_visit(node)
         return [loop_code, loop_call]
+
+    def visit_Constant(self, node):
+        a = ast.copy_location(
+            ast.Call(
+                func=ast.Name(id="constant", ctx=ast.Load()),
+                args=[
+                    ast.Constant(value=node.value),
+                ],
+                keywords=[],
+            ),
+            node,
+        )
+        self.generic_visit(node)
+        return a

@@ -49,6 +49,7 @@ def generate(
     no_timestamps=False,
     battery=None,
     config=None,
+    name=None,
 ):
     bmgen.options = {}
     if config:
@@ -107,9 +108,9 @@ def generate(
             import_module(f"bmgen.targets.{target}.battery"), "battery"
         )
     target_module.battery = target_battery
-    if isinstance(file, str):
-        programName, _ = os.path.splitext(os.path.basename(file))
-        target_module.generator.programName = programName
+    if name is None and isinstance(file, str):
+        name, _ = os.path.splitext(os.path.basename(file))
+    target_module.generator.programName = name
     exec(compile(newtree, filename="<ast>", mode="exec"), {})
     if intermediate == "targetast":
         output(out, target_module.generator.ast())

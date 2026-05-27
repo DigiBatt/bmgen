@@ -2,7 +2,35 @@
 
 Test generator for battery cyclers.
 
+Supported formats: Basytec, Neware, Digatron, JSON-LD.
+
 ![Screenshot](images/screenshot.png)
+
+Documentation: https://digibatt.github.io/bmgen
+
+Examples:  [examples](examples)
+
+Setup
+=====
+
+The Python package is available on [PyPI](https://pypi.org/project/bm-generator/) and can be installed using pip:
+
+    pip install bm-generator
+
+Installation from sources
+-------------------------
+
+The required dependencies and the package itself can be installed using pip:
+
+    pip install -r requirements.txt
+    pip install -e .
+
+Documentation
+-------------
+
+The documentation is built using the script
+
+    ./build_docs.sh
 
 ## Examples
 
@@ -85,20 +113,21 @@ Command for this example: <code>bmgen --target basytec --format table examples/s
 
 A working installation of Python >= 3.10 and pip is required. The web version also requires npm.
 
-The bmgen package can be installed using pip:
+The bmgen package can be downloaded from the Gitlab server:
+
+    pip install --index-url https://token:glpat-pNBLCU7BiNexQJA6GVNh@git.isea.rwth-aachen.de/api/v4/projects/2105/packages/pypi/simple bmgen
+
+Alternatively, the package can also be installed from its sources:
  
-    git clone git@github.com:DigiBatt/bmgen.git
+    git clone git@git.isea.rwth-aachen.de:ESS/testing/bmgen.git
     cd bmgen
+    pip install -r requirements.txt
     pip install -e .
     
-To build the modules for the web version, the provided install script can be used:
+To build the modules for the web version and the documentation, the provided build script can be used:
 
-    ./install.sh
+    ./build.sh
     
-The documentation is built using the script
-
-    ./build_docs.sh
-
 ## Usage
 
 The easiest way to get started is using the web version by running the command:
@@ -134,28 +163,3 @@ Basytec:
 ### -o, --out
 
 Name of the output file. If this option is not provided, the output is written to the terminal.
-
-## Feature completeness
-
-|                                                   | Battery Manager            | Neware | BasyTec |
-| ------------------------------------------------- | -------------------------- | ------ | ------- |
-| charge/discharge/pause                            | ✔️                         | ✔️    | ✔️      |
-| limits (global and for individual steps)          | ✔️                         | ✔️    | ✔️      |
-| registrations (global)                            | ✔️                         | ✔️    | ✔️      |
-| registrations (for individual steps)              | ✔️                         | ✔️    | ✔️      |
-| variables in the generated program                | ✔️                         | ➖    | ❌      |
-| battery parameters                                | ✔️                         | ➖    | ✔️      |
-| if / else statements                              | ✔️                         | ✔️    | ❌      |
-| if / else statements (compile time)               | ❌                         | ✔️    | ✔️      |
-| loops with fixed cycle count                      | ✔️                         | ✔️    | ❌      |
-| loops with arbitrary conditions                   | ✔️                         | ➖    | ❌      |
-| loops (compile time)                              | ❌                         | ✔️    | ✔️      |
-| references to duration/Ah count of previous steps | ✔️                         | ✔️    | ✔️      |
-| calculations in the generated program             | ✔️                         | ➖    | ❌      |
-| array constants                                   | ✔️                         | ➖    | ➖      |
-| array constants (compile time)                    | ❌                         | ✔️    | ✔️      |
-| mutable arrays                                    | ✔️                         | ➖    | ➖      |
-
-✔️ implemented
-❌ planned
-➖ not supported by the target

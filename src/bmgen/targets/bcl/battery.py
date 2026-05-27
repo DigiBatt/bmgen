@@ -1,6 +1,6 @@
-from bmgen.battery import CyclerBattery
+from bmgen.battery import BatteryParametersNotSupported
 from bmgen.targets.bcl.ast import BCLUnit
 
-battery = CyclerBattery(
+battery = BatteryParametersNotSupported(
     oneC=BCLUnit("CRate"),
 )

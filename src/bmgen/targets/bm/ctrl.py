@@ -73,7 +73,8 @@ def ctrl_for(iterable, body, var, g, l):
         try:
             iterable = iterable.to_python_range()
         except:
-            raise Exception("Cannot process iterable in for loop")
+            # raise Exception("Cannot process iterable in for loop")
+            pass
         for i in iterable:
             l[var.name] = i
             exec(code, g, l)

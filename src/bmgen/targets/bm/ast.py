@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List
+import typing
 
 import bmgen
 import bmgen.targets.bm as bm
@@ -150,6 +151,18 @@ class BMVariable(BMNamedValue): ...
 class BMChannel(BMNamedValue): ...
 
 
+class BMChannelDynamic(BMNamedValue):
+
+    def __init__(self, f: typing.Callable[[], str]):
+        self.f = f
+
+    f: typing.Callable[[], str]
+
+    @property
+    def name(self) -> str:
+        return self.f()
+
+
 @dataclass
 class BMArray(BMVariable):
     arraynum: int
@@ -249,51 +262,61 @@ class BMNumber(BMNumValue):
     def toText(self):
         return str(self.value)
 
+    @cast.autocast()
     def __add__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented
         return BMNumber(self.value + other.value)
 
+    @cast.autocast()
     def __sub__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented
         return BMNumber(self.value - other.value)
 
+    @cast.autocast()
     def __mul__(self, other):
         if not isinstance(other, BMNumber):
             return BMNumValue.__mul__(self, other)
         return BMNumber(self.value * other.value)
 
+    @cast.autocast()
     def __truediv__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented
-        return BMNumber(self.value * other.value)
+        return BMNumber(self.value / other.value)
 
+    @cast.autocast()
     def __lt__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented
         return self.value < other.value
 
+    @cast.autocast()
     def __gt__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented
         return self.value > other.value
 
+    @cast.autocast()
     def __le__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented
         return self.value <= other.value
 
+    @cast.autocast()
     def __ge__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented
         return self.value >= other.value
 
+    @cast.autocast()
     def __eq__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented
         return self.value == other.value
 
+    @cast.autocast()
     def __ne__(self, other):
         if not isinstance(other, BMNumber):
             return NotImplemented

@@ -23,8 +23,8 @@ class FunctionCall(Expression):
     kwargs: Dict[str, Expression] = field(default_factory=dict)
 
     def toText(self) -> str:
-        argitems = [v.toText() for v in self.args]
-        argitems += [f"{k}={v.toText()}" for k, v in self.kwargs.items()]
+        argitems = [toText(v) for v in self.args]
+        argitems += [f"{k}={toText(v)}" for k, v in self.kwargs.items()]
         argstring = ", ".join(argitems)
         return f"{self.function}({argstring})"
 
@@ -46,7 +46,39 @@ class Import:
 
 
 @dataclass
-class NumberLiteral(Expression):
+class NumericExpression(Expression):
+    pass
+
+    def __add__(self, other: "NumericExpression"):
+        return BinaryOperation("+", self, other)
+
+    def __sub__(self, other: "NumericExpression"):
+        return BinaryOperation("-", self, other)
+
+    def __mul__(self, other: "NumericExpression"):
+        return BinaryOperation("*", self, other)
+
+    def __div__(self, other: "NumericExpression"):
+        return BinaryOperation("/", self, other)
+
+    def __gt__(self, other: "NumericExpression"):
+        return BinaryOperation(">", self, other)
+
+    def __lt__(self, other: "NumericExpression"):
+        return BinaryOperation("<", self, other)
+
+    def __ge__(self, other: "NumericExpression"):
+        return BinaryOperation(">=", self, other)
+
+    def __le__(self, other: "NumericExpression"):
+        return BinaryOperation("<=", self, other)
+
+    def __neg__(self):
+        return UnaryOperation("-", self)
+
+
+@dataclass
+class NumberLiteral(NumericExpression):
     value: float
 
     def toText(self) -> str:
@@ -54,11 +86,20 @@ class NumberLiteral(Expression):
 
 
 @dataclass
-class Variable(Expression):
+class Variable(NumericExpression):
     name: str
 
     def toText(self) -> str:
         return self.name
+
+
+@dataclass
+class UnaryOperation(Expression):
+    operator: str
+    value: Expression
+
+    def toText(self) -> str:
+        return f"{self.operator}{self.value.toText()}"
 
 
 @dataclass
@@ -85,3 +126,17 @@ class Program:
 
     def toText(self) -> str:
         return "\n".join([s.toText() for s in self.statements])
+
+
+@dataclass
+class TimeExpression(Expression):
+    hours: NumericExpression
+    minutes: NumericExpression
+    seconds: NumericExpression
+
+
+def toText(value):
+    if isinstance(value, Expression):
+        return value.toText()
+    elif isinstance(value, list):
+        return ListLiteral(value).toText()

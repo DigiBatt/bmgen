@@ -1,6 +1,6 @@
-import bmgen.targets.bcl.ast as ast
+import bmgen.targets.python.ast as ast
 
-I = ast.BCLTerminationType("ElectricCurrent")
-V = ast.BCLTerminationType("Voltage")
-t = ast.BCLTerminationType("time")
-StepCharge = ast.BCLTerminationType("charge")
+I = ast.Variable("I")
+V = ast.Variable("V")
+t = ast.Variable("t")
+StepCharge = ast.Variable("StepCharge")

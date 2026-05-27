@@ -1,8 +1,8 @@
 from bmgen.battery import Battery
-from bmgen.targets.bcl.generators.bcl_generator import BCLGenerator
-from bmgen.transformer import Transformer
+from bmgen.targets.python.generators.python_generator import PythonGenerator
+from bmgen.targets.python.transformer import Transformer
 
-generator: BCLGenerator
+generator: PythonGenerator
 battery: Battery
 
-default_format = "json"
+default_format = "text"

@@ -1,29 +1,27 @@
 {
-	"name": "bmgen",
-	"version": "0.0.1",
-	"private": true,
-	"description": "BM Generator 3000",
-	"main": "index.js",
-	"author": "Elias Barbers, ISEA, RWTH Aachen University",
-	"license": "MIT",
-	"devDependencies": {
-		"css-loader": "^5.2.7",
-		"electron": "^19.1.8",
-		"file-loader": "^6.2.0",
-		"glob": "^7.2.0",
-		"html-webpack-plugin": "^5.5.0",
-		"monaco-editor-webpack-plugin": "^7.0.1",
-		"monaco-editor": "^0.32.1",
-		"style-loader": "^3.3.1",
-		"terser-webpack-plugin": "^5.3.1",
-		"ts-loader": "^9.2.6",
-		"typescript": "^5.0.2",
-		"webpack-cli": "^4.9.2",
-		"webpack-dev-server": "^4.7.4",
-		"webpack": "^5.76.0",
-		"yaserver": "^0.4.0"
-	},
-	"overrides": {
-		"@electron/get": "2.0.0"
-	}
+  "name": "vue",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@primeuix/themes": "^2.0.3",
+    "@primevue/forms": "^4.5.5",
+    "monaco-editor": "^0.55.1",
+    "primeicons": "^7.0.0",
+    "primevue": "^4.5.5",
+    "vue": "^3.5.32"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.6",
+    "vite": "^8.0.8",
+    "vite-plugin-vue-devtools": "^8.1.1"
+  },
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  }
 }

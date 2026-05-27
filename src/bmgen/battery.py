@@ -61,3 +61,13 @@ class PredefindedBattery(Battery):
                 f"Battery parameter '{name}' not specified in the battery definition"
             )
         return value
+
+
+class BatteryParametersNotSupported(Battery):
+    def __getattribute__(self, name: str) -> Any:
+        value = super().__getattribute__(name)
+        if value is None:
+            raise Exception(
+                f"The chosen target does not support referencing battery parameters. Enable fixed parameters in the config options or use fixed values in the program."
+            )
+        return value

@@ -1,3 +1,3 @@
-from bmgen.battery import CyclerBattery
+from bmgen.battery import BatteryParametersNotSupported
 
-battery = CyclerBattery()
+battery = BatteryParametersNotSupported()

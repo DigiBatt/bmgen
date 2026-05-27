@@ -22,7 +22,7 @@ def main(generate, update, testdir):
         for target in [
             dir
             for dir in os.listdir(testdir)
-            if dir != "input" and os.path.isdir(f"{testdir}/{dir}")
+            if dir != "input" and dir != "jsonld" and os.path.isdir(f"{testdir}/{dir}")
         ]:
             for format in os.listdir(testdir + "/" + target):
                 print(f"{testname} - {target} - {format}")
