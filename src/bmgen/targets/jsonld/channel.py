@@ -5,4 +5,4 @@ import bmgen.targets.jsonld.ontology as ontology
 I = ast.Channel(ontology.CellCurrent, ontology.Ampere)
 V = ast.Channel(ontology.CellVoltage, ontology.Volt)
 t = ast.Channel(ontology.StepTime, ontology.Second)
-# StepCharge = ast.BCLTerminationType("charge")
+StepCharge = ast.UnsupportedChannel("Charge reference is not supported in JSON-LD")

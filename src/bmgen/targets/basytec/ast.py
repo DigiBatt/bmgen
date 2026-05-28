@@ -21,12 +21,26 @@ class BasytecChannel:
             value = BasytecValueLiteral(other, self.unit)
         return BasytecLimit(self, "<", value)
 
+    def __le__(self, other):
+        if isinstance(other, BasytecValue):
+            value = other
+        else:
+            value = BasytecValueLiteral(other, self.unit)
+        return BasytecLimit(self, "<=", value)
+
     def __gt__(self, other):
         if isinstance(other, BasytecValue):
             value = other
         else:
             value = BasytecValueLiteral(other, self.unit)
         return BasytecLimit(self, ">", value)
+
+    def __ge__(self, other):
+        if isinstance(other, BasytecValue):
+            value = other
+        else:
+            value = BasytecValueLiteral(other, self.unit)
+        return BasytecLimit(self, ">=", value)
 
 
 class BasytecAction:
@@ -50,6 +64,18 @@ class BasytecGoto(BasytecAction):
 
 class BasytecValue(ABC):
     pass
+
+    def __mul__(self, other):
+        raise Exception("Mathematical operations are not yet supported for Basytec.")
+
+    def __add__(self, other):
+        raise Exception("Mathematical operations are not yet supported for Basytec.")
+
+    def __sub__(self, other):
+        raise Exception("Mathematical operations are not yet supported for Basytec.")
+
+    def __div__(self, other):
+        raise Exception("Mathematical operations are not yet supported for Basytec.")
 
 
 @dataclass

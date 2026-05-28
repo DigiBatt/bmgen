@@ -263,3 +263,13 @@ def create_property(
         prop = type(None, None)
         prop.identifier = value.id
     return prop
+
+
+@compare
+@dataclass
+class UnsupportedChannel(NumericValue):
+
+    message: str
+
+    def toOntology(self):
+        raise Exception(self.message)

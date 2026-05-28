@@ -6,13 +6,6 @@ export const GeneratorSettings = {
         "filenameExtension": ".txt",
         "label": "Battery Manager"
     },
-    "bm_sql": {
-        "target": "bm",
-        "displayFormat": "prettySql",
-        "downloadFormat": "sql",
-        "filenameExtension": ".sql",
-        "label": "Battery Manager (SQL)"
-    },
     "neware": {
         "target": "neware",
         "displayFormat": "table",
@@ -40,12 +33,5 @@ export const GeneratorSettings = {
         "downloadFormat": "json",
         "filenameExtension": ".json",
         "label": "JSON-LD"
-    },
-    "python": {
-        "target": "python",
-        "displayFormat": "html",
-        "downloadFormat": "text",
-        "filenameExtension": ".py",
-        "label": "Python"
     }
 }

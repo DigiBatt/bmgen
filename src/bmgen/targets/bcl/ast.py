@@ -23,6 +23,18 @@ class BCLUnit:
 class BCLValue(ABC):
     unit: BCLUnit
 
+    def __mul__(self, other):
+        raise Exception("Mathematical operations are not supported for BCL.")
+
+    def __add__(self, other):
+        raise Exception("Mathematical operations are not supported for BCL.")
+
+    def __sub__(self, other):
+        raise Exception("Mathematical operations are not supported for BCL.")
+
+    def __div__(self, other):
+        raise Exception("Mathematical operations are not supported for BCL.")
+
 
 @dataclass
 class BCLParameter(BCLValue):
