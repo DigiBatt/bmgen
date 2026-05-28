@@ -5,7 +5,7 @@ import ProgramOutput from './components/ProgramOutput.vue'
 import { ref, watch, provide, computed } from 'vue'
 import { GeneratorSettings } from '@/targets';
 
-const code = ref("Hello world!");
+const code = ref("");
 const config = ref({});
 const name = ref("program");
 const server = ref(window.location.href);

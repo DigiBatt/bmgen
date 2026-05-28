@@ -120,6 +120,10 @@ function downloadGenerated() {
     })
 }
 
+if (code.value === "") {
+    loadExample("simple_program.py");
+}
+
 const emit = defineEmits(['updateProgram'])
 
 </script>
