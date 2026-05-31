@@ -1,4 +1,5 @@
 import os
+import importlib.metadata
 
 from bmgen.battery import Battery
 from bmgen.channel import *
@@ -11,7 +12,4 @@ options = {}
 
 
 def get_version():
-    with open(
-        os.path.join(os.path.dirname(os.path.realpath(__file__)), "version"), "r"
-    ) as version_file:
-        return version_file.read().strip()
+    return importlib.metadata.version("bmgen")

@@ -1,5 +1,0 @@
-astor
-click
-sphinx==7.3.7
-pydata-sphinx-theme==0.16.0
-sphinx-click==6.0.0
