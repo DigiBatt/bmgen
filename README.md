@@ -26,8 +26,7 @@ Installation from sources
 
 The required dependencies and the package itself can also be installed from the sources using pip:
 
-    pip install -r requirements.txt
-    pip install -e .
+    pip install -e .[dev]
 
 A working installation of Python >= 3.10 and pip is required. The web version also requires npm.
 To build the modules for the web version and the documentation, the provided build script can be used:
@@ -118,32 +117,20 @@ Command for this example: <code>bmgen --target basytec --format table examples/s
 </details>
 </p>
 
- ## Installation
-
-A working installation of Python >= 3.10 and pip is required. The web version also requires npm.
-
-The bmgen package can be downloaded from the Gitlab server:
-
-    pip install --index-url https://token:glpat-pNBLCU7BiNexQJA6GVNh@git.isea.rwth-aachen.de/api/v4/projects/2105/packages/pypi/simple bmgen
-
-Alternatively, the package can also be installed from its sources:
- 
-    git clone git@git.isea.rwth-aachen.de:ESS/testing/bmgen.git
-    cd bmgen
-    pip install -r requirements.txt
-    pip install -e .
-    
-To build the modules for the web version and the documentation, the provided build script can be used:
-
-    ./build.sh
-    
-## Usage
+## Web Interface
 
 The easiest way to get started is using the web version by running the command:
 
     bmgen-server
 
-The program can also be used as a command line tool.
+The web interface can be accessed at http://localhost:5000
+
+## CLI
+
+The program can also be used as a command line tool:
+
+    bmgen
+
 The only required argument is the filename of the Python program to be translated.
 A dash ( - ) can be used to read from standard input.
 

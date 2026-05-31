@@ -1,6 +1,6 @@
 [project]
 name = "bmgen"
-version = "0.29.10"
+version = "0.29.11"
 description = "Test generator for battery cyclers"
 authors = [
     { name = "Elias Barbers, Forschungszentrum Jülich (FZJ)", email = "e.barbers@fz-juelich.de" }
