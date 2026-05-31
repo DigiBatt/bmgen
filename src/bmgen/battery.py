@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from typing import Any
+import bmgen
 
 
 @dataclass
@@ -50,9 +51,10 @@ class CyclerBattery(Battery):
     def __getattribute__(self, name: str) -> Any:
         value = super().__getattribute__(name)
         if value is None:
-            raise Exception(
-                f"Battery parameter '{name}' not available for the chosen target"
-            )
+            if not bmgen.SPHINX_AUTODOC:
+                raise Exception(
+                    f"Battery parameter '{name}' not available for the chosen target"
+                )
         return value
 
 
@@ -62,9 +64,10 @@ class PredefindedBattery(Battery):
         if name == "oneC" and value is None:
             value = super().__getattribute__("nominalCapacity")
         if value is None:
-            raise Exception(
-                f"Battery parameter '{name}' not specified in the battery definition"
-            )
+            if not bmgen.SPHINX_AUTODOC:
+                raise Exception(
+                    f"Battery parameter '{name}' not specified in the battery definition"
+                )
         return value
 
 
@@ -72,7 +75,8 @@ class BatteryParametersNotSupported(Battery):
     def __getattribute__(self, name: str) -> Any:
         value = super().__getattribute__(name)
         if value is None:
-            raise Exception(
-                f"The chosen target does not support referencing battery parameters. Enable fixed parameters in the config options or use fixed values in the program."
-            )
+            if not bmgen.SPHINX_AUTODOC:
+                raise Exception(
+                    f"The chosen target does not support referencing battery parameters. Enable fixed parameters in the config options or use fixed values in the program."
+                )
         return value

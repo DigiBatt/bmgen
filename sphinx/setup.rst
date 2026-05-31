@@ -16,3 +16,8 @@ The required dependencies and the package itself can also be installed from the 
 
     pip install -r requirements.txt
     pip install -e .
+
+A working installation of Python >= 3.10 and pip is required. The web version also requires npm.
+To build the modules for the web version and the documentation, the provided build script can be used:
+
+    ./build.sh

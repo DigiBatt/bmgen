@@ -4,6 +4,8 @@ from bmgen.battery import Battery
 from bmgen.channel import *
 from bmgen.function import *
 
+SPHINX_AUTODOC = False
+
 battery = Battery()
 options = {}
 
