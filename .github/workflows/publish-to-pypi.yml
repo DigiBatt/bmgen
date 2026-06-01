@@ -1,7 +1,7 @@
 name: Build Python package and publish on PyPI
 
 on:
-  relase:
+  release:
     types: [published]
 
 jobs:
@@ -19,10 +19,11 @@ jobs:
         python-version: "3.x"
     - name: Install pypa/build
       run: python3 -m pip install build .[dev] --user
-    - name: Build frontend
+    - name: Node setup
       uses: actions/setup-node@v4
       with:
         node-version: '22.x'
+    - name: Build frontend
       run: ./build.sh
     - name: Build a binary wheel and a source tarball
       run: python3 -m build
