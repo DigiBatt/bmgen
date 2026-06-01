@@ -1,6 +1,6 @@
 [project]
 name = "bm-generator"
-version = "0.29.14"
+version = "0.29.15"
 description = "Test generator for battery cyclers"
 authors = [
     { name = "Elias Barbers, Forschungszentrum Jülich (FZJ)", email = "e.barbers@fz-juelich.de" }
@@ -43,4 +43,11 @@ build-backend = "setuptools.build_meta"
 [tool.pytest.ini_options]
 addopts = [
     "--import-mode=importlib",
+]
+
+[tool.setuptools.package-data]
+bmgen = [
+    "web/client/public/examples/*",
+    "web/client/dist/*",
+    "web/client/dist/**/*",
 ]
