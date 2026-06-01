@@ -12,4 +12,4 @@ options = {}
 
 
 def get_version():
-    return importlib.metadata.version("bmgen")
+    return importlib.metadata.version("bm-generator")
